@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stadtklima & Ungleichheit – Berlin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--ink:#1a1814;--paper:#f5f2eb;--pd:#ede9df;--accent:#c0392b;--warm:#e67e22;--muted:#7a756c;--rule:#d4cfc4;--w:680px}
+    html{scroll-behavior:smooth}
+    body{background:var(--paper);color:var(--ink);font-family:'Source Serif 4',Georgia,serif;font-size:18px;line-height:1.75;-webkit-font-smoothing:antialiased}
+    /* masthead */
+    .mast{border-bottom:3px double var(--ink);text-align:center;padding:18px 24px 14px;background:var(--paper);position:sticky;top:0;z-index:200}
+    .mast span{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+    /* hero */
+    .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 80px;position:relative;overflow:hidden;background:var(--ink)}
+    .hero-bg{position:absolute;inset:0;opacity:.5}
+    #hero-map{width:100%;height:100%}
+    .hero-c{position:relative;z-index:2;max-width:var(--w);margin:0 auto;padding:0 24px}
+    .kicker{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,242,235,.5);margin-bottom:20px}
+    .hero h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(38px,6vw,72px);font-weight:900;line-height:1.05;color:var(--paper);margin-bottom:28px}
+    .hero h1 em{font-style:italic;color:#f0a070}
+    .deck{font-size:19px;line-height:1.6;color:rgba(245,242,235,.8);max-width:560px;margin-bottom:40px}
+    .byline{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;color:rgba(245,242,235,.38)}
+    .scroll-hint{position:absolute;bottom:28px;right:32px;z-index:2;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,242,235,.28);display:flex;align-items:center;gap:8px}
+    .scroll-hint::before{content:'';display:block;width:1px;height:40px;background:rgba(245,242,235,.18);animation:p 2s ease-in-out infinite}
+    @keyframes p{0%,100%{opacity:.2}50%{opacity:.7}}
+    /* text */
+    .sec{padding:80px 24px}
+    .inn{max-width:var(--w);margin:0 auto}
+    hr.rule{border:none;border-top:1px solid var(--rule);margin:0 auto;max-width:var(--w)}
+    .lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:block}
+    h2{font-family:'Playfair Display',Georgia,serif;font-size:clamp(26px,4vw,40px);font-weight:700;line-height:1.15;margin-bottom:24px}
+    h3{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;line-height:1.3;margin:40px 0 14px}
+    p{margin-bottom:22px}p:last-child{margin-bottom:0}
+    .dc::first-letter{font-family:'Playfair Display',serif;font-size:4.2em;font-weight:900;float:left;line-height:.82;margin:6px 10px -4px 0;color:var(--accent)}
+    blockquote{border-left:3px solid var(--accent);margin:40px 0;padding:6px 0 6px 28px;font-family:'Playfair Display',serif;font-style:italic;font-size:22px;line-height:1.4}
+    /* mechanism */
+    .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:40px 0}
+    .mc{background:var(--pd);padding:28px 24px}
+    .mc:first-child{border-top:3px solid var(--accent)}
+    .mc:nth-child(2){border-top:3px solid var(--warm)}
+    .mc-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+    .mc-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:10px}
+    .mc p{font-size:15px;line-height:1.6;color:#4a4640;margin:0}
+    .arr{grid-column:1/-1;text-align:center;padding:16px;background:var(--pd);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--muted)}
+    /* table */
+    .dt{width:100%;border-collapse:collapse;margin:32px 0;font-size:15px}
+    .dt th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--ink);padding:8px 12px 10px;text-align:left}
+    .dt td{padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+    .dt tr:last-child td{border-bottom:none}
+    .tag{display:inline-block;font-family:'DM Mono',monospace;font-size:10px;padding:2px 7px;border:1px solid currentColor;border-radius:2px;letter-spacing:.05em}
+    .th{color:var(--accent)}.tg{color:#2e7d32}.ts{color:#1565c0}
+    /* map blocks */
+    .mb{background:var(--ink);padding:48px 24px}
+    .mbi{max-width:960px;margin:0 auto}
+    .mb .lbl{color:rgba(245,242,235,.42)}
+    .mb h2{color:var(--paper);margin-bottom:10px}
+    .mdeck{color:rgba(245,242,235,.68);font-size:16px;margin-bottom:28px;max-width:var(--w)}
+    .mc-wrap{width:100%;height:520px;border:1px solid rgba(245,242,235,.1);position:relative}
+    .mc-cap{margin-top:14px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:rgba(245,242,235,.32);max-width:var(--w)}
+    /* loading */
+    .mload{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(20,17,12,.92);z-index:50;gap:16px;transition:opacity .3s}
+    .mload.gone{opacity:0;pointer-events:none}
+    .spin{width:28px;height:28px;border:2px solid rgba(245,242,235,.12);border-top-color:rgba(245,242,235,.55);border-radius:50%;animation:sp .8s linear infinite}
+    @keyframes sp{to{transform:rotate(360deg)}}
+    .ltxt{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;color:rgba(245,242,235,.38);text-transform:uppercase}
+    /* missing */
+    .miss{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(20,17,12,.93);z-index:49;gap:12px;padding:32px;text-align:center}
+    .miss.show{display:flex}
+    .miss-icon{font-size:32px;opacity:.38}
+    .miss-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--paper)}
+    .miss-txt{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.07em;color:rgba(245,242,235,.38);max-width:420px;line-height:1.7}
+    .miss-file{font-family:'DM Mono',monospace;font-size:12px;color:#f0a070;background:rgba(240,160,112,.08);padding:3px 9px;border:1px solid rgba(240,160,112,.25)}
+    /* controls */
+    .lctrl{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+    .lbtn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;padding:6px 14px;border:1px solid rgba(245,242,235,.18);background:transparent;color:rgba(245,242,235,.5);cursor:pointer;transition:all .2s}
+    .lbtn.on{background:rgba(245,242,235,.11);color:var(--paper);border-color:rgba(245,242,235,.42)}
+    .lbtn:hover{border-color:rgba(245,242,235,.42)}
+    .tctrl{display:flex;gap:2px;margin-bottom:20px;width:fit-content;border:1px solid rgba(245,242,235,.16)}
+    .tbtn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;padding:8px 22px;border:none;background:transparent;color:rgba(245,242,235,.42);cursor:pointer;transition:all .2s}
+    .tbtn.on{background:rgba(245,242,235,.13);color:var(--paper)}
+    /* legend */
+    .leg{background:rgba(16,14,10,.88);border:1px solid rgba(245,242,235,.09);padding:12px 16px;position:absolute;bottom:24px;right:12px;z-index:500;min-width:160px}
+    .leg-t{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,242,235,.4);margin-bottom:10px}
+    .leg-r{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,242,235,.62)}
+    .sw{width:14px;height:14px;flex-shrink:0}
+    /* findings */
+    .fsec{background:var(--pd)}
+    .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:40px 0}
+    .fc{background:var(--paper);padding:28px 22px}
+    .fn{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;line-height:1;color:var(--accent);margin-bottom:8px}
+    .fl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+    .ft{font-size:14px;line-height:1.6;color:#4a4640;margin:0}
+    /* conclusion */
+    .csec{background:var(--ink);color:var(--paper);padding:100px 24px}
+    .csec .lbl{color:rgba(245,242,235,.35)}
+    .csec h2{color:var(--paper)}
+    .csec p{color:rgba(245,242,235,.75)}
+    .csec h3{color:var(--paper);margin-top:48px;font-size:18px}
+    .clist{list-style:none;margin:20px 0 0}
+    .clist li{padding:14px 0 14px 28px;border-bottom:1px solid rgba(245,242,235,.07);color:rgba(245,242,235,.7);font-size:16px;position:relative}
+    .clist li::before{content:'→';position:absolute;left:0;color:#f0a070;font-family:'DM Mono',monospace}
+    footer{border-top:3px double rgba(245,242,235,.1);padding:40px 24px;background:var(--ink);text-align:center}
+    footer p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;color:rgba(245,242,235,.25);margin:0}
+    /* leaflet */
+    .leaflet-control-zoom a{background:rgba(16,14,10,.9)!important;color:rgba(245,242,235,.62)!important;border-color:rgba(245,242,235,.1)!important}
+    .leaflet-control-attribution{background:rgba(16,14,10,.6)!important;color:rgba(245,242,235,.22)!important;font-size:9px!important}
+    .leaflet-control-attribution a{color:rgba(245,242,235,.3)!important}
+    .leaflet-popup-content-wrapper{background:var(--ink);color:var(--paper);border-radius:0;box-shadow:0 4px 24px rgba(0,0,0,.6)}
+    .leaflet-popup-tip{background:var(--ink)}
+    .leaflet-popup-content{margin:16px 18px;min-width:210px}
+    .pn{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;margin-bottom:10px;color:var(--paper);border-bottom:1px solid rgba(245,242,235,.1);padding-bottom:8px}
+    .pr{display:flex;justify-content:space-between;gap:16px;font-family:'DM Mono',monospace;font-size:11px;padding:4px 0;color:rgba(245,242,235,.55)}
+    .pv{color:var(--paper);font-weight:500}
+    .pbadge{display:inline-block;padding:2px 8px;font-size:10px;letter-spacing:.08em}
+    @media(max-width:640px){.mgrid,.fgrid{grid-template-columns:1fr}.mc-wrap{height:380px}}
+  </style>
+</head>
+<body>
+
+<header class="mast">
+  <span>Critical Mapping · TU Berlin · Stadtklima &amp; Soziale Ungleichheit</span>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"><div id="hero-map"></div></div>
+  <div class="hero-c">
+    <p class="kicker">Berlin im Klimawandel</p>
+    <h1>Wer schwitzt,<br>wenn es heiß wird –<br>und warum <em>das kein Zufall</em> ist</h1>
+    <p class="deck">Hitze in der Stadt ist nicht gleichmäßig verteilt. Sie trifft diejenigen am stärksten, die ihr am wenigsten ausweichen können – und die am wenigsten Grün in ihrer Nachbarschaft haben.</p>
+    <p class="byline">Eine Analyse von Stadtklima, Grünvolumen und sozialer Ungleichheit in Berlin &nbsp;·&nbsp; 2024</p>
+  </div>
+  <div class="scroll-hint">Scrollen</div>
+</section>
+
+<!-- THESE -->
+<hr class="rule" style="margin-top:80px">
+<section class="sec">
+  <div class="inn">
+    <span class="lbl">These</span>
+    <h2>Grün schützt vor Hitze.<br>Aber wer hat Grün?</h2>
+    <p class="dc">An Sommertagen mit über 35 Grad unterscheiden sich Berliner Stadtteile um bis zu 10 Grad Celsius. Der Prenzlauer Berg kühlt sich nachts in seinen begrünten Innenhöfen deutlich stärker ab als das dicht versiegelte Neukölln-Nord. Und die Bewohnerinnen von Spandau-West, eingekesselt zwischen Bundesstraßen und Plattenbau, haben statistisch gesehen weniger Zugang zu Grünflächen als jene in Dahlem oder Grunewald.</p>
+    <p>Doch ist dieser Zusammenhang zufällig – oder folgt das Grün tatsächlich dem Geld? Und wenn ja: Verschärft sich diese Ungleichheit in dem Maß, wie Gentrifizierungsprozesse die Sozialstruktur der Stadt umschichten?</p>
+    <blockquote>„Stadtplanung kann die Lufttemperatur nicht direkt steuern. Aber sie entscheidet, wo Bäume gepflanzt werden – und wo nicht."</blockquote>
+    <p>Diese Analyse verbindet drei Datenschichten: das Klimamodell Berlin, die Grünvolumenzahlen des Umweltatlas sowie das Monitoring Soziale Stadtentwicklung des Berliner Senats. Ziel ist es, räumliche Überlappungen von Hitzebelastung, Grünarmut und sozialer Benachteiligung sichtbar zu machen.</p>
+  </div>
+</section>
+
+<!-- MECHANISMUS -->
+<hr class="rule">
+<section class="sec" style="background:var(--pd)">
+  <div class="inn">
+    <span class="lbl">Hintergrund</span>
+    <h2>Wie Stadtplanung Hitze erzeugt – und wie Grün sie lindert</h2>
+    <p>Städte heizen sich aus einem einfachen Grund stärker auf als ihr Umland: Asphalt, Beton und Gebäudemassen speichern tagsüber Wärme und geben sie nachts langsam wieder ab. Gleichzeitig fehlt die Verdunstungskühlung, die unversiegelte Böden und Vegetation leisten.</p>
+    <div class="mgrid">
+      <div class="mc"><div class="mc-lbl">Faktor 1</div><div class="mc-title">Versiegelung</div><p>Asphalt und Beton absorbieren bis zu 90 % der Sonnenstrahlung und geben sie als Wärme ab. In stark versiegelten Gebieten liegen Oberflächentemperaturen im Sommer bis zu 40 °C über denen begrünter Flächen.</p></div>
+      <div class="mc"><div class="mc-lbl">Faktor 2</div><div class="mc-title">Fehlendes Grünvolumen</div><p>Bäume kühlen durch Verdunstung und Beschattung. Ein einzelner Stadtbaum kann an einem Sommertag die Kühlwirkung von mehreren Klimaanlagen ersetzen. Fehlt er, bleibt diese Wirkung aus.</p></div>
+      <div class="arr">↓ beide Faktoren zusammen erzeugen den städtischen Wärmeinseleffekt ↓</div>
+      <div class="mc" style="grid-column:1/-1;border-top:3px solid var(--accent)"><div class="mc-lbl">Folge</div><div class="mc-title">Thermische Belastung für Menschen</div><p>Der Index PET (Physiologisch Äquivalente Temperatur) misst, wie Hitze für den menschlichen Körper tatsächlich erlebbar ist. In stark versiegelten, grünarmen Gebieten übersteigt PET an Hitzetagen 46 °C – eine Belastung, die medizinisch als „sehr stark" eingestuft wird.</p></div>
+    </div>
+    <h3>Warum ist das auch eine Frage sozialer Gerechtigkeit?</h3>
+    <p>Wer in einer grünarmen, stark versiegelten Nachbarschaft wohnt, hat statistisch gesehen häufig auch weniger Ressourcen, dieser Situation auszuweichen: kein Haus mit Garten, kein Urlaub im Sommer, keine Klimaanlage. Die Fähigkeit, sich vor Hitze zu schützen, ist ungleich verteilt – und diese Ungleichheit reproduziert sich räumlich.</p>
+  </div>
+</section>
+
+<!-- DATEN -->
+<hr class="rule">
+<section class="sec">
+  <div class="inn">
+    <span class="lbl">Methodik &amp; Daten</span>
+    <h2>Die verwendeten Datenschichten</h2>
+    <p>Alle Daten stammen aus öffentlich zugänglichen Berliner Geodiensten. Die räumliche Analyse erfolgte in QGIS auf Ebene der Lebensweltlich orientierten Räume (LOR) – Berlins Planungsraumgliederung in 542 Planungsräume.</p>
+    <table class="dt">
+      <thead><tr><th>Datensatz</th><th>Jahr</th><th>Typ</th><th>Quelle</th></tr></thead>
+      <tbody>
+        <tr><td>Klimamodell Berlin – PET &amp; Lufttemperatur</td><td>2022</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
+        <tr><td>Klimaanalysekarten (historisch)</td><td>2014</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
+        <tr><td>Grünvolumenzahl (inkl. Δ 2010→2020)</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Umweltatlas Berlin</td></tr>
+        <tr><td>Versiegelungsgrad</td><td>2021</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
+        <tr><td>Monitoring Soziale Stadtentwicklung</td><td>2023</td><td><span class="tag ts">Sozial</span></td><td>SenStadt Berlin</td></tr>
+        <tr><td>Monitoring Soziale Stadtentwicklung</td><td>2013</td><td><span class="tag ts">Sozial</span></td><td>SenStadt Berlin</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:14px;color:var(--muted)">Der Mehrfachbelastungsindex wurde durch Zonenstatistik berechnet: Für jeden Planungsraum wurden die Mittelwerte aller drei Dimensionen bestimmt, standardisiert und zu einem Gesamtindex summiert.</p>
+  </div>
+</section>
+
+<!-- MAP 1: HITZE -->
+<div class="mb">
+  <div class="mbi">
+    <span class="lbl">Datenschicht 1 von 3</span>
+    <h2>Hitzebelastung in Berlin</h2>
+    <p class="mdeck">Nächtliche Lufttemperatur (PET) an einem durchschnittlichen Sommertag, aggregiert auf LOR-Planungsräume. Je dunkler, desto höher die thermische Belastung.</p>
+    <div class="mc-wrap">
+      <div id="map-hitze" style="width:100%;height:100%"></div>
+      <div class="mload" id="ld-hitze"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
+      <div class="miss" id="ms-hitze">
+        <div class="miss-icon">📂</div>
+        <div class="miss-title">Analysedaten fehlen</div>
+        <div class="miss-txt">Lege die exportierte QGIS-Datei als <span class="miss-file">analyse.geojson</span> in denselben Ordner wie diese HTML-Datei. Das GeoJSON benötigt je Planungsraum ein Attribut <code>hitze_pet</code>.</div>
+      </div>
+      <div class="leg"><div class="leg-t">Wärmebelastung (PET)</div>
+        <div class="leg-r"><div class="sw" style="background:#fee5d9"></div>Gering (&lt;18°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#fcae91"></div>Mittel (18–29°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#fb6a4a"></div>Hoch (29–41°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#cb181d"></div>Sehr hoch (&gt;41°C)</div>
+      </div>
+    </div>
+    <p class="mc-cap">Quelle: Klimamodell Berlin 2022 (Umweltatlas), aggregiert auf LOR-Planungsräume per Zonenstatistik in QGIS. Klick auf Planungsraum für Details.</p>
+  </div>
+</div>
+
+<!-- MAP 2: GRÜN -->
+<div class="mb" style="padding-top:2px">
+  <div class="mbi">
+    <span class="lbl">Datenschicht 2 von 3</span>
+    <h2>Grünvolumen in Berlin</h2>
+    <p class="mdeck">Grünvolumenzahl (GVZ) in m³/m², gemessen aus Vegetationshöhendaten (2020). Dunkelgrün = viel Vegetation, Hellgelb = wenig.</p>
+    <div class="mc-wrap">
+      <div id="map-gruen" style="width:100%;height:100%"></div>
+      <div class="mload" id="ld-gruen"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
+      <div class="miss" id="ms-gruen">
+        <div class="miss-icon">📂</div>
+        <div class="miss-title">Analysedaten fehlen</div>
+        <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">gruen_gvz</span> (Grünvolumenzahl, m³/m²).</div>
+      </div>
+      <div class="leg"><div class="leg-t">Grünvolumenzahl (m³/m²)</div>
+        <div class="leg-r"><div class="sw" style="background:#edf8e9"></div>Sehr hoch (&gt;8)</div>
+        <div class="leg-r"><div class="sw" style="background:#74c476"></div>Hoch (4–8)</div>
+        <div class="leg-r"><div class="sw" style="background:#238b45"></div>Mittel (2–4)</div>
+        <div class="leg-r"><div class="sw" style="background:#00441b"></div>Gering (&lt;2)</div>
+      </div>
+    </div>
+    <p class="mc-cap">Quelle: Grünvolumen 2020 (Umweltatlas Berlin), aggregiert auf LOR-Planungsräume per Zonenstatistik in QGIS.</p>
+  </div>
+</div>
+
+<!-- MAP 3: SOZIAL -->
+<div class="mb" style="padding-top:2px">
+  <div class="mbi">
+    <span class="lbl">Datenschicht 3 von 3</span>
+    <h2>Soziale Ungleichheit</h2>
+    <p class="mdeck">Gesamtindex Soziale Ungleichheit (MSS 2023) auf LOR-Planungsraumebene. Erfasst Arbeitslosigkeit, Transferbezug und Kinderarmut.</p>
+    <div class="mc-wrap">
+      <div id="map-sozial" style="width:100%;height:100%"></div>
+      <div class="mload" id="ld-sozial"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
+      <div class="miss" id="ms-sozial">
+        <div class="miss-icon">📂</div>
+        <div class="miss-title">Analysedaten fehlen</div>
+        <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">sozial_index</span> (MSS Gesamtindex, Wert 1–4).</div>
+      </div>
+      <div class="leg"><div class="leg-t">Sozialer Status (MSS)</div>
+        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Hoch</div>
+        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Mittel</div>
+        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Niedrig</div>
+        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sehr niedrig</div>
+      </div>
+    </div>
+    <p class="mc-cap">Quelle: Monitoring Soziale Stadtentwicklung 2023, SenStadt Berlin.</p>
+  </div>
+</div>
+
+<!-- MAP 4: KOMBINIERT -->
+<div class="mb" style="padding-top:2px;padding-bottom:64px">
+  <div class="mbi">
+    <span class="lbl">Kombinierte Analyse</span>
+    <h2>Mehrfachbelastung: Wo treffen alle drei Faktoren zusammen?</h2>
+    <p class="mdeck">Rot = dreifach belastet (Hitze + grünarm + sozial benachteiligt). Klick auf einen Planungsraum für alle drei Werte im Detail.</p>
+    <div class="lctrl">
+      <button class="lbtn on" onclick="setMode('all',this)">Alle Faktoren</button>
+      <button class="lbtn" onclick="setMode('hitze',this)">Nur Hitze</button>
+      <button class="lbtn" onclick="setMode('gruen',this)">Nur Grün</button>
+      <button class="lbtn" onclick="setMode('sozial',this)">Nur Sozial</button>
+    </div>
+    <div class="mc-wrap">
+      <div id="map-kombi" style="width:100%;height:100%"></div>
+      <div class="mload" id="ld-kombi"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
+      <div class="miss" id="ms-kombi">
+        <div class="miss-icon">📂</div>
+        <div class="miss-title">Analysedaten fehlen</div>
+        <div class="miss-txt">Das GeoJSON benötigt Attribute <span class="miss-file">hitze_pet</span>, <span class="miss-file">gruen_gvz</span>, <span class="miss-file">sozial_index</span> und <span class="miss-file">belastung_score</span> (0–3).</div>
+      </div>
+      <div class="leg" id="leg-kombi"><div class="leg-t">Mehrfachbelastung</div>
+        <div class="leg-r"><div class="sw" style="background:#fef0d9"></div>Keine</div>
+        <div class="leg-r"><div class="sw" style="background:#fdcc8a"></div>Einfach</div>
+        <div class="leg-r"><div class="sw" style="background:#fc8d59"></div>Zweifach</div>
+        <div class="leg-r"><div class="sw" style="background:#b30000"></div>Dreifach</div>
+      </div>
+    </div>
+    <p class="mc-cap">Mehrfachbelastungsindex: je 1 Punkt für überdurchschnittliche Hitze, unterdurchschnittliches Grün, niedrigen/sehr niedrigen Sozialindex. Max. 3 Punkte.</p>
+  </div>
+</div>
+
+<!-- ERKENNTNISSE -->
+<section class="sec fsec">
+  <div class="inn">
+    <span class="lbl">Gesamtstädtische Befunde</span>
+    <h2>Was die Daten zeigen</h2>
+    <div class="fgrid">
+      <div class="fc"><div class="fn" id="s1">–</div><div class="fl">Dreifach belastete Planungsräume</div><p class="ft" id="s1t">Wird aus den QGIS-Analysedaten automatisch berechnet.</p></div>
+      <div class="fc"><div class="fn" id="s2">–</div><div class="fl">Δ Grünvolumen 2010→2020</div><p class="ft" id="s2t">Wird aus den QGIS-Analysedaten automatisch berechnet.</p></div>
+      <div class="fc"><div class="fn" id="s3">–</div><div class="fl">Temperaturspanne Berlin</div><p class="ft" id="s3t">Wird aus den QGIS-Analysedaten automatisch berechnet.</p></div>
+    </div>
+    <h3>Räumliche Konzentration</h3>
+    <p>Die Analyse zeigt eine deutliche räumliche Konzentration der Mehrfachbelastung in Spandau-West, Neukölln-Nord, Wedding und Marzahn-Hellersdorf-Nord – Gebiete mit verdichteter Bebauung, hohem Versiegelungsgrad und sozial überdurchschnittlich belasteter Bevölkerung.</p>
+    <p>Demgegenüber zeigen Gebiete wie Dahlem, Wannsee oder Pankow-Niederschönhausen durchgängig geringe Belastungswerte in allen drei Dimensionen.</p>
+  </div>
+</section>
+
+<!-- FALLBEISPIELE INTRO -->
+<hr class="rule">
+<section class="sec">
+  <div class="inn">
+    <span class="lbl">Vertiefung · Zwei Gebiete im Vergleich</span>
+    <h2>Wie sich ein Jahrzehnt anfühlt –<br>je nachdem, wo man wohnt</h2>
+    <p>Zwei Berliner Gebiete, ähnlich dicht bebaut, ähnlich versiegelt – und doch eine sehr unterschiedliche Entwicklung zwischen 2013 und 2022. Das eine hat Gentrifizierungsprozesse erlebt, das andere nicht.</p>
+  </div>
+</section>
+
+<!-- FALLGEBIET 1 -->
+<div class="mb">
+  <div class="mbi">
+    <span class="lbl">Fallgebiet 1</span>
+    <h2 style="margin-bottom:6px">Neukölln-Nord</h2>
+    <p class="mdeck" style="margin-bottom:16px">Gentrifizierung und Verdrängung – aber bleibt das Grün?</p>
+    <p style="color:rgba(245,242,235,.65);font-size:16px;max-width:600px;margin-bottom:24px">Neukölln-Nord war 2013 eines der sozial belastetsten Gebiete Berlins. Seitdem ist der Sozialindex gestiegen – nicht weil die Lage besser wurde, sondern weil einkommensschwache Bewohnerinnen verdrängt wurden. Die Hitzebelastung blieb.</p>
+    <div class="tctrl">
+      <button class="tbtn on" onclick="switchCase('nk','2013',this)">ca. 2013</button>
+      <button class="tbtn" onclick="switchCase('nk','2022',this)">ca. 2022</button>
+    </div>
+    <div class="mc-wrap">
+      <div id="map-nk" style="width:100%;height:100%"></div>
+      <div class="mload" id="ld-nk"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
+      <div class="miss" id="ms-nk">
+        <div class="miss-icon">📂</div><div class="miss-title">Analysedaten fehlen</div>
+        <div class="miss-txt">Benötigt <span class="miss-file">analyse.geojson</span> mit Attributen <code>sozial_2013</code> und <code>sozial_2022</code>.</div>
+      </div>
+      <div class="leg"><div class="leg-t" id="nk-lt">MSS 2013 · Sozialindex</div>
+        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sehr niedrig</div>
+        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Niedrig</div>
+        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Mittel</div>
+        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Hoch</div>
+      </div>
+    </div>
+    <p class="mc-cap" id="nk-cap">Darstellung: MSS 2013, Sozialindex auf LOR-Planungsraumebene. Zoom auf Neukölln-Nord.</p>
+  </div>
+</div>
+
+<!-- FALLGEBIET 2 -->
+<div class="mb" style="padding-top:2px;padding-bottom:64px">
+  <div class="mbi">
+    <span class="lbl">Fallgebiet 2</span>
+    <h2 style="margin-bottom:6px">Spandau-West / Heerstraße Nord</h2>
+    <p class="mdeck" style="margin-bottom:16px">Konstant belastet – auf allen Ebenen</p>
+    <p style="color:rgba(245,242,235,.65);font-size:16px;max-width:600px;margin-bottom:24px">Spandau-West zeigt über beide Zeitpunkte hinweg ein konsistentes Bild: hohe Hitzebelastung, unterdurchschnittliches Grünvolumen, niedriger Sozialindex. Hier hat sich wenig verändert – und das ist das Problem.</p>
+    <div class="tctrl">
+      <button class="tbtn on" onclick="switchCase('sp','2013',this)">ca. 2013</button>
+      <button class="tbtn" onclick="switchCase('sp','2022',this)">ca. 2022</button>
+    </div>
+    <div class="mc-wrap">
+      <div id="map-sp" style="width:100%;height:100%"></div>
+      <div class="mload" id="ld-sp"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
+      <div class="miss" id="ms-sp">
+        <div class="miss-icon">📂</div><div class="miss-title">Analysedaten fehlen</div>
+        <div class="miss-txt">Benötigt <span class="miss-file">analyse.geojson</span> mit Attributen <code>sozial_2013</code> und <code>sozial_2022</code>.</div>
+      </div>
+      <div class="leg"><div class="leg-t" id="sp-lt">MSS 2013 · Sozialindex</div>
+        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sehr niedrig</div>
+        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Niedrig</div>
+        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Mittel</div>
+        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Hoch</div>
+      </div>
+    </div>
+    <p class="mc-cap" id="sp-cap">Darstellung: MSS 2013, Sozialindex auf LOR-Planungsraumebene. Zoom auf Spandau-West.</p>
+  </div>
+</div>
+
+<!-- FAZIT -->
+<section class="csec">
+  <div class="inn">
+    <span class="lbl">Fazit</span>
+    <h2>Das Grün folgt dem Geld –<br>und das ist ein Planungsproblem</h2>
+    <p>Die Analyse zeigt einen robusten räumlichen Zusammenhang: Gebiete mit niedrigem Sozialindex sind in Berlin systematisch häufiger von Hitzebelastung betroffen und weisen ein geringeres Grünvolumen auf. Dieser Zusammenhang hat sich zwischen 2013 und 2022 nicht aufgelöst.</p>
+    <p>Besonders deutlich wird das im Vergleich von Gentrifizierungsgebieten wie Neukölln-Nord mit konstant belasteten Gebieten wie Spandau-West: Im ersten Fall hat sich der Sozialindex scheinbar verbessert – nicht durch bessere Lebensverhältnisse, sondern durch Verdrängung. Die physische Hitzebelastung blieb.</p>
+    <h3>Was Stadtplanung tun müsste</h3>
+    <ul class="clist">
+      <li>Begrünungsmaßnahmen gezielt in sozial belasteten, hitzeexponierten Gebieten priorisieren – nicht dort, wo ohnehin schon Grün ist</li>
+      <li>Milieuschutz und Begrünung als gemeinsame Strategie denken: Wer verdrängt wird, profitiert nicht von nachträglichen Bäumen</li>
+      <li>Den Mehrfachbelastungsindex als verbindliches Planungsinstrument einführen, etwa im Stadtentwicklungsplan Klima</li>
+      <li>Versiegelungsgrad als Kriterium bei Baugenehmigungen stärker gewichten – besonders in bereits hitzebelasteten Quartieren</li>
+      <li>Hitzevorsorge nicht nur als technische, sondern als soziale Aufgabe begreifen: kühle öffentliche Räume gezielt für belastete Gebiete</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <p>Stadtklima &amp; Soziale Ungleichheit in Berlin &nbsp;·&nbsp; Critical Mapping · TU Berlin &nbsp;·&nbsp; 2024 &nbsp;·&nbsp; Geodaten: Umweltatlas Berlin, SenStadt Berlin (dl-zero-de/2.0) · LOR: Amt für Statistik Berlin-Brandenburg (CC BY 3.0 DE)</p>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════
+// KONFIGURATION – passe Dateinamen & Feldnamen an
+// ══════════════════════════════════════════════
+const CFG = {
+  lorFile:     'lor.geojson',       // LOR-Geometrien von ODIS herunterladen
+  analyseFile: 'analyse.geojson',   // QGIS-Export mit Analysedaten
+
+  // Feldnamen im analyse.geojson (müssen mit QGIS-Export übereinstimmen)
+  idField:      'PLR_ID',           // LOR-Schlüssel (8-stellig, z.B. "01011101")
+  nameField:    'PLR_NAME',         // Name des Planungsraums
+  bezirkField:  'BEZ_NAME',         // Bezirksname
+  hitzeFeld:    'hitze_pet',        // PET-Mittelwert (°C)
+  gruenFeld:    'gruen_gvz',        // Grünvolumenzahl (m³/m²)
+  sozialFeld:   'sozial_index',     // MSS-Gesamtindex (1–4)
+  sozial13Feld: 'sozial_2013',      // MSS 2013 Sozialindex
+  sozial22Feld: 'sozial_2022',      // MSS 2022 Sozialindex
+  scoreFeld:    'belastung_score',  // Mehrfachbelastung 0–3
+  deltaFeld:    'gruen_delta',      // Δ GVZ 2010→2020
+};
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let lorGeoJSON = null;
+let lookup = {};   // { "PLR_ID": { ...properties } }
+let maps = {}, layers = {};
+let kombiMode = 'all';
+
+const BERLIN = [52.52, 13.405];
+const NK     = [52.477, 13.437];
+const SP     = [52.527, 13.196];
+
+// ══════════════════════════════════════════════
+// TILES
+// ══════════════════════════════════════════════
+const darkBase = () => L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
+  { attribution:'© OpenStreetMap © CARTO', subdomains:'abcd', maxZoom:19 }
+);
+const darkLabels = () => L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',
+  { subdomains:'abcd', maxZoom:19, pane:'shadowPane' }
+);
+function makeMap(id, center, zoom, noScroll) {
+  const m = L.map(id, { zoomControl:true, scrollWheelZoom:!noScroll });
+  darkBase().addTo(m); darkLabels().addTo(m);
+  m.setView(center, zoom);
+  return m;
+}
+
+// ══════════════════════════════════════════════
+// COLOUR SCALES
+// ══════════════════════════════════════════════
+function cHeat(v) {
+  if (v == null) return '#2a2825';
+  if (v > 41) return '#cb181d';
+  if (v > 29) return '#fb6a4a';
+  if (v > 18) return '#fcae91';
+  return '#fee5d9';
+}
+function cGreen(v) {
+  if (v == null) return '#2a2825';
+  if (v > 8) return '#edf8e9';
+  if (v > 4) return '#74c476';
+  if (v > 2) return '#238b45';
+  return '#00441b';
+}
+function cSocial(v) {
+  if (v == null) return '#2a2825';
+  return ['#2a2825','#08306b','#2171b5','#6baed6','#eff3ff'][Math.round(v)] || '#2a2825';
+}
+function cScore(v) {
+  return ['#fef0d9','#fdcc8a','#fc8d59','#b30000'][v] || '#2a2825';
+}
+const socialLabel = v => (['–','Sehr niedrig','Niedrig','Mittel','Hoch'])[Math.round(v)] || '–';
+const scoreLabel  = v => (['Keine','Einfach','Zweifach','Dreifach'])[v] || '–';
+const scoreTextColor = v => v >= 2 ? '#fff' : '#222';
+
+// ══════════════════════════════════════════════
+// DATA LOADING
+// ══════════════════════════════════════════════
+async function loadFiles() {
+  const [lor, analyse] = await Promise.allSettled([
+    fetch(CFG.lorFile).then(r => { if (!r.ok) throw r.status; return r.json(); }),
+    fetch(CFG.analyseFile).then(r => { if (!r.ok) throw r.status; return r.json(); }),
+  ]);
+  if (lor.status === 'fulfilled') lorGeoJSON = lor.value;
+  if (analyse.status === 'fulfilled' && analyse.value?.features) {
+    analyse.value.features.forEach(f => {
+      const p = f.properties;
+      // try multiple common id field names
+      const id = String(p[CFG.idField] || p.PLR_ID || p.PLANUNGSRAUM_ID || p.plr_id || '');
+      if (id) lookup[id] = p;
+    });
+  }
+}
+
+// ══════════════════════════════════════════════
+// LOR ID from feature
+// ══════════════════════════════════════════════
+function lorID(f) {
+  const p = f.properties;
+  return String(p[CFG.idField] || p.PLR_ID || p.PLANUNGSRAUM_ID || p.plr_id || p.gml_id || '');
+}
+function lorName(f) {
+  const p = f.properties;
+  return p[CFG.nameField] || p.PLR_NAME || p.PLANUNGSRAUM || p.BEZ || lorID(f);
+}
+
+// ══════════════════════════════════════════════
+// STYLE FACTORIES
+// ══════════════════════════════════════════════
+function styleFor(f, colorFn, field) {
+  const ap = lookup[lorID(f)] || {};
+  const v = ap[field];
+  return { fillColor: colorFn(v), fillOpacity: v != null ? 0.73 : 0.12, color:'rgba(255,255,255,0.07)', weight:0.5 };
+}
+function styleKombi(f, mode) {
+  const ap = lookup[lorID(f)] || {};
+  let fill, op;
+  if (mode==='hitze')  { fill=cHeat(ap[CFG.hitzeFeld]);   op=ap[CFG.hitzeFeld]!=null?0.73:0.12; }
+  else if (mode==='gruen')  { fill=cGreen(ap[CFG.gruenFeld]);  op=ap[CFG.gruenFeld]!=null?0.73:0.12; }
+  else if (mode==='sozial') { fill=cSocial(ap[CFG.sozialFeld]);op=ap[CFG.sozialFeld]!=null?0.73:0.12; }
+  else { fill=cScore(ap[CFG.scoreFeld]); op=ap[CFG.scoreFeld]!=null?0.73:0.12; }
+  return { fillColor:fill, fillOpacity:op, color:'rgba(255,255,255,0.07)', weight:0.5 };
+}
+
+// ══════════════════════════════════════════════
+// POPUPS
+// ══════════════════════════════════════════════
+function popHitze(name, ap) {
+  const v = ap[CFG.hitzeFeld];
+  return `<div class="pn">${name}</div>
+    <div class="pr"><span>PET (Wärmebelastung)</span><span class="pv">${v!=null?v.toFixed(1)+' °C':'–'}</span></div>
+    <div class="pr"><span>Bezirk</span><span class="pv">${ap[CFG.bezirkField]||'–'}</span></div>`;
+}
+function popGruen(name, ap) {
+  const v = ap[CFG.gruenFeld], d = ap[CFG.deltaFeld];
+  return `<div class="pn">${name}</div>
+    <div class="pr"><span>Grünvolumenzahl 2020</span><span class="pv">${v!=null?v.toFixed(2)+' m³/m²':'–'}</span></div>
+    <div class="pr"><span>Δ 2010→2020</span><span class="pv">${d!=null?(d>0?'+':'')+d.toFixed(2):'–'}</span></div>`;
+}
+function popSozial(name, ap) {
+  const v = ap[CFG.sozialFeld];
+  return `<div class="pn">${name}</div>
+    <div class="pr"><span>Sozialindex (MSS 2023)</span><span class="pv">${socialLabel(v)}</span></div>
+    <div class="pr"><span>Bezirk</span><span class="pv">${ap[CFG.bezirkField]||'–'}</span></div>`;
+}
+function popKombi(name, ap) {
+  const sc = ap[CFG.scoreFeld];
+  return `<div class="pn">${name}</div>
+    <div class="pr"><span>Hitze (PET)</span><span class="pv">${ap[CFG.hitzeFeld]!=null?ap[CFG.hitzeFeld].toFixed(1)+' °C':'–'}</span></div>
+    <div class="pr"><span>Grünvolumen</span><span class="pv">${ap[CFG.gruenFeld]!=null?ap[CFG.gruenFeld].toFixed(2)+' m³/m²':'–'}</span></div>
+    <div class="pr"><span>Sozialindex</span><span class="pv">${socialLabel(ap[CFG.sozialFeld])}</span></div>
+    <div class="pr"><span>Mehrfachbelastung</span>
+      <span class="pbadge" style="background:${cScore(sc)};color:${scoreTextColor(sc)}">${scoreLabel(sc)}</span>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════
+// LAYER BUILDERS
+// ══════════════════════════════════════════════
+function hover(layer, styleFn) {
+  layer.on('mouseover', () => layer.setStyle({ fillOpacity:0.9, color:'rgba(255,255,255,0.28)', weight:1.2 }));
+  layer.on('mouseout',  () => layer.setStyle(styleFn()));
+}
+
+function buildTheme(map, colorFn, field, popupFn) {
+  if (!lorGeoJSON) return null;
+  return L.geoJSON(lorGeoJSON, {
+    style: f => styleFor(f, colorFn, field),
+    onEachFeature: (f, layer) => {
+      const ap = lookup[lorID(f)] || {};
+      const name = lorName(f);
+      layer.on('click', () => layer.bindPopup(popupFn(name, ap)).openPopup());
+      hover(layer, () => styleFor(f, colorFn, field));
+    }
+  }).addTo(map);
+}
+
+function buildKombi(map, mode) {
+  if (!lorGeoJSON) return null;
+  return L.geoJSON(lorGeoJSON, {
+    style: f => styleKombi(f, mode),
+    onEachFeature: (f, layer) => {
+      const ap = lookup[lorID(f)] || {};
+      const name = lorName(f);
+      layer.on('click', () => layer.bindPopup(popKombi(name, ap)).openPopup());
+      hover(layer, () => styleKombi(f, mode));
+    }
+  }).addTo(map);
+}
+
+// ── centroid helper ──
+function approxCenter(coords) {
+  const ring = Array.isArray(coords[0][0]) ? (Array.isArray(coords[0][0][0]) ? coords[0][0] : coords[0]) : coords;
+  let la=0,ln=0; ring.forEach(p=>{ln+=p[0];la+=p[1];}); return [la/ring.length, ln/ring.length];
+}
+
+function buildCase(map, center, radiusDeg, yearField) {
+  if (!lorGeoJSON) return null;
+  const [clat,clng] = center;
+  return L.geoJSON(lorGeoJSON, {
+    filter: f => {
+      try {
+        const c = approxCenter(f.geometry.coordinates);
+        return Math.abs(c[0]-clat)<radiusDeg && Math.abs(c[1]-clng)<radiusDeg*1.6;
+      } catch { return false; }
+    },
+    style: f => {
+      const ap = lookup[lorID(f)] || {};
+      const v = ap[yearField];
+      return { fillColor:cSocial(v), fillOpacity:v!=null?0.75:0.12, color:'rgba(255,255,255,0.14)', weight:1 };
+    },
+    onEachFeature: (f, layer) => {
+      const ap = lookup[lorID(f)] || {};
+      const name = lorName(f);
+      const v = ap[yearField];
+      layer.bindTooltip(`${name}${v?' · '+socialLabel(v):''}`, { direction:'top' });
+    }
+  }).addTo(map);
+}
+
+// ══════════════════════════════════════════════
+// UI
+// ══════════════════════════════════════════════
+const hideLoader = id => document.getElementById('ld-'+id)?.classList.add('gone');
+const showMiss   = id => { document.getElementById('ms-'+id)?.classList.add('show'); hideLoader(id); };
+
+function setMode(mode, btn) {
+  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  kombiMode = mode;
+  if (layers.kombi) maps.kombi.removeLayer(layers.kombi);
+  layers.kombi = buildKombi(maps.kombi, mode);
+}
+
+function switchCase(area, year, btn) {
+  btn.closest('.tctrl').querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const field = year==='2013' ? CFG.sozial13Feld : CFG.sozial22Feld;
+  const center = area==='nk' ? NK : SP;
+  if (layers[area]) maps[area].removeLayer(layers[area]);
+  layers[area] = buildCase(maps[area], center, 0.032, field);
+  document.getElementById(area+'-lt').textContent = `MSS ${year} · Sozialindex`;
+  document.getElementById(area+'-cap').textContent = area==='nk'
+    ? `Neukölln-Nord, MSS ${year}: ${year==='2013'?'Hohe Transferbezugsquote, hohe Kinderarmut.':'Verbesserter Index – primär durch Verdrängungsprozesse.'}`
+    : `Spandau-West, MSS ${year}: ${year==='2013'?'Strukturell verfestigte Benachteiligung.':'Kaum Veränderung – Sozialindex bleibt niedrig.'}`;
+}
+
+function computeStats() {
+  const vals = Object.values(lookup);
+  if (!vals.length) return;
+  const sc = vals.map(v=>v[CFG.scoreFeld]).filter(v=>v!=null);
+  if (sc.length) {
+    const triple = sc.filter(v=>v===3).length;
+    document.getElementById('s1').textContent = Math.round(triple/sc.length*100)+'%';
+    document.getElementById('s1t').textContent = 'der Planungsräume sind gleichzeitig hitzebelas-tet, grünarm und sozial benachteiligt.';
+  }
+  const dl = vals.map(v=>v[CFG.deltaFeld]).filter(v=>v!=null);
+  if (dl.length) {
+    const avg = dl.reduce((a,b)=>a+b,0)/dl.length;
+    document.getElementById('s2').textContent = (avg>0?'+':'')+avg.toFixed(1);
+    document.getElementById('s2t').textContent = 'Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) von 2010 bis 2020.';
+  }
+  const pets = vals.map(v=>v[CFG.hitzeFeld]).filter(v=>v!=null);
+  if (pets.length) {
+    document.getElementById('s3').textContent = (Math.max(...pets)-Math.min(...pets)).toFixed(0)+'°C';
+    document.getElementById('s3t').textContent = 'Spanne der PET-Werte zwischen am stärksten und am schwächsten belasteten Planungsräumen.';
+  }
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+async function init() {
+  // Hero (non-interactive)
+  const hero = L.map('hero-map',{zoomControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false,keyboard:false});
+  darkBase().addTo(hero); hero.setView(BERLIN,11);
+
+  // All maps
+  maps.hitze  = makeMap('map-hitze',  BERLIN, 11, true);
+  maps.gruen  = makeMap('map-gruen',  BERLIN, 11, true);
+  maps.sozial = makeMap('map-sozial', BERLIN, 11, true);
+  maps.kombi  = makeMap('map-kombi',  BERLIN, 11, true);
+  maps.nk     = makeMap('map-nk',     NK,     13, true);
+  maps.sp     = makeMap('map-sp',     SP,     13, true);
+
+  // Load data
+  await loadFiles();
+
+  const hasLOR     = !!lorGeoJSON;
+  const hasAnalyse = Object.keys(lookup).length > 0;
+
+  // Build all layers (or show missing banners)
+  const mapIds = ['hitze','gruen','sozial','kombi','nk','sp'];
+
+  if (!hasLOR) {
+    mapIds.forEach(showMiss);
+    return;
+  }
+
+  layers.hitze  = buildTheme(maps.hitze,  cHeat,   CFG.hitzeFeld,  popHitze);
+  layers.gruen  = buildTheme(maps.gruen,  cGreen,  CFG.gruenFeld,  popGruen);
+  layers.sozial = buildTheme(maps.sozial, cSocial, CFG.sozialFeld, popSozial);
+  layers.kombi  = buildKombi(maps.kombi, 'all');
+  layers.nk     = buildCase(maps.nk, NK, 0.032, CFG.sozial13Feld);
+  layers.sp     = buildCase(maps.sp, SP, 0.032, CFG.sozial13Feld);
+
+  mapIds.forEach(hideLoader);
+
+  if (!hasAnalyse) mapIds.forEach(showMiss);
+  else computeStats();
+
+  // Fix grey tiles after layout
+  setTimeout(() => {
+    [hero,...Object.values(maps)].forEach(m => m.invalidateSize());
+  }, 400);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
