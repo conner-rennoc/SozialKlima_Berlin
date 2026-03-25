@@ -486,25 +486,11 @@ const scoreTextColor = v => v >= 2 ? '#fff' : '#222';
 // ══════════════════════════════════════════════
 // DATA LOADING
 // ══════════════════════════════════════════════
-function debugMsg(msg) {
-  let el = document.getElementById('_dbg');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = '_dbg';
-    el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#b30000;color:#fff;font-family:monospace;font-size:12px;padding:8px 12px;white-space:pre-wrap;max-height:30vh;overflow:auto';
-    document.body.prepend(el);
-  }
-  el.textContent += msg + '\n';
-}
-
 async function loadFiles() {
-  debugMsg('loadFiles start – lor: ' + CFG.lorFile + '  analyse: ' + CFG.analyseFile);
   const [lor, analyse] = await Promise.allSettled([
-    fetch(CFG.lorFile).then(r => { if (!r.ok) throw 'lor HTTP ' + r.status; return r.json(); }),
-    fetch(CFG.analyseFile).then(r => { if (!r.ok) throw 'analyse HTTP ' + r.status; return r.json(); }),
+    fetch(CFG.lorFile).then(r => { if (!r.ok) throw r.status; return r.json(); }),
+    fetch(CFG.analyseFile).then(r => { if (!r.ok) throw r.status; return r.json(); }),
   ]);
-  debugMsg('lor: ' + lor.status + (lor.reason ? ' – ' + lor.reason : '') + (lor.value ? ' – features: ' + lor.value.features?.length : ''));
-  debugMsg('analyse: ' + analyse.status + (analyse.reason ? ' – ' + analyse.reason : '') + (analyse.value ? ' – features: ' + analyse.value.features?.length : ''));
   if (lor.status === 'fulfilled') lorGeoJSON = lor.value;
   if (analyse.status === 'fulfilled' && analyse.value?.features) {
     analyse.value.features.forEach(f => {
@@ -513,7 +499,6 @@ async function loadFiles() {
       if (id) lookup[id] = p;
     });
   }
-  debugMsg('lookup size: ' + Object.keys(lookup).length + '  lorGeoJSON: ' + !!lorGeoJSON);
 }
 
 // ══════════════════════════════════════════════
