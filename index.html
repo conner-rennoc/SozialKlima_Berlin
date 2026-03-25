@@ -159,12 +159,44 @@
     <span class="lbl">Hintergrund</span>
     <h2>Wie Stadtplanung Hitze erzeugt – und wie Grün sie lindert</h2>
     <p>Städte heizen sich aus einem einfachen Grund stärker auf als ihr Umland: Asphalt, Beton und Gebäudemassen speichern tagsüber Wärme und geben sie nachts langsam wieder ab. Gleichzeitig fehlt die Verdunstungskühlung, die unversiegelte Böden und Vegetation leisten.</p>
-    <div class="mgrid">
-      <div class="mc"><div class="mc-lbl">Faktor 1</div><div class="mc-title">Versiegelung</div><p>Asphalt und Beton absorbieren bis zu 90 % der Sonnenstrahlung und geben sie als Wärme ab. In stark versiegelten Gebieten liegen Oberflächentemperaturen im Sommer bis zu 40 °C über denen begrünter Flächen.</p></div>
-      <div class="mc"><div class="mc-lbl">Faktor 2</div><div class="mc-title">Fehlendes Grünvolumen</div><p>Bäume kühlen durch Verdunstung und Beschattung. Ein einzelner Stadtbaum kann an einem Sommertag die Kühlwirkung von mehreren Klimaanlagen ersetzen. Fehlt er, bleibt diese Wirkung aus.</p></div>
-      <div class="arr">↓ beide Faktoren zusammen erzeugen den städtischen Wärmeinseleffekt ↓</div>
-      <div class="mc" style="grid-column:1/-1;border-top:3px solid var(--accent)"><div class="mc-lbl">Folge</div><div class="mc-title">Thermische Belastung für Menschen</div><p>Der Index PET (Physiologisch Äquivalente Temperatur) misst, wie Hitze für den menschlichen Körper tatsächlich erlebbar ist. In stark versiegelten, grünarmen Gebieten übersteigt PET an Hitzetagen 46 °C – eine Belastung, die medizinisch als „sehr stark" eingestuft wird.</p></div>
+  </div>
+  <div style="max-width:960px;margin:0 auto">
+    <div class="mc" style="border-top:3px solid var(--accent)">
+      <div class="mc-lbl">Faktor 1</div>
+      <div class="mc-title">Versiegelung</div>
+      <p>Asphalt und Beton absorbieren bis zu 90 % der Sonnenstrahlung und geben sie als Wärme ab. In stark versiegelten Gebieten liegen Oberflächentemperaturen im Sommer bis zu 40 °C über denen begrünter Flächen. Die Karte zeigt, wie ungleich der Versiegelungsgrad über Berlin verteilt ist – die dichte Innenstadt im Kontrast zu den grünen Randlagen.</p>
     </div>
+    <div class="mc-wrap" style="height:420px;margin-top:2px;border-color:rgba(0,0,0,.15)">
+      <div id="map-versiegelung" style="width:100%;height:100%"></div>
+      <div id="wms-err-versiegelung" style="display:none;position:absolute;inset:0;background:rgba(232,229,220,.93);z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center">
+        <div style="font-size:28px;opacity:.28">🌐</div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--ink)">WMS-Dienst nicht erreichbar</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);max-width:380px;line-height:1.8">Versiegelung 2021 · Umweltatlas Berlin<br>gdi.berlin.de/services/wms/ua_versiegelung_2021</div>
+      </div>
+    </div>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:10px;margin-bottom:40px">Quelle: Versiegelung 2021, Umweltatlas Berlin. Versiegelungsgrad in 10 %-Stufen je Block, ermittelt aus Sentinel-2-Satellitendaten.</p>
+    <div class="mc" style="border-top:3px solid var(--warm)">
+      <div class="mc-lbl">Faktor 2</div>
+      <div class="mc-title">Fehlendes Grün</div>
+      <p>Bäume kühlen durch Verdunstung und Beschattung. Ein einzelner Stadtbaum kann an einem Sommertag die Kühlwirkung von mehreren Klimaanlagen ersetzen. Für die Bewohnerinnen der Stadt ist dabei zweierlei relevant: das <em>Grünvolumen</em> – der gesamte Vegetationsbestand inkl. privater Gärten und Hinterhöfe, der lokal kühlt – und die <em>Grünversorgung</em>, also der Zugang zu öffentlichen Grünflächen im Gehwegbereich. Die Karte zeigt Letzteres: wie viel m² öffentliche Grünfläche pro Einwohner im 500-m-Gehwegnetz erreichbar sind.</p>
+    </div>
+    <div class="mc-wrap" style="height:420px;margin-top:2px;border-color:rgba(0,0,0,.15)">
+      <div id="map-gruenversorgung" style="width:100%;height:100%"></div>
+      <div id="wms-err-gruenversorgung" style="display:none;position:absolute;inset:0;background:rgba(232,229,220,.93);z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center">
+        <div style="font-size:28px;opacity:.28">🌐</div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--ink)">WMS-Dienst nicht erreichbar</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);max-width:380px;line-height:1.8">Versorgung mit wohnungsnahen Grünanlagen 2020 · Umweltatlas Berlin<br>fbinter.stadt-berlin.de/fb/wms/senstadt/k06_05gruenversorg2020</div>
+      </div>
+    </div>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:10px;margin-bottom:48px">Quelle: Versorgung mit wohnungsnahen Grünanlagen 2020, Umweltatlas Berlin. m² öffentlicher Grünfläche pro Einwohner im 500-m-Gehwegnetz.</p>
+    <div class="arr">↓ beide Faktoren zusammen erzeugen den städtischen Wärmeinseleffekt ↓</div>
+    <div class="mc" style="border-top:3px solid var(--accent)">
+      <div class="mc-lbl">Folge</div>
+      <div class="mc-title">Thermische Belastung für Menschen</div>
+      <p>Der Index PET (Physiologisch Äquivalente Temperatur) misst, wie Hitze für den menschlichen Körper tatsächlich erlebbar ist. In stark versiegelten, grünarmen Gebieten übersteigt PET an Hitzetagen 46 °C – eine Belastung, die medizinisch als „sehr stark" eingestuft wird.</p>
+    </div>
+  </div>
+  <div class="inn" style="padding-top:40px;padding-bottom:0">
     <h3>Warum ist das auch eine Frage sozialer Gerechtigkeit?</h3>
     <p>Wer in einer grünarmen, stark versiegelten Nachbarschaft wohnt, hat statistisch gesehen häufig auch weniger Ressourcen, dieser Situation auszuweichen: kein Haus mit Garten, kein Urlaub im Sommer, keine Klimaanlage. Die Fähigkeit, sich vor Hitze zu schützen, ist ungleich verteilt – und diese Ungleichheit reproduziert sich räumlich.</p>
   </div>
@@ -184,7 +216,7 @@
         <tr><td>Klimamodell Berlin – PET 14 Uhr</td><td>2022</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
         <tr><td>Versiegelung</td><td>2021</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
         <tr><td>Grünvolumen (inkl. Δ 2010→2020)</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Umweltatlas Berlin</td></tr>
-        <tr><td>Versorgung mit wohnungsnahen Grünanlagen</td><td>aktuell</td><td><span class="tag tg">Grün</span></td><td>Umweltatlas Berlin</td></tr>
+        <tr><td>Versorgung mit wohnungsnahen Grünanlagen</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Umweltatlas Berlin</td></tr>
       </tbody>
     </table>
     <p style="font-size:14px;color:var(--muted)">Alle Datenschichten wurden auf LOR-Planungsraumebene aggregiert. Der Mehrfachbelastungsindex summiert je einen Punkt für überdurchschnittliche Hitze, unterdurchschnittliches Grünvolumen und niedrigen Sozialindex (Schwellenwerte: 75./25./40. Perzentil).</p>
@@ -384,7 +416,7 @@ const CFG = {
 // ══════════════════════════════════════════════
 let lorGeoJSON = null;
 let lookup = {};   // { "PLR_ID": { ...properties } }
-let maps = {}, layers = {};
+let maps = {}, layers = {}, wmsMaps = [];
 let activeFactors = { hitze: true, gruen: true, sozial: true };
 
 const BERLIN = [52.52, 13.405];
@@ -437,6 +469,29 @@ function cScore(v) {
 const socialLabel = v => (['–','Sehr niedrig','Niedrig','Mittel','Hoch'])[Math.round(v)] || '–';
 const scoreLabel  = v => (['Keine','Einfach','Zweifach','Dreifach'])[v] || '–';
 const scoreTextColor = v => v >= 2 ? '#fff' : '#222';
+
+// ══════════════════════════════════════════════
+// WMS MAPS
+// ══════════════════════════════════════════════
+function initWmsMap(mapId, errId, wmsUrl, layerName) {
+  const m = makeMap(mapId, BERLIN, 10, true);
+  let errors = 0;
+  const wmsLayer = L.tileLayer.wms(wmsUrl, {
+    layers: layerName,
+    format: 'image/png',
+    transparent: true,
+    opacity: 0.88,
+    attribution: 'Umweltatlas Berlin',
+  });
+  wmsLayer.on('tileerror', function() {
+    if (++errors === 3) {
+      const el = document.getElementById(errId);
+      if (el) el.style.display = 'flex';
+    }
+  });
+  wmsLayer.addTo(m);
+  return m;
+}
 
 // ══════════════════════════════════════════════
 // DATA LOADING
@@ -627,6 +682,12 @@ async function init() {
   const hero = L.map('hero-map',{zoomControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false,keyboard:false});
   darkBase().addTo(hero); hero.setView(BERLIN,11);
 
+  // WMS background maps (Mechanismus-Abschnitt)
+  wmsMaps.push(initWmsMap('map-versiegelung',    'wms-err-versiegelung',
+    'https://gdi.berlin.de/services/wms/ua_versiegelung_2021', '0'));
+  wmsMaps.push(initWmsMap('map-gruenversorgung', 'wms-err-gruenversorgung',
+    'https://fbinter.stadt-berlin.de/fb/wms/senstadt/k06_05gruenversorg2020', 'k06_05gruenversorg2020'));
+
   // All maps
   maps.hitze  = makeMap('map-hitze',  BERLIN, 11, true);
   maps.gruen  = makeMap('map-gruen',  BERLIN, 11, true);
@@ -659,7 +720,7 @@ async function init() {
 
   // Fix grey tiles after layout
   setTimeout(() => {
-    [hero,...Object.values(maps)].forEach(m => m.invalidateSize());
+    [hero, ...Object.values(maps), ...wmsMaps].forEach(m => m.invalidateSize());
   }, 400);
 }
 
