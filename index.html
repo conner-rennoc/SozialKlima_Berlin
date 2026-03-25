@@ -207,10 +207,10 @@
         <div class="miss-txt">Lege die exportierte QGIS-Datei als <span class="miss-file">analyse.geojson</span> in denselben Ordner wie diese HTML-Datei. Das GeoJSON benötigt je Planungsraum ein Attribut <code>hitze_pet</code>.</div>
       </div>
       <div class="leg"><div class="leg-t">Wärmebelastung (PET)</div>
-        <div class="leg-r"><div class="sw" style="background:#fee5d9"></div>Gering (&lt;18°C)</div>
-        <div class="leg-r"><div class="sw" style="background:#fcae91"></div>Mittel (18–29°C)</div>
-        <div class="leg-r"><div class="sw" style="background:#fb6a4a"></div>Hoch (29–41°C)</div>
-        <div class="leg-r"><div class="sw" style="background:#cb181d"></div>Sehr hoch (&gt;41°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#cb181d"></div>Sehr hoch (&gt;37°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#fb6a4a"></div>Hoch (35–37°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#fcae91"></div>Mittel (33–35°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#fee5d9"></div>Gering (&lt;33°C)</div>
       </div>
     </div>
     <p class="mc-cap">Quelle: Klimamodell Berlin 2022 (Umweltatlas), aggregiert auf LOR-Planungsräume per Zonenstatistik in QGIS. Klick auf Planungsraum für Details.</p>
@@ -232,10 +232,10 @@
         <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">gruen_gvz</span> (Grünvolumenzahl, m³/m²).</div>
       </div>
       <div class="leg"><div class="leg-t">Grünvolumenzahl (m³/m²)</div>
-        <div class="leg-r"><div class="sw" style="background:#edf8e9"></div>Sehr hoch (&gt;8)</div>
-        <div class="leg-r"><div class="sw" style="background:#74c476"></div>Hoch (4–8)</div>
-        <div class="leg-r"><div class="sw" style="background:#238b45"></div>Mittel (2–4)</div>
-        <div class="leg-r"><div class="sw" style="background:#00441b"></div>Gering (&lt;2)</div>
+        <div class="leg-r"><div class="sw" style="background:#00441b"></div>Sehr hoch (&gt;8)</div>
+        <div class="leg-r"><div class="sw" style="background:#238b45"></div>Hoch (4–8)</div>
+        <div class="leg-r"><div class="sw" style="background:#74c476"></div>Mittel (2–4)</div>
+        <div class="leg-r"><div class="sw" style="background:#edf8e9"></div>Gering (&lt;2)</div>
       </div>
     </div>
     <p class="mc-cap">Quelle: Grünvolumen 2020 (Umweltatlas Berlin), aggregiert auf LOR-Planungsräume per Zonenstatistik in QGIS.</p>
@@ -257,10 +257,10 @@
         <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">sozial_index</span> (MSS Gesamtindex, Wert 1–4).</div>
       </div>
       <div class="leg"><div class="leg-t">Sozialer Status (MSS)</div>
-        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Hoch</div>
-        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Mittel</div>
-        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Niedrig</div>
-        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sehr niedrig</div>
+        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sozial benachteiligt</div>
+        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Eher benachteiligt</div>
+        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Eher privilegiert</div>
+        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Sozial privilegiert</div>
       </div>
     </div>
     <p class="mc-cap">Quelle: Monitoring Soziale Stadtentwicklung 2023, SenStadt Berlin.</p>
@@ -294,7 +294,30 @@
         <div class="leg-r"><div class="sw" style="background:#b30000"></div>Dreifach</div>
       </div>
     </div>
-    <p class="mc-cap">Mehrfachbelastungsindex: je 1 Punkt für überdurchschnittliche Hitze, unterdurchschnittliches Grün, niedrigen/sehr niedrigen Sozialindex. Max. 3 Punkte.</p>
+    <div style="margin-top:18px;max-width:640px">
+      <p class="mc-cap" style="margin-bottom:10px;letter-spacing:.06em">Wie der Score berechnet wird — je Dimension 1 Punkt wenn Schwellenwert überschritten:</p>
+      <table style="width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,242,235,.45)">
+        <tr style="border-bottom:1px solid rgba(245,242,235,.07)">
+          <td style="padding:6px 0">Hitze (PET 14h)</td>
+          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">&gt; 36,5 °C</td>
+          <td style="padding:6px 0;color:rgba(245,242,235,.35)">75. Perzentil aller LOR</td>
+          <td style="padding:6px 0;text-align:right;color:#fc8d59">+1 Punkt</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(245,242,235,.07)">
+          <td style="padding:6px 0">Grünvolumen (GVZ)</td>
+          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">&lt; 2,2 m³/m²</td>
+          <td style="padding:6px 0;color:rgba(245,242,235,.35)">25. Perzentil aller LOR</td>
+          <td style="padding:6px 0;text-align:right;color:#fc8d59">+1 Punkt</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0">Sozialindex (MSS 2023)</td>
+          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">si_n &lt; 2</td>
+          <td style="padding:6px 0;color:rgba(245,242,235,.35)">40. Perzentil aller LOR</td>
+          <td style="padding:6px 0;text-align:right;color:#fc8d59">+1 Punkt</td>
+        </tr>
+      </table>
+      <p class="mc-cap" style="margin-top:8px">16 von 542 Planungsräumen erzielen den Maximalwert (Score 3) — sie sind gleichzeitig hitzebelastet, grünarm und sozial benachteiligt.</p>
+    </div>
   </div>
 </div>
 
@@ -343,10 +366,10 @@
         <div class="miss-txt">Benötigt <span class="miss-file">analyse.geojson</span> mit Attributen <code>sozial_2013</code> und <code>sozial_2022</code>.</div>
       </div>
       <div class="leg"><div class="leg-t" id="nk-lt">MSS 2013 · Sozialindex</div>
-        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sehr niedrig</div>
-        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Niedrig</div>
-        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Mittel</div>
-        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Hoch</div>
+        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sozial benachteiligt</div>
+        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Eher benachteiligt</div>
+        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Eher privilegiert</div>
+        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Sozial privilegiert</div>
       </div>
     </div>
     <p class="mc-cap" id="nk-cap">Darstellung: MSS 2013, Sozialindex auf LOR-Planungsraumebene. Zoom auf Neukölln-Nord.</p>
@@ -372,10 +395,10 @@
         <div class="miss-txt">Benötigt <span class="miss-file">analyse.geojson</span> mit Attributen <code>sozial_2013</code> und <code>sozial_2022</code>.</div>
       </div>
       <div class="leg"><div class="leg-t" id="sp-lt">MSS 2013 · Sozialindex</div>
-        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sehr niedrig</div>
-        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Niedrig</div>
-        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Mittel</div>
-        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Hoch</div>
+        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sozial benachteiligt</div>
+        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Eher benachteiligt</div>
+        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Eher privilegiert</div>
+        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Sozial privilegiert</div>
       </div>
     </div>
     <p class="mc-cap" id="sp-cap">Darstellung: MSS 2013, Sozialindex auf LOR-Planungsraumebene. Zoom auf Spandau-West.</p>
@@ -460,17 +483,17 @@ function makeMap(id, center, zoom, noScroll) {
 // ══════════════════════════════════════════════
 function cHeat(v) {
   if (v == null) return '#2a2825';
-  if (v > 41) return '#cb181d';
-  if (v > 29) return '#fb6a4a';
-  if (v > 18) return '#fcae91';
+  if (v > 37) return '#cb181d';
+  if (v > 35) return '#fb6a4a';
+  if (v > 33) return '#fcae91';
   return '#fee5d9';
 }
 function cGreen(v) {
   if (v == null) return '#2a2825';
-  if (v > 8) return '#edf8e9';
-  if (v > 4) return '#74c476';
-  if (v > 2) return '#238b45';
-  return '#00441b';
+  if (v > 8) return '#00441b';
+  if (v > 4) return '#238b45';
+  if (v > 2) return '#74c476';
+  return '#edf8e9';
 }
 function cSocial(v) {
   if (v == null) return '#2a2825';
