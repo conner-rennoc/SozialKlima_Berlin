@@ -192,6 +192,39 @@
   </div>
 </section>
 
+<!-- METHODIK -->
+<hr class="rule">
+<section class="sec">
+  <div class="inn">
+    <span class="lbl">Methodik</span>
+    <h2>Wie die Analyse berechnet wurde</h2>
+    <p>Die Karten basieren auf einer automatisierten Geodatenanalyse in Python (geopandas). Für jeden der 542 Berliner LOR-Planungsräume wurden aus drei thematischen Datensätzen Kennwerte berechnet und zu einem Mehrfachbelastungsindex aggregiert. Alle Berechnungen erfolgten im metrischen Koordinatensystem EPSG:25833 (UTM Zone 33N), um korrekte Flächengewichtungen zu gewährleisten.</p>
+
+    <h3>Hitzebelastung – PET</h3>
+    <p>Datengrundlage: Klimaanalysekarte Berlin 2022 (Umweltatlas), PET 14 Uhr für Siedlungs-, Verkehrs- und Grünflächen (57.801 Polygone). Die Physiologisch Äquivalente Temperatur (PET) beschreibt die thermische Wirkung auf den menschlichen Körper und gilt als Standard-Bioklima-Index für urbane Wärmebelastung. Für jeden Planungsraum wurde ein <strong>flächengewichteter Mittelwert</strong> berechnet: Jedes Klimapolygon wird an der LOR-Grenze zugeschnitten, die Schnittfläche dient als Gewicht. Große Blöcke beeinflussen den Mittelwert stärker als kleine.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;background:var(--pd);padding:14px 18px;line-height:1.8">hitze_pet(LOR) = &Sigma;(PET<sub>i</sub> &times; Fl&auml;che<sub>i</sub>) / &Sigma;(Fl&auml;che<sub>i</sub>)</p>
+
+    <h3>Grünvolumen – GVZ</h3>
+    <p>Datengrundlage: Grünvolumenkataster Berlin 2020 (Umweltatlas, 34.498 Polygone). Die Grünvolumenzahl (GVZ) misst das oberirdische Vegetationsvolumen – Bäume, Sträucher, Gräser – bezogen auf die Grundfläche (m³/m²). Das Feld <code>vegvola2020</code> enthält das absolute Vegetationsvolumen je Polygon in m³, <code>flalle</code> die Polygonfläche in m². Die polygonbezogene GVZ wird daraus berechnet und dann flächengewichtet auf LOR-Ebene aggregiert. Das Delta (Δ 2010→2020) ist aus dem Feld <code>changegvz</code> ebenfalls flächengewichtet gemittelt.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;background:var(--pd);padding:14px 18px;line-height:1.8">GVZ<sub>Polygon</sub> = vegvola2020 / flalle<br>gruen_gvz(LOR) = &Sigma;(GVZ<sub>i</sub> &times; Schnittfl&auml;che<sub>i</sub>) / &Sigma;(Schnittfl&auml;che<sub>i</sub>)</p>
+
+    <h3>Sozialindex – MSS</h3>
+    <p>Datengrundlage: Monitoring Soziale Stadtentwicklung 2023 (SenStadt Berlin). Der Statusindex <code>si_n</code> bildet die soziale Lage je Planungsraum auf einer Skala von 1 (sehr niedrig) bis 4 (hoch) ab. Da der MSS bereits auf denselben 542 LOR-Planungsräumen basiert, war kein räumlicher Join nötig – die Daten wurden direkt über den gemeinsamen Schlüssel PLR_ID zugeordnet.</p>
+
+    <h3>Mehrfachbelastungsindex</h3>
+    <p>Jeder Planungsraum erhält einen Score von 0–3, je nachdem wie viele Belastungsdimensionen zutreffen. Die Schwellenwerte beziehen sich auf die Berliner Gesamtverteilung:</p>
+    <table class="dt" style="margin-top:16px">
+      <thead><tr><th>Kriterium</th><th>Schwelle</th><th>Punkte</th></tr></thead>
+      <tbody>
+        <tr><td>Hitze (PET)</td><td>oberhalb 75. Perzentil aller LOR (&gt; 36,5 °C)</td><td>+1</td></tr>
+        <tr><td>Grünarmut (GVZ)</td><td>unterhalb 25. Perzentil aller LOR (&lt; 2,2 m³/m²)</td><td>+1</td></tr>
+        <tr><td>Soziale Benachteiligung</td><td>unterhalb 40. Perzentil aller LOR (si_n &lt; 2)</td><td>+1</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:22px">Ergebnis: 307 LOR ohne Belastung (57 %), 122 einfach (23 %), 91 zweifach (17 %), 16 dreifach belastet (3 %). Die 16 dreifach belasteten Planungsräume konzentrieren sich auf spezifische Quartiere, in denen alle drei Dimensionen gleichzeitig zutreffen.</p>
+  </div>
+</section>
+
 <!-- MAP 1: HITZE -->
 <div class="mb">
   <div class="mbi">
@@ -418,9 +451,9 @@ const CFG = {
   bezirkField:  'BEZ_NAME',         // Bezirksname
   hitzeFeld:    'hitze_pet',        // PET-Mittelwert (°C)
   gruenFeld:    'gruen_gvz',        // Grünvolumenzahl (m³/m²)
-  sozialFeld:   'sozial_index',     // MSS-Gesamtindex (1–4)
-  sozial13Feld: 'sozial_2013',      // MSS 2013 Sozialindex
-  sozial22Feld: 'sozial_2022',      // MSS 2022 Sozialindex
+  sozialFeld:   'sozial_index',     // MSS Statusindex si_n (1–4) – durch Script auf 'sozial_index' umbenannt
+  sozial13Feld: 'sozial_2013',      // MSS 2013 – nicht verfügbar, Karten zeigen Grau
+  sozial22Feld: 'sozial_2022',      // MSS 2022 – nicht verfügbar, Karten zeigen Grau
   scoreFeld:    'belastung_score',  // Mehrfachbelastung 0–3
   deltaFeld:    'gruen_delta',      // Δ GVZ 2010→2020
 };
