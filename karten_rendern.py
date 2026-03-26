@@ -82,21 +82,23 @@ print("[2/2] Rendere Grünversorgung 2020...")
 gdf_gv = gpd.read_file(os.path.join(ROOT, 'gruenversorgung.geojson'))
 gdf_gv = gdf_gv.to_crs('EPSG:25833')
 
+# LOR als Basis-Layer (füllt Lücken, damit kein schwarzer Hintergrund)
+gdf_lor = gpd.read_file(os.path.join(ROOT, 'lor.geojson'))
+gdf_lor = gdf_lor.to_crs('EPSG:25833')
+
+# Hellere Farben damit 'versorgter Bereich' nicht mit dem dunklen Hintergrund verschmilzt
 GV_COLORS = {
-    'versorgter Bereich':          '#238b45',
-    'unterversorgter Bereich':     '#74c476',
-    'schlecht versorgter Bereich': '#c7e9c0',
-    'nicht versorgter Bereich':    '#f2ede3',  # leicht wärmer als reines Weiß
+    'versorgter Bereich':          '#41ab5d',  # kräftiges Grün
+    'unterversorgter Bereich':     '#a1d99b',  # helles Grün
+    'schlecht versorgter Bereich': '#d4efcc',  # sehr helles Grün
+    'nicht versorgter Bereich':    '#f0ece0',  # cremeweiß
 }
 gdf_gv['_color'] = gdf_gv['voeff_name'].map(GV_COLORS).fillna('#888888')
 
 fig, ax = basis_figure()
-gdf_gv.plot(
-    ax=ax,
-    color=gdf_gv['_color'],
-    linewidth=0,
-    edgecolor='none',
-)
+# Erst LOR als neutrale Basis (dunkelgrau), dann Grünversorgung drauf
+gdf_lor.plot(ax=ax, color='#3a3630', linewidth=0, edgecolor='none')
+gdf_gv.plot(ax=ax, color=gdf_gv['_color'], linewidth=0, edgecolor='none')
 speichern(fig, os.path.join(ROOT, 'gruenversorgung.png'))
 
 print("\nFertig. Nächster Schritt:")
