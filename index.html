@@ -276,7 +276,7 @@
   <div class="mbi">
     <span class="lbl">Datenschicht 3 von 3</span>
     <h2>Soziale Ungleichheit</h2>
-    <p class="mdeck">Gesamtindex Soziale Ungleichheit (MSS 2023) auf LOR-Planungsraumebene. Erfasst Arbeitslosigkeit, Transferbezug und Kinderarmut.</p>
+    <p class="mdeck">Erwerbs- und Sozialindex (ESIx 2022) auf LOR-Planungsraumebene. Kontinuierlicher Index: niedrigere Werte = stärkere soziale Belastung. Erfasst Erwerbslosigkeit, Transferbezug und Sozialstruktur.</p>
     <div class="mc-wrap">
       <div id="map-sozial" style="width:100%;height:100%"></div>
       <div class="mload" id="ld-sozial"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
@@ -285,14 +285,14 @@
         <div class="miss-title">Analysedaten fehlen</div>
         <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">sozial_index</span> (MSS Gesamtindex, Wert 1–4).</div>
       </div>
-      <div class="leg"><div class="leg-t">Sozialer Status (MSS)</div>
-        <div class="leg-r"><div class="sw" style="background:#3f007d"></div>Niedriger sozialer Status</div>
-        <div class="leg-r"><div class="sw" style="background:#7b3fa3"></div>Unterer Mittelbereich</div>
-        <div class="leg-r"><div class="sw" style="background:#b894d4"></div>Oberer Mittelbereich</div>
-        <div class="leg-r"><div class="sw" style="background:#f2e8ff"></div>Hoher sozialer Status</div>
+      <div class="leg"><div class="leg-t">ESIx 2022</div>
+        <div class="leg-r"><div class="sw" style="background:#3f007d"></div>Sehr starke Belastung (&lt;−1.5)</div>
+        <div class="leg-r"><div class="sw" style="background:#7b3fa3"></div>Überdurchschn. Belastung</div>
+        <div class="leg-r"><div class="sw" style="background:#b894d4"></div>Mittlerer Bereich</div>
+        <div class="leg-r"><div class="sw" style="background:#f2e8ff"></div>Geringe Belastung (&gt;0.6)</div>
       </div>
     </div>
-    <p class="mc-cap">Quelle: Monitoring Soziale Stadtentwicklung 2023, SenStadt Berlin.</p>
+    <p class="mc-cap">Quelle: Erwerbs- und Sozialindex (ESIx) 2022, Gesundheits- und Sozialstrukturatlas Berlin. Räumlich verschnitten von LOR 2019 auf LOR 2021.</p>
   </div>
 </div>
 
@@ -404,9 +404,7 @@ const CFG = {
   bezirkField:  'BEZ_NAME',         // Bezirksname
   hitzeFeld:    'hitze_pet',        // PET-Mittelwert (°C)
   gruenFeld:    'gruen_gvz',        // Grünvolumenzahl (m³/m²)
-  sozialFeld:   'sozial_index',     // MSS Statusindex si_n (1–4) – durch Script auf 'sozial_index' umbenannt
-  sozial13Feld: 'sozial_2013',         // MSS 2013 – nicht verfügbar
-  sozial22Feld: 'sozial_2022',         // MSS 2022 – nicht verfügbar
+  sozialFeld:   'esix_wert',        // ESIx 2022 (Erwerbs- und Sozialindex), kontinuierlich; höher = weniger belastet
   scoreFeld:       'belastung_score_alt', // Perzentil-Score 0–3 (alt, für Statistiken)
   deltaFeld:       'gruen_delta',         // Δ GVZ 2010→2020
   rangHitzeFeld:   'rang_hitze',          // Perzentil-Rang Hitze  (0–100, 100=heißester LOR)
@@ -461,10 +459,13 @@ function cGreen(v) {
   if (v > 2) return '#74c476';
   return '#edf8e9';
 }
+// ESIx: kontinuierlicher Index, höher = weniger belastet (ca. -3.5 bis +1.5)
 function cSocial(v) {
   if (v == null) return '#2a2825';
-  // si_n: 1 = niedrigster Status → dunkelviolett; 4 = höchster → hellviolett
-  return ['#2a2825','#3f007d','#7b3fa3','#b894d4','#f2e8ff'][Math.round(v)] || '#2a2825';
+  if (v < -1.5) return '#3f007d';   // sehr starke soziale Belastung
+  if (v <  -0.3) return '#7b3fa3';  // überdurchschnittliche Belastung
+  if (v <   0.6) return '#b894d4';  // mittlerer Bereich
+  return '#f2e8ff';                  // geringe soziale Belastung
 }
 // Rang-Farbskala: 5 Stufen, dynamisch auf aktuellen min/max normiert
 function cRang(v) {
@@ -476,7 +477,13 @@ function cRang(v) {
   if (t > 0.2) return '#ffffb2';
   return '#f7f7e8';
 }
-const socialLabel = v => (['–','Niedriger Status','Unterer Mittelbereich','Oberer Mittelbereich','Hoher Status'])[Math.round(v)] || '–';
+function socialLabel(v) {
+  if (v == null) return '–';
+  if (v < -1.5) return 'Sehr starke soziale Belastung';
+  if (v <  -0.3) return 'Überdurchschnittliche Belastung';
+  if (v <   0.6) return 'Mittlerer Bereich';
+  return 'Geringe soziale Belastung';
+}
 
 // ══════════════════════════════════════════════
 // WMS MAPS
@@ -547,16 +554,35 @@ function activeRang(ap) {
   if (activeFactors.sozial) { if (ap[CFG.rangSozialFeld] == null) return null; sum += ap[CFG.rangSozialFeld]; }
   return sum;
 }
+// Dreifachbelastung: alle drei Faktoren aktiv UND alle Ränge > 75
+function isTripel(ap) {
+  if (!Object.values(activeFactors).every(Boolean)) return false;
+  return (ap[CFG.rangHitzeFeld] > 75 && ap[CFG.rangGruenFeld] > 75 && ap[CFG.rangSozialFeld] > 75);
+}
 // Aktualisiert rangRange anhand aller LOR im Lookup
 function computeRangRange() {
   const vals = Object.values(lookup).map(ap => activeRang(ap)).filter(v => v != null);
   if (vals.length) rangRange = { min: Math.min(...vals), max: Math.max(...vals) };
 }
-function styleKombi(f) {
+function styleKombi(f, hovered) {
   const ap = lookup[lorID(f)] || {};
   const r  = activeRang(ap);
-  if (r == null) return { fillColor:'#2a2825', fillOpacity:0.12, color:'rgba(255,255,255,0.07)', weight:0.5 };
-  return { fillColor:cRang(r), fillOpacity:0.73, color:'rgba(255,255,255,0.07)', weight:0.5 };
+  const tripel = isTripel(ap);
+  if (r == null) return { fillColor:'#2a2825', fillOpacity:0.12, color:'rgba(255,255,255,0.07)', weight:0.3 };
+  if (tripel) {
+    return {
+      fillColor: cRang(r),
+      fillOpacity: hovered ? 0.95 : 0.73,
+      color: 'white',
+      weight: hovered ? 2.5 : 1.5,
+    };
+  }
+  return {
+    fillColor: cRang(r),
+    fillOpacity: hovered ? 0.9 : 0.73,
+    color: hovered ? 'rgba(255,255,255,0.28)' : '#333',
+    weight: hovered ? 1.0 : 0.3,
+  };
 }
 
 // ══════════════════════════════════════════════
@@ -577,7 +603,8 @@ function popGruen(name, ap) {
 function popSozial(name, ap) {
   const v = ap[CFG.sozialFeld];
   return `<div class="pn">${name}</div>
-    <div class="pr"><span>Sozialindex (MSS 2023)</span><span class="pv">${socialLabel(v)}</span></div>
+    <div class="pr"><span>ESIx 2022</span><span class="pv">${v!=null?v.toFixed(2):'–'}</span></div>
+    <div class="pr"><span>Einschätzung</span><span class="pv">${socialLabel(v)}</span></div>
     <div class="pr"><span>Bezirk</span><span class="pv">${ap[CFG.bezirkField]||'–'}</span></div>`;
 }
 function popKombi(name, ap) {
@@ -586,7 +613,7 @@ function popKombi(name, ap) {
   return `<div class="pn">${name}</div>
     <div class="pr"><span>Hitze (PET)</span><span class="pv">${ap[CFG.hitzeFeld]!=null?ap[CFG.hitzeFeld].toFixed(1)+' °C':'–'}</span></div>
     <div class="pr"><span>Grünvolumen</span><span class="pv">${ap[CFG.gruenFeld]!=null?ap[CFG.gruenFeld].toFixed(2)+' m³/m²':'–'}</span></div>
-    <div class="pr"><span>Sozialindex</span><span class="pv">${socialLabel(ap[CFG.sozialFeld])}</span></div>
+    <div class="pr"><span>ESIx 2022</span><span class="pv">${ap[CFG.sozialFeld]!=null?ap[CFG.sozialFeld].toFixed(2)+' ('+socialLabel(ap[CFG.sozialFeld])+')':'–'}</span></div>
     <div style="border-top:1px solid rgba(255,255,255,.08);margin-top:5px;padding-top:5px">
       ${activeFactors.hitze  ?`<div class="pr"><span>Rang Hitze</span><span class="pv">${rh!=null?rh.toFixed(0)+' / 100':'–'}</span></div>`:''}
       ${activeFactors.gruen  ?`<div class="pr"><span>Rang Grün</span><span class="pv">${rg!=null?rg.toFixed(0)+' / 100':'–'}</span></div>`:''}
@@ -619,12 +646,13 @@ function buildTheme(map, colorFn, field, popupFn) {
 function buildKombi(map) {
   if (!lorGeoJSON) return null;
   return L.geoJSON(lorGeoJSON, {
-    style: f => styleKombi(f),
+    style: f => styleKombi(f, false),
     onEachFeature: (f, layer) => {
       const ap = lookup[lorID(f)] || {};
       const name = lorName(f);
+      layer.on('mouseover', () => layer.setStyle(styleKombi(f, true)));
+      layer.on('mouseout',  () => layer.setStyle(styleKombi(f, false)));
       layer.on('click', () => layer.bindPopup(popKombi(name, ap)).openPopup());
-      hover(layer, () => styleKombi(f));
     }
   }).addTo(map);
 }
@@ -649,10 +677,16 @@ function updateKombiLegend() {
     ['#ffffb2','Geringe Belastung'],
     ['#f7f7e8','Geringste Belastung'],
   ];
+  const allActive = Object.values(activeFactors).every(Boolean);
   let html = `<div class="leg-t" style="line-height:1.4;max-width:150px">${title}</div>`;
   steps.forEach(([c,l]) => {
     html += `<div class="leg-r"><div class="sw" style="background:${c}"></div>${l}</div>`;
   });
+  if (allActive) {
+    html += `<div class="leg-r" style="margin-top:6px;border-top:1px solid rgba(255,255,255,.12);padding-top:6px">` +
+      `<div class="sw" style="background:#d7191c;outline:2px solid white;outline-offset:-1px"></div>` +
+      `<span style="font-size:10px;line-height:1.3">Dreifachbelastung<br>(alle Faktoren > 75. Pzt.)</span></div>`;
+  }
   document.getElementById('leg-kombi').innerHTML = html;
 }
 
