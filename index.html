@@ -148,7 +148,7 @@
     <h2>Grün schützt vor Hitze.<br>Aber wer hat Grün?</h2>
     <p class="dc">An Sommertagen mit über 35 Grad unterscheiden sich Berliner Stadtteile um bis zu 10 Grad Celsius. Der Prenzlauer Berg kühlt sich nachts in seinen begrünten Innenhöfen deutlich stärker ab als das dicht versiegelte Neukölln-Nord. Und die Bewohnerinnen von Spandau-West, eingekesselt zwischen Bundesstraßen und Plattenbau, haben statistisch gesehen weniger Zugang zu Grünflächen als jene in Dahlem oder Grunewald.</p>
     <p>Doch ist dieser Zusammenhang zufällig – oder folgt das Grün tatsächlich dem Geld? Und wenn ja: Verschärft sich diese Ungleichheit in dem Maß, wie Gentrifizierungsprozesse die Sozialstruktur der Stadt umschichten?</p>
-    <blockquote>„Stadtplanung kann die Lufttemperatur nicht direkt steuern. Aber sie entscheidet, wo Bäume gepflanzt werden – und wo nicht."</blockquote>
+    <blockquote>„Stadtplanung kann die Lufttemperatur nicht direkt steuern. Aber sie entscheidet, wo Bäume gepflanzt werden – und wo nicht." <cite style="display:block;font-family:'DM Mono',monospace;font-style:normal;font-size:11px;letter-spacing:.1em;color:rgba(26,24,20,.45);margin-top:10px">— Eigene These</cite></blockquote>
     <p>Diese Analyse verbindet drei Datenschichten: das Klimamodell Berlin, die Grünvolumenzahlen des Umweltatlas sowie das Monitoring Soziale Stadtentwicklung des Berliner Senats. Ziel ist es, räumliche Überlappungen von Hitzebelastung, Grünarmut und sozialer Benachteiligung sichtbar zu machen.</p>
   </div>
 </section>
@@ -199,7 +199,7 @@
     <div class="mc" style="border-top:3px solid var(--accent)">
       <div class="mc-lbl">Folge</div>
       <div class="mc-title">Thermische Belastung für Menschen</div>
-      <p>Der Index PET (Physiologisch Äquivalente Temperatur) bewertet Hitze aus Körperperspektive – unter Einbeziehung von Strahlung, Luftfeuchtigkeit und Wind. In den am stärksten belasteten Berliner Planungsräumen übersteigt der mittlere PET-Wert an Sommernachmittagen 38 °C, was medizinisch als „sehr starke Wärmebelastung" gilt. Zwischen dem heißesten und kühlsten Planungsraum liegen mehrere Grad – eine Differenz, die nicht zufällig im Raum verteilt ist.</p>
+      <p>Der Index PET (Physiologisch Äquivalente Temperatur) bewertet Hitze aus Körperperspektive – unter Einbeziehung von Strahlung, Luftfeuchtigkeit und Wind. In den am stärksten belasteten Berliner Planungsräumen übersteigt der mittlere PET-Wert an Sommernachmittagen 38 °C, was medizinisch als „sehr starke Wärmebelastung" gilt – vergleichbar mit einem Aufenthalt in der prallen Sonne ohne Schatten an einem windstillen Sommertag. Zwischen dem heißesten und kühlsten Planungsraum liegen mehrere Grad – eine Differenz, die nicht zufällig im Raum verteilt ist.</p>
     </div>
   </div>
   <div class="inn" style="padding-top:40px;padding-bottom:0">
@@ -217,17 +217,17 @@
     <h2>Die verwendeten Datenschichten</h2>
     <p>Alle Daten stammen aus öffentlich zugänglichen Berliner Geodiensten. Die räumliche Analyse erfolgte in QGIS auf Ebene der Lebensweltlich orientierten Räume (LOR) – Berlins Planungsraumgliederung in 542 Planungsräume.</p>
     <table class="dt">
-      <thead><tr><th>Datensatz</th><th>Jahr</th><th>Typ</th><th>Quelle</th></tr></thead>
+      <thead><tr><th>Datensatz</th><th>Jahr</th><th>Typ</th><th>Was er misst</th></tr></thead>
       <tbody>
-        <tr><td>Erwerbs- und Sozialindex (ESIx) – primärer Sozialindikator</td><td>2022</td><td><span class="tag ts">Sozial</span></td><td>Gesundheits- &amp; Sozialstrukturatlas Berlin</td></tr>
-        <tr><td>Monitoring Soziale Stadtentwicklung (MSS, Ergänzung)</td><td>2023</td><td><span class="tag ts">Sozial</span></td><td>SenStadt Berlin</td></tr>
-        <tr><td>Klimamodell Berlin – PET 14 Uhr</td><td>2022</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
-        <tr><td>Versiegelung der Blockteilflächen</td><td>2021</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
-        <tr><td>Grünvolumen (inkl. Δ 2010→2020)</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Umweltatlas Berlin</td></tr>
-        <tr><td>Versorgung mit wohnungsnahen Grünanlagen</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Umweltatlas Berlin</td></tr>
+        <tr><td>Erwerbs- und Sozialindex (ESIx)</td><td>2022</td><td><span class="tag ts">Sozial</span></td><td>Soziale Belastung: Erwerbslosigkeit, Transferbezug, Wohnlage (20 Indikatoren, kontinuierlich)</td></tr>
+        <tr><td>Monitoring Soziale Stadtentwicklung (MSS, Ergänzung)</td><td>2023</td><td><span class="tag ts">Sozial</span></td><td>Statusindex aus Transferbezug, Arbeitslosigkeit und Kinderarmut (4 Kategorien)</td></tr>
+        <tr><td>Klimamodell Berlin – PET 14 Uhr</td><td>2022</td><td><span class="tag th">Hitze</span></td><td>Gefühlte Hitze am Körper um 14 Uhr (Physiologisch Äquivalente Temperatur)</td></tr>
+        <tr><td>Versiegelung der Blockteilflächen</td><td>2021</td><td><span class="tag th">Hitze</span></td><td>Anteil versiegelter Fläche pro Block (0–100 %), Proxy für Wärmespeicherung</td></tr>
+        <tr><td>Grünvolumenzahl (inkl. Δ 2010→2020)</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Kühlende Biomasse pro m² Fläche (m³/m²), inkl. Veränderung gegenüber 2010</td></tr>
+        <tr><td>Versorgung mit wohnungsnahen Grünanlagen</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Erreichbare öffentliche Grünfläche im 500-m-Gehwegnetz (m² pro Einwohner)</td></tr>
       </tbody>
     </table>
-    <p style="font-size:14px;color:var(--muted)">Alle Datenschichten wurden auf LOR-Planungsraumebene aggregiert. Der Mehrfachbelastungsindex basiert auf einer rang-basierten Normalisierung: Für jeden der drei Faktoren wird der Perzentil-Rang jedes LOR innerhalb aller 542 Planungsräume berechnet (0–100, wobei 100 die höchste Belastung bedeutet). Der Gesamtscore ist die Summe der drei Ränge (max. 300).</p>
+    <p style="font-size:13px;color:var(--muted)">Quellen: Gesundheits- &amp; Sozialstrukturatlas Berlin · SenStadt Berlin · Umweltatlas Berlin (dl-zero-de/2.0) · LOR: Amt für Statistik Berlin-Brandenburg (CC BY 3.0 DE). Alle Datenschichten auf LOR-Planungsraumebene (542 Planungsräume, Stand 2021) aggregiert. Mehrfachbelastungsindex: Summe der drei Perzentil-Ränge (max. 300); Dreifachbelastung = alle drei Ränge &gt; 75.</p>
   </div>
 </section>
 
@@ -293,7 +293,7 @@
       <div class="miss" id="ms-sozial">
         <div class="miss-icon">📂</div>
         <div class="miss-title">Analysedaten fehlen</div>
-        <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">sozial_index</span> (MSS Gesamtindex, Wert 1–4).</div>
+        <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">esix_wert</span> (ESIx 2022, kontinuierlicher Index: negativ = stärker belastet).</div>
       </div>
       <div class="leg"><div class="leg-t">ESIx 2022</div>
         <div class="leg-r"><div class="sw" style="background:#3f007d"></div>Sehr starke Belastung (&lt;−1.5)</div>
@@ -368,11 +368,11 @@
     <span class="lbl">Gesamtstädtische Befunde</span>
     <h2>Was die Daten zeigen</h2>
     <div class="fgrid">
-      <div class="fc"><div class="fn" id="s1">–</div><div class="fl">Dreifach belastete Planungsräume</div><p class="ft" id="s1t">Planungsräume im obersten Viertel bei Hitze, Grünarmut und sozialer Benachteiligung gleichzeitig.</p></div>
-      <div class="fc"><div class="fn" id="s2">–</div><div class="fl">Ø Δ Grünvolumen 2010→2020</div><p class="ft" id="s2t">Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) – gesamtstädtisch kaum Verbesserung.</p></div>
-      <div class="fc"><div class="fn" id="s3">–</div><div class="fl">PET-Spanne Berlin</div><p class="ft" id="s3t">Differenz zwischen heißestem und kühlstem Planungsraum – größer als oft angenommen.</p></div>
+      <div class="fc"><div class="fn" id="s1">15</div><div class="fl">Dreifach belastete Planungsräume</div><p class="ft" id="s1t">Planungsräume im obersten Viertel bei Hitze, Grünarmut und sozialer Benachteiligung gleichzeitig.</p></div>
+      <div class="fc"><div class="fn" id="s2">−0,30</div><div class="fl">Ø Δ Grünvolumen 2010→2020</div><p class="ft" id="s2t">Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) – gesamtstädtisch leichter Rückgang.</p></div>
+      <div class="fc"><div class="fn" id="s3">13,4°C</div><div class="fl">PET-Spanne Berlin</div><p class="ft" id="s3t">Differenz zwischen heißestem (40,0 °C) und kühlstem (26,6 °C) Planungsraum.</p></div>
     </div>
-    <h3>Zwei Typen von Hitzungerechtigkeit</h3>
+    <h3>Zwei Typen von Hitzeungerechtigkeit</h3>
     <p>Die Daten zeigen zwei strukturell verschiedene Muster. In den DDR-Großsiedlungen am Stadtrand – Marzahn-Hellersdorf, Lichtenberg, Teile Spandaus – ist die klimatische Belastung quasi eingebaut: Hochhaussiedlungen der 1970er bis 1990er Jahre ohne gewachsenen Baumbestand, hohe Versiegelung, wenig wohnungsnahes Grün. Die soziale und die klimatische Benachteiligung haben hier dieselbe historische Wurzel.</p>
     <p>Im innerstädtischen Gürtel – Neukölln-Nord, Kreuzberg, Moabit, Wedding, Gesundbrunnen – ist das klimatische Problem eine andere: dichte Gründerzeitbebauung mit wenig Innenhofgrün, Straßenschluchten die sich aufheizen. Die soziale Belastung hat eine andere Genese: Diese Viertel sind die letzten noch halbwegs bezahlbaren Lagen innerhalb des S-Bahn-Rings. Einkommensschwächere Bevölkerung wohnt dort, wo sie sich die Miete noch leisten kann – in klimatisch ungünstigen Gebieten. Das ist Umweltungerechtigkeit als Marktmechanismus.</p>
     <p>Demgegenüber zeigen Gebiete wie Dahlem, Wannsee oder Pankow-Niederschönhausen durchgängig geringe Belastungswerte in allen drei Dimensionen.</p>
@@ -778,13 +778,13 @@ function computeStats() {
   const dl = vals.map(v=>v[CFG.deltaFeld]).filter(v=>v!=null);
   if (dl.length) {
     const avg = dl.reduce((a,b)=>a+b,0)/dl.length;
-    document.getElementById('s2').textContent = (avg>0?'+':'')+avg.toFixed(2);
-    document.getElementById('s2t').textContent = 'Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) von 2010 bis 2020 – gesamtstädtisch kaum Verbesserung.';
+    document.getElementById('s2').textContent = (avg>=0?'+':'')+avg.toFixed(2).replace('.',',');
+    document.getElementById('s2t').textContent = 'Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) von 2010 bis 2020 – gesamtstädtisch leichter Rückgang.';
   }
   const pets = vals.map(v=>v[CFG.hitzeFeld]).filter(v=>v!=null);
   if (pets.length) {
-    document.getElementById('s3').textContent = (Math.max(...pets)-Math.min(...pets)).toFixed(1)+'°C';
-    document.getElementById('s3t').textContent = 'Differenz zwischen heißestem und kühlstem Planungsraum – größer als oft angenommen.';
+    document.getElementById('s3').textContent = (Math.max(...pets)-Math.min(...pets)).toFixed(1).replace('.',',')+'°C';
+    document.getElementById('s3t').textContent = 'Differenz zwischen heißestem ('+Math.max(...pets).toFixed(1)+' °C) und kühlstem ('+Math.min(...pets).toFixed(1)+' °C) Planungsraum.';
   }
 }
 
