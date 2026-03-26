@@ -164,18 +164,9 @@
     <div class="mc" style="border-top:3px solid var(--accent)">
       <div class="mc-lbl">Faktor 1</div>
       <div class="mc-title">Versiegelung</div>
-      <p>Asphalt und Beton absorbieren bis zu 90 % der Sonnenstrahlung und geben sie als Wärme ab. In stark versiegelten Gebieten liegen Oberflächentemperaturen im Sommer bis zu 40 °C über denen begrünter Flächen. Die Karte zeigt, wie ungleich der Versiegelungsgrad über Berlin verteilt ist – die dichte Innenstadt im Kontrast zu den grünen Randlagen.</p>
+      <p>Asphalt und Beton absorbieren bis zu 90 % der Sonnenstrahlung und geben sie als Wärme ab. In stark versiegelten Gebieten liegen Oberflächentemperaturen im Sommer bis zu 40 °C über denen begrünter Flächen. Berlinweit variiert der Versiegelungsgrad erheblich: Die dichte Gründerzeit-Innenstadt liegt oft bei über 80 %, während Randgebiete mit Einzelhausbebauung und Grünanlagen deutlich darunter fallen.</p>
     </div>
-    <div class="mc-wrap" style="height:420px;margin-top:2px;border-color:rgba(0,0,0,.15)">
-      <div id="map-versiegelung" style="width:100%;height:100%"></div>
-      <div id="wms-err-versiegelung" style="display:none;position:absolute;inset:0;background:rgba(232,229,220,.93);z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center">
-        <div style="font-size:28px;opacity:.28">🌐</div>
-        <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--ink)">WMS-Dienst nicht erreichbar</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);max-width:380px;line-height:1.8">Versiegelung 2021 · Umweltatlas Berlin<br>gdi.berlin.de/services/wms/ua_versiegelung_2021</div>
-      </div>
-    </div>
-    <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:10px;margin-bottom:40px">Quelle: Versiegelung 2021, Umweltatlas Berlin. Versiegelungsgrad in 10 %-Stufen je Block, ermittelt aus Sentinel-2-Satellitendaten.</p>
-    <div class="mc" style="border-top:3px solid var(--warm)">
+    <div class="mc" style="border-top:3px solid var(--warm);margin-top:2px">
       <div class="mc-lbl">Faktor 2</div>
       <div class="mc-title">Fehlendes Grün</div>
       <p>Bäume kühlen durch Verdunstung und Beschattung. Ein einzelner Stadtbaum kann an einem Sommertag die Kühlwirkung von mehreren Klimaanlagen ersetzen. Für die Bewohnerinnen der Stadt ist dabei zweierlei relevant: das <em>Grünvolumen</em> – der gesamte Vegetationsbestand inkl. privater Gärten und Hinterhöfe, der lokal kühlt – und die <em>Grünversorgung</em>, also der Zugang zu öffentlichen Grünflächen im Gehwegbereich. Die Karte zeigt Letzteres: wie viel m² öffentliche Grünfläche pro Einwohner im 500-m-Gehwegnetz erreichbar sind.</p>
@@ -238,10 +229,10 @@
         <div class="miss-txt">Lege die exportierte QGIS-Datei als <span class="miss-file">analyse.geojson</span> in denselben Ordner wie diese HTML-Datei. Das GeoJSON benötigt je Planungsraum ein Attribut <code>hitze_pet</code>.</div>
       </div>
       <div class="leg"><div class="leg-t">Wärmebelastung (PET)</div>
-        <div class="leg-r"><div class="sw" style="background:#cb181d"></div>Sehr hoch (&gt;37°C)</div>
-        <div class="leg-r"><div class="sw" style="background:#fb6a4a"></div>Hoch (35–37°C)</div>
-        <div class="leg-r"><div class="sw" style="background:#fcae91"></div>Mittel (33–35°C)</div>
-        <div class="leg-r"><div class="sw" style="background:#fee5d9"></div>Gering (&lt;33°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#d7191c"></div>Sehr hoch (&gt;37°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#f97b2a"></div>Hoch (35–37°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#fecc5c"></div>Mittel (33–35°C)</div>
+        <div class="leg-r"><div class="sw" style="background:#ffffb2"></div>Gering (&lt;33°C)</div>
       </div>
     </div>
     <p class="mc-cap">Quelle: Klimamodell Berlin 2022 (Umweltatlas), aggregiert auf LOR-Planungsräume per Zonenstatistik in QGIS. Klick auf Planungsraum für Details.</p>
@@ -288,10 +279,10 @@
         <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">sozial_index</span> (MSS Gesamtindex, Wert 1–4).</div>
       </div>
       <div class="leg"><div class="leg-t">Sozialer Status (MSS)</div>
-        <div class="leg-r"><div class="sw" style="background:#08306b"></div>Sozial benachteiligt</div>
-        <div class="leg-r"><div class="sw" style="background:#2171b5"></div>Eher benachteiligt</div>
-        <div class="leg-r"><div class="sw" style="background:#6baed6"></div>Eher privilegiert</div>
-        <div class="leg-r"><div class="sw" style="background:#eff3ff"></div>Sozial privilegiert</div>
+        <div class="leg-r"><div class="sw" style="background:#3f007d"></div>Niedriger sozialer Status</div>
+        <div class="leg-r"><div class="sw" style="background:#7b3fa3"></div>Unterer Mittelbereich</div>
+        <div class="leg-r"><div class="sw" style="background:#b894d4"></div>Oberer Mittelbereich</div>
+        <div class="leg-r"><div class="sw" style="background:#f2e8ff"></div>Hoher sozialer Status</div>
       </div>
     </div>
     <p class="mc-cap">Quelle: Monitoring Soziale Stadtentwicklung 2023, SenStadt Berlin.</p>
@@ -320,9 +311,9 @@
       </div>
       <div class="leg" id="leg-kombi"><div class="leg-t">Mehrfachbelastung</div>
         <div class="leg-r"><div class="sw" style="background:#fef0d9"></div>Keine</div>
-        <div class="leg-r"><div class="sw" style="background:#fdcc8a"></div>Einfach</div>
-        <div class="leg-r"><div class="sw" style="background:#fc8d59"></div>Zweifach</div>
-        <div class="leg-r"><div class="sw" style="background:#b30000"></div>Dreifach</div>
+        <div class="leg-r"><div class="sw" style="background:#fecc5c"></div>Einfach</div>
+        <div class="leg-r"><div class="sw" style="background:#f97b2a"></div>Zweifach</div>
+        <div class="leg-r"><div class="sw" style="background:#d7191c"></div>Dreifach</div>
       </div>
     </div>
     <div style="margin-top:18px;max-width:640px">
@@ -447,10 +438,10 @@ function makeMap(id, center, zoom, noScroll) {
 // ══════════════════════════════════════════════
 function cHeat(v) {
   if (v == null) return '#2a2825';
-  if (v > 37) return '#cb181d';
-  if (v > 35) return '#fb6a4a';
-  if (v > 33) return '#fcae91';
-  return '#fee5d9';
+  if (v > 37) return '#d7191c';   // rot
+  if (v > 35) return '#f97b2a';   // orange
+  if (v > 33) return '#fecc5c';   // gelb-orange
+  return '#ffffb2';               // hellgelb
 }
 function cGreen(v) {
   if (v == null) return '#2a2825';
@@ -461,10 +452,11 @@ function cGreen(v) {
 }
 function cSocial(v) {
   if (v == null) return '#2a2825';
-  return ['#2a2825','#08306b','#2171b5','#6baed6','#eff3ff'][Math.round(v)] || '#2a2825';
+  // si_n: 1 = niedrigster Status → dunkelviolett; 4 = höchster → hellviolett
+  return ['#2a2825','#3f007d','#7b3fa3','#b894d4','#f2e8ff'][Math.round(v)] || '#2a2825';
 }
 function cScore(v) {
-  return ['#fef0d9','#fdcc8a','#fc8d59','#b30000'][v] || '#2a2825';
+  return ['#fef0d9','#fecc5c','#f97b2a','#d7191c'][v] || '#2a2825';
 }
 const socialLabel = v => (['–','Sehr niedrig','Niedrig','Mittel','Hoch'])[Math.round(v)] || '–';
 const scoreLabel  = v => (['Keine','Einfach','Zweifach','Dreifach'])[v] || '–';
@@ -623,7 +615,7 @@ const showMiss   = id => { document.getElementById('ms-'+id)?.classList.add('sho
 function updateKombiLegend() {
   const n = Object.values(activeFactors).filter(Boolean).length;
   const labels = ['Keine','Einfach','Zweifach','Dreifach'];
-  const colors = ['#fef0d9','#fdcc8a','#fc8d59','#b30000'];
+  const colors = ['#fef0d9','#fecc5c','#f97b2a','#d7191c'];
   let html = '<div class="leg-t">Mehrfachbelastung</div>';
   for (let i = 0; i <= n; i++) {
     html += `<div class="leg-r"><div class="sw" style="background:${colors[i]}"></div>${labels[i]}</div>`;
@@ -682,9 +674,7 @@ async function init() {
   const hero = L.map('hero-map',{zoomControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false,keyboard:false});
   darkBase().addTo(hero); hero.setView(BERLIN,11);
 
-  // WMS background maps (Mechanismus-Abschnitt)
-  wmsMaps.push(initWmsMap('map-versiegelung',    'wms-err-versiegelung',
-    'https://gdi.berlin.de/services/wms/ua_versiegelung_2021', '0'));
+  // WMS background map (Mechanismus-Abschnitt – Grünversorgung)
   wmsMaps.push(initWmsMap('map-gruenversorgung', 'wms-err-gruenversorgung',
     'https://fbinter.stadt-berlin.de/fb/wms/senstadt/k06_05gruenversorg2020', 'k06_05gruenversorg2020'));
 
