@@ -199,12 +199,13 @@
     <div class="mc" style="border-top:3px solid var(--accent)">
       <div class="mc-lbl">Folge</div>
       <div class="mc-title">Thermische Belastung für Menschen</div>
-      <p>Der Index PET (Physiologisch Äquivalente Temperatur) misst, wie Hitze für den menschlichen Körper tatsächlich erlebbar ist. In stark versiegelten, grünarmen Gebieten übersteigt PET an Hitzetagen 46 °C – eine Belastung, die medizinisch als „sehr stark" eingestuft wird.</p>
+      <p>Der Index PET (Physiologisch Äquivalente Temperatur) bewertet Hitze aus Körperperspektive – unter Einbeziehung von Strahlung, Luftfeuchtigkeit und Wind. In den am stärksten belasteten Berliner Planungsräumen übersteigt der mittlere PET-Wert an Sommernachmittagen 38 °C, was medizinisch als „sehr starke Wärmebelastung" gilt. Zwischen dem heißesten und kühlsten Planungsraum liegen mehrere Grad – eine Differenz, die nicht zufällig im Raum verteilt ist.</p>
     </div>
   </div>
   <div class="inn" style="padding-top:40px;padding-bottom:0">
     <h3>Warum ist das auch eine Frage sozialer Gerechtigkeit?</h3>
     <p>Wer in einer grünarmen, stark versiegelten Nachbarschaft wohnt, hat statistisch gesehen häufig auch weniger Ressourcen, dieser Situation auszuweichen: kein Haus mit Garten, kein Urlaub im Sommer, keine Klimaanlage. Die Fähigkeit, sich vor Hitze zu schützen, ist ungleich verteilt – und diese Ungleichheit reproduziert sich räumlich.</p>
+    <p>Die folgenden interaktiven Karten machen diese drei Dimensionen einzeln und in Kombination sichtbar: wo in Berlin die Hitze am stärksten ist, wo es am wenigsten Grün gibt – und wo beides mit sozialer Benachteiligung zusammenfällt.</p>
   </div>
 </section>
 
@@ -218,9 +219,10 @@
     <table class="dt">
       <thead><tr><th>Datensatz</th><th>Jahr</th><th>Typ</th><th>Quelle</th></tr></thead>
       <tbody>
-        <tr><td>Monitoring Soziale Stadtentwicklung</td><td>2023</td><td><span class="tag ts">Sozial</span></td><td>SenStadt Berlin</td></tr>
+        <tr><td>Erwerbs- und Sozialindex (ESIx) – primärer Sozialindikator</td><td>2022</td><td><span class="tag ts">Sozial</span></td><td>Gesundheits- &amp; Sozialstrukturatlas Berlin</td></tr>
+        <tr><td>Monitoring Soziale Stadtentwicklung (MSS, Ergänzung)</td><td>2023</td><td><span class="tag ts">Sozial</span></td><td>SenStadt Berlin</td></tr>
         <tr><td>Klimamodell Berlin – PET 14 Uhr</td><td>2022</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
-        <tr><td>Versiegelung</td><td>2021</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
+        <tr><td>Versiegelung der Blockteilflächen</td><td>2021</td><td><span class="tag th">Hitze</span></td><td>Umweltatlas Berlin</td></tr>
         <tr><td>Grünvolumen (inkl. Δ 2010→2020)</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Umweltatlas Berlin</td></tr>
         <tr><td>Versorgung mit wohnungsnahen Grünanlagen</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Umweltatlas Berlin</td></tr>
       </tbody>
@@ -332,30 +334,30 @@
       </div>
     </div>
     <div style="margin-top:18px;max-width:640px">
-      <p class="mc-cap" style="margin-bottom:10px;letter-spacing:.06em">Methodik — Z-Score-basierter Kombinationsindex:</p>
+      <p class="mc-cap" style="margin-bottom:10px;letter-spacing:.06em">Methodik — Rang-basierter Kombinationsindex:</p>
       <table style="width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,242,235,.45)">
         <tr style="border-bottom:1px solid rgba(245,242,235,.07)">
-          <td style="padding:6px 0">z&#8239;Hitze</td>
-          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">(PET − μ) / σ</td>
-          <td style="padding:6px 0;color:rgba(245,242,235,.35)">positiv = überdurchschnittlich heiß</td>
+          <td style="padding:6px 0">Rang Hitze</td>
+          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">Perzentil-Rang PET (0–100)</td>
+          <td style="padding:6px 0;color:rgba(245,242,235,.35)">100 = heißester Planungsraum</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(245,242,235,.07)">
-          <td style="padding:6px 0">z&#8239;Grün</td>
-          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">−(GVZ − μ) / σ</td>
-          <td style="padding:6px 0;color:rgba(245,242,235,.35)">positiv = grünarm</td>
+          <td style="padding:6px 0">Rang Grün</td>
+          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">Umgekehrter Rang GVZ (0–100)</td>
+          <td style="padding:6px 0;color:rgba(245,242,235,.35)">100 = grünärmster Planungsraum</td>
         </tr>
         <tr style="border-bottom:1px solid rgba(245,242,235,.07)">
-          <td style="padding:6px 0">z&#8239;Sozial</td>
-          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">−(SI − μ) / σ</td>
-          <td style="padding:6px 0;color:rgba(245,242,235,.35)">positiv = sozial benachteiligt</td>
+          <td style="padding:6px 0">Rang Sozial</td>
+          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">Umgekehrter Rang ESIx (0–100)</td>
+          <td style="padding:6px 0;color:rgba(245,242,235,.35)">100 = stärkste soziale Belastung</td>
         </tr>
         <tr>
-          <td style="padding:6px 0;color:rgba(245,242,235,.7)">z&#8239;Gesamt</td>
-          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">Summe aktiver Faktoren</td>
-          <td style="padding:6px 0;color:rgba(245,242,235,.35)">Farbskala dynamisch normiert</td>
+          <td style="padding:6px 0;color:rgba(245,242,235,.7)">Gesamt</td>
+          <td style="padding:6px 8px;color:rgba(245,242,235,.7)">Summe der aktiven Ränge (max. 300)</td>
+          <td style="padding:6px 0;color:rgba(245,242,235,.35)">Dreifachbelastung: alle Ränge &gt; 75</td>
         </tr>
       </table>
-      <p class="mc-cap" style="margin-top:8px">Farbskala auf den aktuellen Wertebereich normiert — beim Wechsel aktiver Faktoren passt sie sich automatisch an. Klick auf einen Planungsraum zeigt die Einzelwerte.</p>
+      <p class="mc-cap" style="margin-top:8px">Farbskala dynamisch auf den aktuellen Wertebereich normiert. Planungsräume im obersten Viertel aller drei Faktoren gleichzeitig werden mit weißer Umrandung als dreifachbelastet markiert. Klick auf einen Planungsraum zeigt die Einzelwerte.</p>
     </div>
   </div>
 </div>
@@ -366,12 +368,13 @@
     <span class="lbl">Gesamtstädtische Befunde</span>
     <h2>Was die Daten zeigen</h2>
     <div class="fgrid">
-      <div class="fc"><div class="fn" id="s1">–</div><div class="fl">Dreifach belastete Planungsräume</div><p class="ft" id="s1t">Wird aus den QGIS-Analysedaten automatisch berechnet.</p></div>
-      <div class="fc"><div class="fn" id="s2">–</div><div class="fl">Δ Grünvolumen 2010→2020</div><p class="ft" id="s2t">Wird aus den QGIS-Analysedaten automatisch berechnet.</p></div>
-      <div class="fc"><div class="fn" id="s3">–</div><div class="fl">Temperaturspanne Berlin</div><p class="ft" id="s3t">Wird aus den QGIS-Analysedaten automatisch berechnet.</p></div>
+      <div class="fc"><div class="fn" id="s1">–</div><div class="fl">Dreifach belastete Planungsräume</div><p class="ft" id="s1t">Planungsräume im obersten Viertel bei Hitze, Grünarmut und sozialer Benachteiligung gleichzeitig.</p></div>
+      <div class="fc"><div class="fn" id="s2">–</div><div class="fl">Ø Δ Grünvolumen 2010→2020</div><p class="ft" id="s2t">Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) – gesamtstädtisch kaum Verbesserung.</p></div>
+      <div class="fc"><div class="fn" id="s3">–</div><div class="fl">PET-Spanne Berlin</div><p class="ft" id="s3t">Differenz zwischen heißestem und kühlstem Planungsraum – größer als oft angenommen.</p></div>
     </div>
-    <h3>Räumliche Konzentration</h3>
-    <p>Die Analyse zeigt eine deutliche räumliche Konzentration der Mehrfachbelastung in Spandau-West, Neukölln-Nord, Wedding und Marzahn-Hellersdorf-Nord – Gebiete mit verdichteter Bebauung, hohem Versiegelungsgrad und sozial überdurchschnittlich belasteter Bevölkerung.</p>
+    <h3>Zwei Typen von Hitzungerechtigkeit</h3>
+    <p>Die Daten zeigen zwei strukturell verschiedene Muster. In den DDR-Großsiedlungen am Stadtrand – Marzahn-Hellersdorf, Lichtenberg, Teile Spandaus – ist die klimatische Belastung quasi eingebaut: Hochhaussiedlungen der 1970er bis 1990er Jahre ohne gewachsenen Baumbestand, hohe Versiegelung, wenig wohnungsnahes Grün. Die soziale und die klimatische Benachteiligung haben hier dieselbe historische Wurzel.</p>
+    <p>Im innerstädtischen Gürtel – Neukölln-Nord, Kreuzberg, Moabit, Wedding, Gesundbrunnen – ist das klimatische Problem eine andere: dichte Gründerzeitbebauung mit wenig Innenhofgrün, Straßenschluchten die sich aufheizen. Die soziale Belastung hat eine andere Genese: Diese Viertel sind die letzten noch halbwegs bezahlbaren Lagen innerhalb des S-Bahn-Rings. Einkommensschwächere Bevölkerung wohnt dort, wo sie sich die Miete noch leisten kann – in klimatisch ungünstigen Gebieten. Das ist Umweltungerechtigkeit als Marktmechanismus.</p>
     <p>Demgegenüber zeigen Gebiete wie Dahlem, Wannsee oder Pankow-Niederschönhausen durchgängig geringe Belastungswerte in allen drei Dimensionen.</p>
   </div>
 </section>
@@ -380,16 +383,23 @@
 <section class="csec">
   <div class="inn">
     <span class="lbl">Fazit</span>
-    <h2>Das Grün folgt dem Geld –<br>und das ist ein Planungsproblem</h2>
-    <p>Die Analyse zeigt einen robusten räumlichen Zusammenhang: Gebiete mit niedrigem Sozialindex sind in Berlin systematisch häufiger von Hitzebelastung betroffen und weisen ein geringeres Grünvolumen auf. Dieser Zusammenhang hat sich zwischen 2013 und 2022 nicht aufgelöst.</p>
-    <p>Besonders deutlich wird das im Vergleich von Gentrifizierungsgebieten wie Neukölln-Nord mit konstant belasteten Gebieten wie Spandau-West: Im ersten Fall hat sich der Sozialindex scheinbar verbessert – nicht durch bessere Lebensverhältnisse, sondern durch Verdrängung. Die physische Hitzebelastung blieb.</p>
+    <h2>Wenn Hitze auf Armut trifft –<br>und warum die Methode entscheidet,<br><em style="color:#f0a070">wen wir sehen</em></h2>
+    <p>Die Analyse von 542 Berliner Planungsräumen zeigt ein klares Ergebnis: Wer in Berlin wenig Geld hat, wohnt häufiger dort, wo es im Sommer am heißesten ist und am wenigsten Grün gibt. Das ist keine zufällige Verteilung, sondern das Ergebnis von Jahrzehnten Stadtplanung, die sozialen Wohnungsbau und klimatische Qualität selten zusammengedacht hat.</p>
+    <h3>Was der Indikator sichtbar macht – und was nicht</h3>
+    <p>Ein zentraler methodischer Befund dieser Analyse: Die Wahl des Sozialindikators entscheidet darüber, welche Form von Ungleichheit sichtbar wird. Der MSS-Statusindex mit seinen vier diskreten Kategorien bildet vor allem Transferbezug und Kinderarmut ab – und zeigt damit vorrangig die Plattenbau-Peripherie. Der ESIx mit 20 Indikatoren inklusive Wohnlage und Armutsrisiko zeigt auch die Working Poor in Gründerzeitvierteln. Die Wahl des Sozialindikators ist damit keine technische Entscheidung, sondern eine normative: Sie entscheidet mit, welche Bevölkerung als benachteiligt gilt – und damit, welche Gebiete politische Aufmerksamkeit erhalten.</p>
+    <h3>Eine Schere, die sich öffnet</h3>
+    <p>In den Rohdaten ist eine Verschiebungsdynamik erkennbar, die eine statische Momentaufnahme leicht übersieht. Spandau und Reinickendorf zeigen laut ESIx die stärkste negative Entwicklung seit 2013. Gebiete wie Freiheit oder Rosenbecker Straße wurden erst im MSS 2023 neu als Problemgebiete ausgewiesen. Die klimatische Belastung ist relativ stabil. Die soziale Belastung verschlechtert sich aktiv. Die Schere öffnet sich weiter.</p>
+    <p>Verglichen mit dem Berliner Umweltgerechtigkeitsatlas 2023/24, der zusätzlich Lärm und Luftschadstoffe einbezieht, zeigt diese Analyse ein komplementäres Bild: Hitze und Grünarmut folgen einer anderen räumlichen Logik als Lärm und Luftverschmutzung. Wer innenstadtnah wohnt, leidet oft unter Verkehrslärm, ist aber grüntechnisch besser gestellt als der erste Blick vermuten lässt. Wer am Stadtrand wohnt, hat Ruhe – aber sommers keine Abkühlung.</p>
+    <h3>Methodische Grenzen</h3>
+    <p>Zwei Grenzen dieser Analyse müssen transparent gemacht werden. Erstens bildet der PET-Wert um 14 Uhr ausschließlich die Mittagshitze ab. Nächtliche Abkühlungsdefizite – die für gesundheitliche Hitzefolgen oft entscheidender sind als der Spitzenwert am Mittag – bleiben unberücksichtigt. Zweitens misst das Grünvolumen kühlende Biomasse, aber nicht Erreichbarkeit oder Nutzbarkeit. Ein privater Garten in Zehlendorf kühlt die Luft genauso wie ein Park – ist aber nicht öffentlich zugänglich. Die ergänzend dargestellte Grünversorgung mit wohnungsnahen Grünanlagen bildet diese Zugangsdimension besser ab, wurde aber bewusst nicht in den Belastungsscore aufgenommen, um Mehrfachgewichtung zu vermeiden.</p>
     <h3>Was Stadtplanung tun müsste</h3>
+    <p>Die Bezirke haben das Problem erkannt: Marzahn-Hellersdorf hat 2025 als erster Berliner Bezirk einen Bürgerrat zum Hitzeschutz einberufen. Der Senat stellt seit 2026 Fördermittel für Hitzeschutzmaßnahmen in den Bezirken bereit. Die betroffenen Gebiete sind benannt. Die Frage ist, ob Investitionen in Stadtgrün, Entsiegelung und klimagerechten Umbau dorthin fließen, wo sie am dringendsten gebraucht werden – oder ob der Markt auch hier die Entscheidung übernimmt.</p>
     <ul class="clist">
       <li>Begrünungsmaßnahmen gezielt in sozial belasteten, hitzeexponierten Gebieten priorisieren – nicht dort, wo ohnehin schon Grün ist</li>
       <li>Milieuschutz und Begrünung als gemeinsame Strategie denken: Wer verdrängt wird, profitiert nicht von nachträglichen Bäumen</li>
       <li>Den Mehrfachbelastungsindex als verbindliches Planungsinstrument einführen, etwa im Stadtentwicklungsplan Klima</li>
-      <li>Versiegelungsgrad als Kriterium bei Baugenehmigungen stärker gewichten – besonders in bereits hitzebelasteten Quartieren</li>
-      <li>Hitzevorsorge nicht nur als technische, sondern als soziale Aufgabe begreifen: kühle öffentliche Räume gezielt für belastete Gebiete</li>
+      <li>Versiegelungsgrad als verbindliches Kriterium bei Baugenehmigungen stärker gewichten – besonders in bereits hitzebelasteten Quartieren</li>
+      <li>Hitzevorsorge nicht nur als technische, sondern als soziale Aufgabe begreifen: kühle öffentliche Räume gezielt für dreifach belastete Gebiete planen</li>
     </ul>
   </div>
 </section>
@@ -754,22 +764,27 @@ function activateAll() {
 function computeStats() {
   const vals = Object.values(lookup);
   if (!vals.length) return;
-  const sc = vals.map(v=>v[CFG.scoreFeld]).filter(v=>v!=null);
-  if (sc.length) {
-    const triple = sc.filter(v=>v===3).length;
-    document.getElementById('s1').textContent = Math.round(triple/sc.length*100)+'%';
-    document.getElementById('s1t').textContent = 'der Planungsräume sind gleichzeitig hitzebelas-tet, grünarm und sozial benachteiligt.';
+  // Rang-basierte Dreifachbelastung: alle drei Ränge > 75
+  const withRangs = vals.filter(v =>
+    v[CFG.rangHitzeFeld] != null && v[CFG.rangGruenFeld] != null && v[CFG.rangSozialFeld] != null
+  );
+  if (withRangs.length) {
+    const triple = withRangs.filter(v =>
+      v[CFG.rangHitzeFeld] > 75 && v[CFG.rangGruenFeld] > 75 && v[CFG.rangSozialFeld] > 75
+    ).length;
+    document.getElementById('s1').textContent = triple;
+    document.getElementById('s1t').textContent = 'Planungsräume sind im obersten Viertel bei Hitze, Grünarmut und sozialer Benachteiligung gleichzeitig – dreifach belastet.';
   }
   const dl = vals.map(v=>v[CFG.deltaFeld]).filter(v=>v!=null);
   if (dl.length) {
     const avg = dl.reduce((a,b)=>a+b,0)/dl.length;
-    document.getElementById('s2').textContent = (avg>0?'+':'')+avg.toFixed(1);
-    document.getElementById('s2t').textContent = 'Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) von 2010 bis 2020.';
+    document.getElementById('s2').textContent = (avg>0?'+':'')+avg.toFixed(2);
+    document.getElementById('s2t').textContent = 'Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) von 2010 bis 2020 – gesamtstädtisch kaum Verbesserung.';
   }
   const pets = vals.map(v=>v[CFG.hitzeFeld]).filter(v=>v!=null);
   if (pets.length) {
-    document.getElementById('s3').textContent = (Math.max(...pets)-Math.min(...pets)).toFixed(0)+'°C';
-    document.getElementById('s3t').textContent = 'Spanne der PET-Werte zwischen am stärksten und am schwächsten belasteten Planungsräumen.';
+    document.getElementById('s3').textContent = (Math.max(...pets)-Math.min(...pets)).toFixed(1)+'°C';
+    document.getElementById('s3t').textContent = 'Differenz zwischen heißestem und kühlstem Planungsraum – größer als oft angenommen.';
   }
 }
 
