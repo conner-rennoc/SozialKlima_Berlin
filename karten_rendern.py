@@ -24,7 +24,7 @@ XLIM = (366000, 418000)
 YLIM = (5797000, 5839000)
 
 BG = '#1a1814'          # Website-Hintergrundfarbe (--ink)
-FIG_W, FIG_H = 12, 7.5  # ~1.6:1 Seitenverhältnis
+FIG_W, FIG_H = 16, 10   # ~1.6:1 Seitenverhältnis
 
 def basis_figure():
     fig, ax = plt.subplots(figsize=(FIG_W, FIG_H))
@@ -38,7 +38,7 @@ def basis_figure():
     return fig, ax
 
 def speichern(fig, pfad):
-    fig.savefig(pfad, dpi=120, bbox_inches='tight', pad_inches=0,
+    fig.savefig(pfad, dpi=150, bbox_inches='tight', pad_inches=0,
                 facecolor=BG)
     plt.close(fig)
     # PNG-Kompression via Pillow wenn verfügbar
