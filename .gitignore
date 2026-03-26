@@ -1,0 +1,4 @@
+# Große Rohdaten – nur lokal, nicht ins Repo
+rohdaten/
+gruenversorgung.geojson
+.DS_Store
