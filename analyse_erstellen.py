@@ -187,16 +187,37 @@ def main():
     punkte_gruen  = (ergebnis["gruen_gvz"]   < g_schwelle).astype(int)
     punkte_sozial = (ergebnis["sozial_index"] < s_schwelle).astype(int)
 
-    ergebnis["belastung_score"] = (punkte_hitze + punkte_gruen + punkte_sozial).where(
+    ergebnis["belastung_score_alt"] = (punkte_hitze + punkte_gruen + punkte_sozial).where(
         ergebnis[["hitze_pet", "gruen_gvz", "sozial_index"]].notna().all(axis=1),
         other=pd.NA,
     ).astype("Int64")
 
     # Statistik ausgeben
-    score_counts = ergebnis["belastung_score"].value_counts().sort_index()
-    log("Verteilung belastung_score:")
+    score_counts = ergebnis["belastung_score_alt"].value_counts().sort_index()
+    log("Verteilung belastung_score_alt:")
     for score, count in score_counts.items():
         log(f"  Score {score}: {count} Planungsraeume")
+
+    # Z-Scores berechnen
+    print("\n[5b] Berechne Z-Scores...")
+    h_mean = np.nanmean(ergebnis["hitze_pet"])
+    h_std  = np.nanstd(ergebnis["hitze_pet"],  ddof=0)
+    g_mean = np.nanmean(ergebnis["gruen_gvz"])
+    g_std  = np.nanstd(ergebnis["gruen_gvz"],  ddof=0)
+    s_mean = np.nanmean(ergebnis["sozial_index"])
+    s_std  = np.nanstd(ergebnis["sozial_index"], ddof=0)
+
+    ergebnis["z_hitze"]  = ((ergebnis["hitze_pet"]    - h_mean) / h_std).round(3)
+    ergebnis["z_gruen"]  = (-(ergebnis["gruen_gvz"]   - g_mean) / g_std).round(3)
+    ergebnis["z_sozial"] = (-(ergebnis["sozial_index"] - s_mean) / s_std).round(3)
+    # z_sozial bleibt NaN wo sozial_index fehlt
+
+    ergebnis["z_gesamt"] = (ergebnis["z_hitze"] + ergebnis["z_gruen"] + ergebnis["z_sozial"]).round(3)
+
+    log(f"z_hitze:  Bereich {ergebnis['z_hitze'].min():.2f} – {ergebnis['z_hitze'].max():.2f}")
+    log(f"z_gruen:  Bereich {ergebnis['z_gruen'].min():.2f} – {ergebnis['z_gruen'].max():.2f}")
+    log(f"z_sozial: Bereich {ergebnis['z_sozial'].min():.2f} – {ergebnis['z_sozial'].max():.2f}")
+    log(f"z_gesamt: Bereich {ergebnis['z_gesamt'].min():.2f} – {ergebnis['z_gesamt'].max():.2f} ({ergebnis['z_gesamt'].notna().sum()} LOR)")
 
     # 6. Als GeoJSON exportieren
     print("\n[6/6] Exportiere analyse.geojson...")
@@ -218,7 +239,9 @@ def main():
     # Spaltenreihenfolge
     spalten = ["PLR_ID", "PLR_NAME", "BEZ", "BEZ_NAME",
                "hitze_pet", "gruen_gvz", "gruen_delta",
-               "sozial_index", "belastung_score", "geometry"]
+               "sozial_index", "belastung_score_alt",
+               "z_hitze", "z_gruen", "z_sozial", "z_gesamt",
+               "geometry"]
     export = export[spalten]
 
     export.to_file(OUTPUT, driver="GeoJSON")
