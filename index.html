@@ -85,10 +85,10 @@
     .tbtn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;padding:8px 22px;border:none;background:transparent;color:rgba(245,242,235,.42);cursor:pointer;transition:all .2s}
     .tbtn.on{background:rgba(245,242,235,.13);color:var(--paper)}
     /* legend */
-    .leg{background:rgba(16,14,10,.88);border:1px solid rgba(245,242,235,.09);padding:12px 16px;position:absolute;top:16px;right:12px;z-index:500;min-width:160px}
-    .leg-t{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,242,235,.4);margin-bottom:10px}
-    .leg-r{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,242,235,.62)}
-    .sw{width:14px;height:14px;flex-shrink:0}
+    .leg{background:rgba(16,14,10,.88);border:1px solid rgba(245,242,235,.09);padding:8px 10px;position:absolute;top:12px;right:10px;z-index:500;min-width:0}
+    .leg-t{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,242,235,.4);margin-bottom:6px}
+    .leg-r{display:flex;align-items:center;gap:6px;margin-bottom:3px;font-family:'DM Mono',monospace;font-size:9px;color:rgba(245,242,235,.62)}
+    .sw{width:11px;height:11px;flex-shrink:0}
     /* findings */
     .fsec{background:var(--pd)}
     .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:40px 0}
@@ -643,11 +643,21 @@ function hover(layer, styleFn) {
   layer.on('mouseout',  () => layer.setStyle(styleFn()));
 }
 
-// Senkt die Legende hinter den Map-Content wenn ein Popup offen ist
+// Blendet Legende nur aus wenn Popup sie räumlich überlappt
 function hookLegendToPopup(map) {
   const leg = map.getContainer().parentElement.querySelector('.leg');
   if (!leg) return;
-  map.on('popupopen',  () => { leg.style.zIndex = '-1'; });
+  map.on('popupopen', function(e) {
+    requestAnimationFrame(() => {
+      const popupEl = e.popup.getElement();
+      if (!popupEl) return;
+      const pr = popupEl.getBoundingClientRect();
+      const lr = leg.getBoundingClientRect();
+      const overlaps = pr.left < lr.right && pr.right > lr.left &&
+                       pr.top  < lr.bottom && pr.bottom > lr.top;
+      leg.style.zIndex = overlaps ? '-1' : '500';
+    });
+  });
   map.on('popupclose', () => { leg.style.zIndex = '500'; });
 }
 
