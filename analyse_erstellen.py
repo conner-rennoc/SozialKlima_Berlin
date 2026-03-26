@@ -172,6 +172,21 @@ def main():
     n_joined = ergebnis["sozial_index"].notna().sum()
     log(f"{n_joined} von {len(ergebnis)} LOR mit Sozialindex befuellt.")
 
+    # 4b. ESIx 2022 laden und per Flächenverschneidung joinen
+    print("\n[4b] Lade ESIx 2022 und verschneide räumlich...")
+    esix = gpd.read_file(os.path.join(ROHDATEN, "ESIx.geojson"))
+    esix = esix[["esix_wert", "geometry"]].copy()
+    esix["esix_wert"] = pd.to_numeric(esix["esix_wert"], errors="coerce")
+    esix = esix.dropna(subset=["esix_wert"])  # schicht=9 (Gewerbe) hat None → raus
+    esix = esix.to_crs(CRS_WORK)
+    log(f"{len(esix)} ESIx-Features geladen (ohne schicht=9), CRS: {CRS_WORK}")
+
+    esix_result = flaechengewichteter_mittelwert(lor, esix, "esix_wert")
+    ergebnis["esix_wert"] = ergebnis["PLR_ID"].map(esix_result)
+    n_esix = ergebnis["esix_wert"].notna().sum()
+    log(f"{n_esix} von {len(ergebnis)} LOR mit ESIx befuellt.")
+    log(f"esix_wert: Bereich {ergebnis['esix_wert'].min():.3f} – {ergebnis['esix_wert'].max():.3f}, Mittelwert {ergebnis['esix_wert'].mean():.3f}")
+
     # 5. Mehrfachbelastungsindex berechnen
     print("\n[5/6] Berechne Mehrfachbelastungsindex...")
 
@@ -206,18 +221,54 @@ def main():
     g_std  = np.nanstd(ergebnis["gruen_gvz"],  ddof=0)
     s_mean = np.nanmean(ergebnis["sozial_index"])
     s_std  = np.nanstd(ergebnis["sozial_index"], ddof=0)
+    e_mean = np.nanmean(ergebnis["esix_wert"])
+    e_std  = np.nanstd(ergebnis["esix_wert"],  ddof=0)
 
-    ergebnis["z_hitze"]  = ((ergebnis["hitze_pet"]    - h_mean) / h_std).round(3)
-    ergebnis["z_gruen"]  = (-(ergebnis["gruen_gvz"]   - g_mean) / g_std).round(3)
-    ergebnis["z_sozial"] = (-(ergebnis["sozial_index"] - s_mean) / s_std).round(3)
-    # z_sozial bleibt NaN wo sozial_index fehlt
+    ergebnis["z_hitze"]      = ((ergebnis["hitze_pet"]    - h_mean) / h_std).round(3)
+    ergebnis["z_gruen"]      = (-(ergebnis["gruen_gvz"]   - g_mean) / g_std).round(3)
+    ergebnis["z_sozial_mss"] = (-(ergebnis["sozial_index"] - s_mean) / s_std).round(3)
+    # ESIx: höher = weniger belastet → Vorzeichen umkehren
+    ergebnis["z_sozial_esix"] = (-(ergebnis["esix_wert"] - e_mean) / e_std).round(3)
 
-    ergebnis["z_gesamt"] = (ergebnis["z_hitze"] + ergebnis["z_gruen"] + ergebnis["z_sozial"]).round(3)
+    # z_gesamt basiert jetzt auf ESIx (bleibt NaN wo esix_wert fehlt)
+    ergebnis["z_gesamt"] = (ergebnis["z_hitze"] + ergebnis["z_gruen"] + ergebnis["z_sozial_esix"]).round(3)
 
-    log(f"z_hitze:  Bereich {ergebnis['z_hitze'].min():.2f} – {ergebnis['z_hitze'].max():.2f}")
-    log(f"z_gruen:  Bereich {ergebnis['z_gruen'].min():.2f} – {ergebnis['z_gruen'].max():.2f}")
-    log(f"z_sozial: Bereich {ergebnis['z_sozial'].min():.2f} – {ergebnis['z_sozial'].max():.2f}")
-    log(f"z_gesamt: Bereich {ergebnis['z_gesamt'].min():.2f} – {ergebnis['z_gesamt'].max():.2f} ({ergebnis['z_gesamt'].notna().sum()} LOR)")
+    log(f"z_hitze:       Bereich {ergebnis['z_hitze'].min():.2f} – {ergebnis['z_hitze'].max():.2f}")
+    log(f"z_gruen:       Bereich {ergebnis['z_gruen'].min():.2f} – {ergebnis['z_gruen'].max():.2f}")
+    log(f"z_sozial_mss:  Bereich {ergebnis['z_sozial_mss'].min():.2f} – {ergebnis['z_sozial_mss'].max():.2f}")
+    log(f"z_sozial_esix: Bereich {ergebnis['z_sozial_esix'].min():.2f} – {ergebnis['z_sozial_esix'].max():.2f} ({ergebnis['z_sozial_esix'].notna().sum()} LOR)")
+    log(f"z_gesamt:      Bereich {ergebnis['z_gesamt'].min():.2f} – {ergebnis['z_gesamt'].max():.2f} ({ergebnis['z_gesamt'].notna().sum()} LOR)")
+
+    # Rang-basierte Normalisierung (0–100 je Faktor, 100 = höchste Belastung)
+    print("\n[5c] Berechne Rang-basierte Scores (0–100)...")
+
+    n = len(ergebnis)
+
+    # rang_hitze: Rang von hitze_pet, aufsteigend (höchster Wert = Rang 100)
+    ergebnis["rang_hitze"] = (
+        ergebnis["hitze_pet"].rank(method="average", na_option="keep") / n * 100
+    ).round(1)
+
+    # rang_gruen: Rang von gruen_gvz, umgekehrt (niedrigster GVZ = Rang 100)
+    ergebnis["rang_gruen"] = (
+        (n + 1 - ergebnis["gruen_gvz"].rank(method="average", na_option="keep")) / n * 100
+    ).round(1)
+
+    # rang_sozial: Rang von esix_wert, umgekehrt (niedrigster ESIx = höchste Belastung = Rang 100)
+    ergebnis["rang_sozial"] = (
+        (n + 1 - ergebnis["esix_wert"].rank(method="average", na_option="keep")) / n * 100
+    ).round(1)
+
+    # belastung_rang: Summe der drei Ränge (0–300), NaN wenn irgendein Rang fehlt
+    alle_raenge = ergebnis[["rang_hitze", "rang_gruen", "rang_sozial"]]
+    ergebnis["belastung_rang"] = alle_raenge.sum(axis=1).where(
+        alle_raenge.notna().all(axis=1), other=np.nan
+    ).round(1)
+
+    log(f"rang_hitze:    Bereich {ergebnis['rang_hitze'].min():.1f} – {ergebnis['rang_hitze'].max():.1f}")
+    log(f"rang_gruen:    Bereich {ergebnis['rang_gruen'].min():.1f} – {ergebnis['rang_gruen'].max():.1f}")
+    log(f"rang_sozial:   Bereich {ergebnis['rang_sozial'].min():.1f} – {ergebnis['rang_sozial'].max():.1f}")
+    log(f"belastung_rang: Bereich {ergebnis['belastung_rang'].min():.1f} – {ergebnis['belastung_rang'].max():.1f} ({ergebnis['belastung_rang'].notna().sum()} LOR)")
 
     # 6. Als GeoJSON exportieren
     print("\n[6/6] Exportiere analyse.geojson...")
@@ -233,14 +284,15 @@ def main():
     export["BEZ_NAME"] = export["PLR_ID"].map(ergebnis.set_index("PLR_ID")["BEZ_NAME"])
 
     # Felder runden fuer kompaktere Dateigroe
-    for col in ["hitze_pet", "gruen_gvz", "gruen_delta", "sozial_index"]:
+    for col in ["hitze_pet", "gruen_gvz", "gruen_delta", "sozial_index", "esix_wert"]:
         export[col] = export[col].round(3)
 
     # Spaltenreihenfolge
     spalten = ["PLR_ID", "PLR_NAME", "BEZ", "BEZ_NAME",
                "hitze_pet", "gruen_gvz", "gruen_delta",
-               "sozial_index", "belastung_score_alt",
-               "z_hitze", "z_gruen", "z_sozial", "z_gesamt",
+               "sozial_index", "esix_wert", "belastung_score_alt",
+               "rang_hitze", "rang_gruen", "rang_sozial", "belastung_rang",
+               "z_hitze", "z_gruen", "z_sozial_mss", "z_sozial_esix", "z_gesamt",
                "geometry"]
     export = export[spalten]
 

@@ -217,7 +217,7 @@
         <tr><td>Versorgung mit wohnungsnahen Grünanlagen</td><td>2020</td><td><span class="tag tg">Grün</span></td><td>Umweltatlas Berlin</td></tr>
       </tbody>
     </table>
-    <p style="font-size:14px;color:var(--muted)">Alle Datenschichten wurden auf LOR-Planungsraumebene aggregiert. Der Mehrfachbelastungsindex summiert je einen Punkt für überdurchschnittliche Hitze, unterdurchschnittliches Grünvolumen und niedrigen Sozialindex (Schwellenwerte: 75./25./40. Perzentil).</p>
+    <p style="font-size:14px;color:var(--muted)">Alle Datenschichten wurden auf LOR-Planungsraumebene aggregiert. Der Mehrfachbelastungsindex basiert auf einer rang-basierten Normalisierung: Für jeden der drei Faktoren wird der Perzentil-Rang jedes LOR innerhalb aller 542 Planungsräume berechnet (0–100, wobei 100 die höchste Belastung bedeutet). Der Gesamtscore ist die Summe der drei Ränge (max. 300).</p>
   </div>
 </section>
 
@@ -407,12 +407,12 @@ const CFG = {
   sozialFeld:   'sozial_index',     // MSS Statusindex si_n (1–4) – durch Script auf 'sozial_index' umbenannt
   sozial13Feld: 'sozial_2013',         // MSS 2013 – nicht verfügbar
   sozial22Feld: 'sozial_2022',         // MSS 2022 – nicht verfügbar
-  scoreFeld:    'belastung_score_alt', // Perzentil-Score 0–3 (alt, für Statistiken)
-  deltaFeld:    'gruen_delta',         // Δ GVZ 2010→2020
-  zHitzeFeld:   'z_hitze',            // Z-Score Hitze  (positiv = überdurchschnittlich heiß)
-  zGruenFeld:   'z_gruen',            // Z-Score Grün   (positiv = grünarm)
-  zSozialFeld:  'z_sozial',           // Z-Score Sozial (positiv = benachteiligt)
-  zGesamtFeld:  'z_gesamt',           // Summe aller drei Z-Scores
+  scoreFeld:       'belastung_score_alt', // Perzentil-Score 0–3 (alt, für Statistiken)
+  deltaFeld:       'gruen_delta',         // Δ GVZ 2010→2020
+  rangHitzeFeld:   'rang_hitze',          // Perzentil-Rang Hitze  (0–100, 100=heißester LOR)
+  rangGruenFeld:   'rang_gruen',          // Perzentil-Rang Grün   (0–100, 100=grünärmster)
+  rangSozialFeld:  'rang_sozial',         // Perzentil-Rang Sozial (0–100, 100=am stärksten belastet)
+  belastungRangFeld: 'belastung_rang',    // Summe der drei Ränge (0–300)
 };
 
 // ══════════════════════════════════════════════
@@ -422,7 +422,7 @@ let lorGeoJSON = null;
 let lookup = {};   // { "PLR_ID": { ...properties } }
 let maps = {}, layers = {}, wmsMaps = [];
 let activeFactors = { hitze: true, gruen: true, sozial: true };
-let zRange = { min: 0, max: 1 }; // wird nach Datenladen berechnet
+let rangRange = { min: 0, max: 300 }; // wird nach Datenladen berechnet
 
 const BERLIN = [52.52, 13.405];
 
@@ -466,10 +466,10 @@ function cSocial(v) {
   // si_n: 1 = niedrigster Status → dunkelviolett; 4 = höchster → hellviolett
   return ['#2a2825','#3f007d','#7b3fa3','#b894d4','#f2e8ff'][Math.round(v)] || '#2a2825';
 }
-// Z-Score Farbskala: 5 Stufen, dynamisch auf aktuellen min/max normiert
-function cZScore(v) {
+// Rang-Farbskala: 5 Stufen, dynamisch auf aktuellen min/max normiert
+function cRang(v) {
   if (v == null) return '#2a2825';
-  const t = Math.max(0, Math.min(1, (v - zRange.min) / (zRange.max - zRange.min)));
+  const t = Math.max(0, Math.min(1, (v - rangRange.min) / (rangRange.max - rangRange.min)));
   if (t > 0.8) return '#d7191c';
   if (t > 0.6) return '#f97b2a';
   if (t > 0.4) return '#fecc5c';
@@ -539,24 +539,24 @@ function styleFor(f, colorFn, field) {
   const v = ap[field];
   return { fillColor: colorFn(v), fillOpacity: v != null ? 0.73 : 0.12, color:'rgba(255,255,255,0.07)', weight:0.5 };
 }
-// Berechnet den aktiven Z-Score-Summenwert für einen LOR
-function activeZ(ap) {
+// Berechnet die aktive Rang-Summe für einen LOR
+function activeRang(ap) {
   let sum = 0;
-  if (activeFactors.hitze)  { if (ap[CFG.zHitzeFeld]  == null) return null; sum += ap[CFG.zHitzeFeld]; }
-  if (activeFactors.gruen)  { if (ap[CFG.zGruenFeld]  == null) return null; sum += ap[CFG.zGruenFeld]; }
-  if (activeFactors.sozial) { if (ap[CFG.zSozialFeld] == null) return null; sum += ap[CFG.zSozialFeld]; }
+  if (activeFactors.hitze)  { if (ap[CFG.rangHitzeFeld]  == null) return null; sum += ap[CFG.rangHitzeFeld]; }
+  if (activeFactors.gruen)  { if (ap[CFG.rangGruenFeld]  == null) return null; sum += ap[CFG.rangGruenFeld]; }
+  if (activeFactors.sozial) { if (ap[CFG.rangSozialFeld] == null) return null; sum += ap[CFG.rangSozialFeld]; }
   return sum;
 }
-// Aktualisiert zRange anhand aller LOR im Lookup
-function computeZRange() {
-  const vals = Object.values(lookup).map(ap => activeZ(ap)).filter(v => v != null);
-  if (vals.length) zRange = { min: Math.min(...vals), max: Math.max(...vals) };
+// Aktualisiert rangRange anhand aller LOR im Lookup
+function computeRangRange() {
+  const vals = Object.values(lookup).map(ap => activeRang(ap)).filter(v => v != null);
+  if (vals.length) rangRange = { min: Math.min(...vals), max: Math.max(...vals) };
 }
 function styleKombi(f) {
   const ap = lookup[lorID(f)] || {};
-  const z  = activeZ(ap);
-  if (z == null) return { fillColor:'#2a2825', fillOpacity:0.12, color:'rgba(255,255,255,0.07)', weight:0.5 };
-  return { fillColor:cZScore(z), fillOpacity:0.73, color:'rgba(255,255,255,0.07)', weight:0.5 };
+  const r  = activeRang(ap);
+  if (r == null) return { fillColor:'#2a2825', fillOpacity:0.12, color:'rgba(255,255,255,0.07)', weight:0.5 };
+  return { fillColor:cRang(r), fillOpacity:0.73, color:'rgba(255,255,255,0.07)', weight:0.5 };
 }
 
 // ══════════════════════════════════════════════
@@ -581,17 +581,17 @@ function popSozial(name, ap) {
     <div class="pr"><span>Bezirk</span><span class="pv">${ap[CFG.bezirkField]||'–'}</span></div>`;
 }
 function popKombi(name, ap) {
-  const z = activeZ(ap);
-  const zh = ap[CFG.zHitzeFeld], zg = ap[CFG.zGruenFeld], zs = ap[CFG.zSozialFeld];
+  const r  = activeRang(ap);
+  const rh = ap[CFG.rangHitzeFeld], rg = ap[CFG.rangGruenFeld], rs = ap[CFG.rangSozialFeld];
   return `<div class="pn">${name}</div>
     <div class="pr"><span>Hitze (PET)</span><span class="pv">${ap[CFG.hitzeFeld]!=null?ap[CFG.hitzeFeld].toFixed(1)+' °C':'–'}</span></div>
     <div class="pr"><span>Grünvolumen</span><span class="pv">${ap[CFG.gruenFeld]!=null?ap[CFG.gruenFeld].toFixed(2)+' m³/m²':'–'}</span></div>
     <div class="pr"><span>Sozialindex</span><span class="pv">${socialLabel(ap[CFG.sozialFeld])}</span></div>
     <div style="border-top:1px solid rgba(255,255,255,.08);margin-top:5px;padding-top:5px">
-      ${activeFactors.hitze  ?`<div class="pr"><span>z Hitze</span><span class="pv">${zh!=null?zh.toFixed(2):'–'}</span></div>`:''}
-      ${activeFactors.gruen  ?`<div class="pr"><span>z Grün</span><span class="pv">${zg!=null?zg.toFixed(2):'–'}</span></div>`:''}
-      ${activeFactors.sozial ?`<div class="pr"><span>z Sozial</span><span class="pv">${zs!=null?zs.toFixed(2):'–'}</span></div>`:''}
-      <div class="pr"><span>z Gesamt (aktiv)</span><span class="pv">${z!=null?z.toFixed(2):'–'}</span></div>
+      ${activeFactors.hitze  ?`<div class="pr"><span>Rang Hitze</span><span class="pv">${rh!=null?rh.toFixed(0)+' / 100':'–'}</span></div>`:''}
+      ${activeFactors.gruen  ?`<div class="pr"><span>Rang Grün</span><span class="pv">${rg!=null?rg.toFixed(0)+' / 100':'–'}</span></div>`:''}
+      ${activeFactors.sozial ?`<div class="pr"><span>Rang Sozial</span><span class="pv">${rs!=null?rs.toFixed(0)+' / 100':'–'}</span></div>`:''}
+      <div class="pr"><span>Belastung gesamt</span><span class="pv">${r!=null?r.toFixed(0)+' / '+Object.values(activeFactors).filter(Boolean).length*100:'–'}</span></div>
     </div>`;
 }
 
@@ -662,7 +662,7 @@ function toggleFactor(factor, btn) {
   activeFactors[factor] = !activeFactors[factor];
   btn.classList.toggle('on', activeFactors[factor]);
   document.getElementById('btn-alle').classList.toggle('on', Object.values(activeFactors).every(Boolean));
-  computeZRange();
+  computeRangRange();
   if (layers.kombi) maps.kombi.removeLayer(layers.kombi);
   layers.kombi = buildKombi(maps.kombi);
   updateKombiLegend();
@@ -672,7 +672,7 @@ function activateAll() {
   activeFactors = { hitze: true, gruen: true, sozial: true };
   document.querySelectorAll('.factor-btn').forEach(b => b.classList.add('on'));
   document.getElementById('btn-alle').classList.add('on');
-  computeZRange();
+  computeRangRange();
   if (layers.kombi) maps.kombi.removeLayer(layers.kombi);
   layers.kombi = buildKombi(maps.kombi);
   updateKombiLegend();
@@ -763,7 +763,7 @@ async function init() {
   mapIds.forEach(hideLoader);
 
   if (!hasAnalyse) mapIds.forEach(showMiss);
-  else { computeZRange(); computeStats(); updateKombiLegend(); }
+  else { computeRangRange(); computeStats(); updateKombiLegend(); }
 
   // Fix grey tiles after layout
   setTimeout(() => {
