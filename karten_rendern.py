@@ -79,26 +79,39 @@ speichern(fig, os.path.join(ROOT, 'versiegelung.png'))
 # ── 2. Grünversorgung ──────────────────────────────────────────────────────
 
 print("[2/2] Rendere Grünversorgung 2020...")
-gdf_gv = gpd.read_file(os.path.join(ROOT, 'gruenversorgung.geojson'))
-gdf_gv = gdf_gv.to_crs('EPSG:25833')
 
-# LOR als Basis-Layer (füllt Lücken, damit kein schwarzer Hintergrund)
+# LOR als Basis-Layer
 gdf_lor = gpd.read_file(os.path.join(ROOT, 'lor.geojson'))
 gdf_lor = gdf_lor.to_crs('EPSG:25833')
 
-# Hellere Farben damit 'versorgter Bereich' nicht mit dem dunklen Hintergrund verschmilzt
+# Versorgungsgrad in Gelb-Abstufungen (dunkel = gut versorgt, hell = schlecht)
+gdf_gv = gpd.read_file(os.path.join(ROOT, 'gruenversorgung.geojson'))
+gdf_gv = gdf_gv.to_crs('EPSG:25833')
+
 GV_COLORS = {
-    'versorgter Bereich':          '#41ab5d',  # kräftiges Grün
-    'unterversorgter Bereich':     '#a1d99b',  # helles Grün
-    'schlecht versorgter Bereich': '#d4efcc',  # sehr helles Grün
-    'nicht versorgter Bereich':    '#f0ece0',  # cremeweiß
+    'versorgter Bereich':          '#c47d00',  # sattes Amber (beste Versorgung)
+    'unterversorgter Bereich':     '#e8b014',  # mittleres Gelb
+    'schlecht versorgter Bereich': '#f5d87a',  # helles Gelb
+    'nicht versorgter Bereich':    '#fef0c0',  # sehr helles Creme-Gelb
 }
 gdf_gv['_color'] = gdf_gv['voeff_name'].map(GV_COLORS).fillna('#888888')
 
+# Parks und Wälder als Overlay
+gdf_parks = gpd.read_file(os.path.join(ROOT, 'rohdaten', 'öffentliche grünanlagen.geojson'))
+gdf_parks = gdf_parks.to_crs('EPSG:25833')
+
+gdf_wald = gpd.read_file(os.path.join(ROOT, 'rohdaten', 'Wald (erholung).geojson'))
+# Wald liegt bereits in EPSG:25833
+
 fig, ax = basis_figure()
-# Erst LOR als neutrale Basis (dunkelgrau), dann Grünversorgung drauf
+# 1) LOR als neutrale Basis
 gdf_lor.plot(ax=ax, color='#3a3630', linewidth=0, edgecolor='none')
+# 2) Versorgungsgrad (gelbe Abstufungen)
 gdf_gv.plot(ax=ax, color=gdf_gv['_color'], linewidth=0, edgecolor='none')
+# 3) Parks (mittleres Grün)
+gdf_parks.plot(ax=ax, color='#3a8c4e', linewidth=0, edgecolor='none')
+# 4) Wälder (dunkles Grün)
+gdf_wald.plot(ax=ax, color='#1a5230', linewidth=0, edgecolor='none')
 speichern(fig, os.path.join(ROOT, 'gruenversorgung.png'))
 
 print("\nFertig. Nächster Schritt:")
