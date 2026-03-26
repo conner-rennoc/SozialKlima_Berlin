@@ -166,12 +166,19 @@
       <div class="mc-title">Versiegelung</div>
       <p>Asphalt und Beton absorbieren bis zu 90 % der Sonnenstrahlung und geben sie als Wärme ab. In stark versiegelten Gebieten liegen Oberflächentemperaturen im Sommer bis zu 40 °C über denen begrünter Flächen. Berlinweit variiert der Versiegelungsgrad erheblich: Die dichte Gründerzeit-Innenstadt liegt oft bei über 80 %, während Randgebiete mit Einzelhausbebauung und Grünanlagen deutlich darunter fallen.</p>
     </div>
-    <div class="mc" style="border-top:3px solid var(--warm);margin-top:2px">
+    <div class="mc-wrap" style="height:500px;margin-top:2px;border-color:rgba(0,0,0,.15)">
+      <div id="map-versiegelung" style="width:100%;height:100%"></div>
+      <div class="leg"><div class="leg-t">Versiegelungsgrad 2021</div>
+        <div class="leg-r" style="font-size:10px;color:rgba(245,242,235,.5);line-height:1.4;max-width:130px">Hell = gering · Dunkel = stark versiegelt</div>
+      </div>
+    </div>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:10px;margin-bottom:2px">Quelle: Versiegelung der Blockteilflächen 2021, Umweltatlas Berlin (WMS).</p>
+    <div class="mc" style="border-top:3px solid var(--warm);margin-top:40px">
       <div class="mc-lbl">Faktor 2</div>
       <div class="mc-title">Fehlendes Grün</div>
       <p>Bäume kühlen durch Verdunstung und Beschattung. Ein einzelner Stadtbaum kann an einem Sommertag die Kühlwirkung von mehreren Klimaanlagen ersetzen. Für die Bewohnerinnen der Stadt ist dabei zweierlei relevant: das <em>Grünvolumen</em> – der gesamte Vegetationsbestand inkl. privater Gärten und Hinterhöfe, der lokal kühlt – und die <em>Grünversorgung</em>, also der Zugang zu öffentlichen Grünflächen im Gehwegbereich. Die Karte zeigt Letzteres: wie viel m² öffentliche Grünfläche pro Einwohner im 500-m-Gehwegnetz erreichbar sind.</p>
     </div>
-    <div class="mc-wrap" style="height:420px;margin-top:2px;border-color:rgba(0,0,0,.15)">
+    <div class="mc-wrap" style="height:500px;margin-top:2px;border-color:rgba(0,0,0,.15)">
       <div id="map-gruenversorgung" style="width:100%;height:100%"></div>
       <div class="mload" id="ld-gruenversorgung"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
       <div class="miss" id="ms-gruenversorgung">
@@ -437,6 +444,17 @@ const darkLabels = () => L.tileLayer(
 );
 function makeMap(id, center, zoom, noScroll) {
   const m = L.map(id, { zoomControl:true, scrollWheelZoom:!noScroll });
+  darkBase().addTo(m); darkLabels().addTo(m);
+  m.setView(center, zoom);
+  return m;
+}
+// Vollständig gesperrte Karte (kein Zoom, kein Drag, kein Klick)
+function makeStaticMap(id, center, zoom) {
+  const m = L.map(id, {
+    zoomControl:false, scrollWheelZoom:false, dragging:false,
+    doubleClickZoom:false, boxZoom:false, keyboard:false,
+    tap:false, touchZoom:false,
+  });
   darkBase().addTo(m); darkLabels().addTo(m);
   m.setView(center, zoom);
   return m;
@@ -742,28 +760,31 @@ async function init() {
   const hero = L.map('hero-map',{zoomControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false,keyboard:false});
   darkBase().addTo(hero); hero.setView(BERLIN,11);
 
-  // Grünversorgung-Karte (Mechanismus-Abschnitt)
-  const mapGV = makeMap('map-gruenversorgung', BERLIN, 10, true);
+  // Versiegelung-Karte (Mechanismus-Abschnitt, statisch)
+  const mapVS = makeStaticMap('map-versiegelung', BERLIN, 11);
+  wmsMaps.push(mapVS);
+  L.tileLayer.wms('https://gdi.berlin.de/services/wms/ua_versiegelung_2021', {
+    layers: 'versieg2021', styles: '', format: 'image/png',
+    transparent: true, opacity: 0.85, attribution: 'Umweltatlas Berlin',
+  }).addTo(mapVS);
+
+  // Grünversorgung-Karte (Mechanismus-Abschnitt, statisch)
+  const mapGV = makeStaticMap('map-gruenversorgung', BERLIN, 11);
   wmsMaps.push(mapGV);
   fetch('gruenversorgung.geojson')
     .then(r => r.ok ? r.json() : Promise.reject())
     .then(data => {
       const GV_COLORS = {
-        'versorgter Bereich':        '#238b45',
-        'unterversorgter Bereich':   '#74c476',
+        'versorgter Bereich':         '#238b45',
+        'unterversorgter Bereich':    '#74c476',
         'schlecht versorgter Bereich':'#c7e9c0',
-        'nicht versorgter Bereich':  '#f7fcf5',
+        'nicht versorgter Bereich':   '#f7fcf5',
       };
       L.geoJSON(data, {
         style: f => ({
           fillColor: GV_COLORS[f.properties.voeff_name] || '#ccc',
-          fillOpacity: 0.78,
-          color: 'rgba(255,255,255,0.06)',
-          weight: 0.5,
+          fillOpacity: 0.78, color: 'rgba(255,255,255,0.06)', weight: 0.5,
         }),
-        onEachFeature: (f, layer) => {
-          layer.bindTooltip(f.properties.voeff_name, { direction:'top', sticky:true });
-        },
       }).addTo(mapGV);
       hideLoader('gruenversorgung');
     })
