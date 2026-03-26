@@ -173,10 +173,17 @@
     </div>
     <div class="mc-wrap" style="height:420px;margin-top:2px;border-color:rgba(0,0,0,.15)">
       <div id="map-gruenversorgung" style="width:100%;height:100%"></div>
-      <div id="wms-err-gruenversorgung" style="display:none;position:absolute;inset:0;background:rgba(232,229,220,.93);z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center">
-        <div style="font-size:28px;opacity:.28">🌐</div>
-        <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--ink)">WMS-Dienst nicht erreichbar</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);max-width:380px;line-height:1.8">Versorgung mit wohnungsnahen Grünanlagen 2020 · Umweltatlas Berlin<br>fbinter.stadt-berlin.de/fb/wms/senstadt/k06_05gruenversorg2020</div>
+      <div class="mload" id="ld-gruenversorgung"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
+      <div class="miss" id="ms-gruenversorgung">
+        <div class="miss-icon">📂</div>
+        <div class="miss-title">Geodaten nicht verfügbar</div>
+        <div class="miss-txt">gruenversorgung.geojson · Versorgung mit wohnungsnahen Grünanlagen 2020, Umweltatlas Berlin</div>
+      </div>
+      <div class="leg"><div class="leg-t">Grünversorgung (500-m-Radius)</div>
+        <div class="leg-r"><div class="sw" style="background:#238b45"></div>Gut versorgt</div>
+        <div class="leg-r"><div class="sw" style="background:#74c476"></div>Unterversorgt</div>
+        <div class="leg-r"><div class="sw" style="background:#c7e9c0"></div>Schlecht versorgt</div>
+        <div class="leg-r"><div class="sw" style="background:#f7fcf5;border:1px solid rgba(255,255,255,.2)"></div>Nicht versorgt</div>
       </div>
     </div>
     <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:10px;margin-bottom:48px">Quelle: Versorgung mit wohnungsnahen Grünanlagen 2020, Umweltatlas Berlin. m² öffentlicher Grünfläche pro Einwohner im 500-m-Gehwegnetz.</p>
@@ -674,9 +681,32 @@ async function init() {
   const hero = L.map('hero-map',{zoomControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false,keyboard:false});
   darkBase().addTo(hero); hero.setView(BERLIN,11);
 
-  // WMS background map (Mechanismus-Abschnitt – Grünversorgung)
-  wmsMaps.push(initWmsMap('map-gruenversorgung', 'wms-err-gruenversorgung',
-    'https://fbinter.stadt-berlin.de/fb/wms/senstadt/k06_05gruenversorg2020', 'k06_05gruenversorg2020'));
+  // Grünversorgung-Karte (Mechanismus-Abschnitt)
+  const mapGV = makeMap('map-gruenversorgung', BERLIN, 10, true);
+  wmsMaps.push(mapGV);
+  fetch('gruenversorgung.geojson')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => {
+      const GV_COLORS = {
+        'versorgter Bereich':        '#238b45',
+        'unterversorgter Bereich':   '#74c476',
+        'schlecht versorgter Bereich':'#c7e9c0',
+        'nicht versorgter Bereich':  '#f7fcf5',
+      };
+      L.geoJSON(data, {
+        style: f => ({
+          fillColor: GV_COLORS[f.properties.voeff_name] || '#ccc',
+          fillOpacity: 0.78,
+          color: 'rgba(255,255,255,0.06)',
+          weight: 0.5,
+        }),
+        onEachFeature: (f, layer) => {
+          layer.bindTooltip(f.properties.voeff_name, { direction:'top', sticky:true });
+        },
+      }).addTo(mapGV);
+      hideLoader('gruenversorgung');
+    })
+    .catch(() => showMiss('gruenversorgung'));
 
   // All maps
   maps.hitze  = makeMap('map-hitze',  BERLIN, 11, true);
