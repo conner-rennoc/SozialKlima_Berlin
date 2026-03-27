@@ -373,6 +373,15 @@
       <div class="fc"><div class="fn" id="s2">28 %</div><div class="fl">ohne Grünversorgung</div><p class="ft" id="s2t">Jeder vierte Berliner Wohnblock liegt außerhalb fußläufig erreichbarer Grünanlagen.</p></div>
       <div class="fc"><div class="fn" id="s3">13,4°C</div><div class="fl">Hitzespanne</div><p class="ft" id="s3t">Temperaturgefälle zwischen dem heißesten und kühlsten Berliner Kiez.</p></div>
     </div>
+    <!-- SCATTER PLOT -->
+    <div style="margin:44px 0 16px">
+      <h3 style="margin-top:0;margin-bottom:8px">Klimabelastung trifft soziale Lage – aber nicht überall</h3>
+      <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);margin-bottom:16px;line-height:1.75;max-width:600px">Jeder Punkt ist ein Berliner Planungsraum. Gesamtstädtisch zeigt sich kaum linearer Zusammenhang (r = 0,025) – die Mehrfachbelastung konzentriert sich auf wenige Gebiete oben rechts.</p>
+      <div style="background:var(--ink);padding:20px 16px 14px;position:relative;border:1px solid rgba(245,242,235,.07)">
+        <div id="scatter-container" style="position:relative;width:100%"></div>
+        <div id="scatter-tooltip" style="position:absolute;display:none;background:rgba(16,14,10,.97);border:1px solid rgba(245,242,235,.14);padding:10px 12px;pointer-events:none;z-index:20;min-width:150px"></div>
+      </div>
+    </div>
     <h3>Zwei Typen von Hitzeungerechtigkeit</h3>
     <p>Die Daten zeigen zwei strukturell verschiedene Muster. In den DDR-Großsiedlungen am Stadtrand – Marzahn-Hellersdorf, Lichtenberg, Teile Spandaus – ist die klimatische Belastung quasi eingebaut: Hochhaussiedlungen der 1970er bis 1990er Jahre ohne gewachsenen Baumbestand, hohe Versiegelung, wenig wohnungsnahes Grün. Die soziale und die klimatische Benachteiligung haben hier dieselbe historische Wurzel.</p>
     <p>Im innerstädtischen Gürtel – Neukölln-Nord, Kreuzberg, Moabit, Wedding, Gesundbrunnen – ist das klimatische Problem ein anderes: dichte Gründerzeitbebauung mit wenig Innenhofgrün, Straßenschluchten die sich aufheizen. Die soziale Belastung hat eine andere Genese: Diese Viertel sind die letzten noch halbwegs bezahlbaren Lagen innerhalb des S-Bahn-Rings. Einkommensschwächere Bevölkerung wohnt dort, wo sie sich die Miete noch leisten kann – in klimatisch ungünstigen Gebieten. Das ist Umweltungerechtigkeit als Marktmechanismus.</p>
@@ -762,6 +771,195 @@ function activateAll() {
   updateKombiLegend();
 }
 
+// ══════════════════════════════════════════════
+// SCATTER PLOT
+// ══════════════════════════════════════════════
+function buildScatter() {
+  const container = document.getElementById('scatter-container');
+  const tooltip   = document.getElementById('scatter-tooltip');
+  if (!container) return;
+  const vals = Object.values(lookup);
+  if (!vals.length) return;
+
+  // Build data
+  const data = vals.map(p => {
+    const rh = p[CFG.rangHitzeFeld], rg = p[CFG.rangGruenFeld], rs = p[CFG.rangSozialFeld];
+    return {
+      name:   p[CFG.nameField]   || '',
+      bez:    p[CFG.bezirkField] || '',
+      hg:     (rh != null && rg != null) ? +(rh + rg).toFixed(1) : null,
+      rs,
+      tripel: rh > 75 && rg > 75 && rs > 75,
+    };
+  }).filter(d => d.hg != null && d.rs != null);
+
+  // Bezirk colours (12, readable on dark bg)
+  const bezList = [...new Set(data.map(d => d.bez))].sort();
+  const palette = ['#ff6b6b','#ffd93d','#ff9f43','#f0932b',
+                   '#6ab04c','#badc58','#00b894','#55efc4',
+                   '#74b9ff','#a29bfe','#fd79a8','#e17055'];
+  const colorOf = {};
+  bezList.forEach((b, i) => { colorOf[b] = palette[i % palette.length]; });
+
+  // Dimensions
+  const W = 720, H = 390;
+  const M = { top: 16, right: 196, bottom: 46, left: 52 };
+  const pw = W - M.left - M.right;
+  const ph = H - M.top  - M.bottom;
+
+  const ns = 'http://www.w3.org/2000/svg';
+  const el = (tag, a={}) => {
+    const e = document.createElementNS(ns, tag);
+    Object.entries(a).forEach(([k,v]) => e.setAttribute(k,v));
+    return e;
+  };
+  const tx = (str, a={}) => { const e = el('text',a); e.textContent = str; return e; };
+
+  const svg = el('svg', { viewBox:`0 0 ${W} ${H}`, width:'100%', style:'display:block;overflow:visible' });
+
+  // Scale
+  const sx = v => M.left + (v / 200) * pw;
+  const sy = v => M.top + ph - (v / 100) * ph;
+
+  // Gridlines
+  const gridG = el('g');
+  [0,50,100,150,200].forEach(x => gridG.appendChild(el('line',{
+    x1:sx(x),y1:M.top,x2:sx(x),y2:M.top+ph,stroke:'rgba(245,242,235,.07)','stroke-width':'1'})));
+  [0,25,50,75,100].forEach(y => gridG.appendChild(el('line',{
+    x1:M.left,y1:sy(y),x2:M.left+pw,y2:sy(y),stroke:'rgba(245,242,235,.07)','stroke-width':'1'})));
+  svg.appendChild(gridG);
+
+  // Dreifachbelastungs-Zone (top-right, dashed outline)
+  svg.appendChild(el('rect',{
+    x:sx(150), y:M.top, width:sx(200)-sx(150), height:sy(75)-M.top,
+    fill:'rgba(255,255,255,.025)', stroke:'rgba(255,255,255,.1)',
+    'stroke-width':'1','stroke-dasharray':'4 3'
+  }));
+  const zoneLabel = tx('Dreifachbelastungs-\nzone', {
+    x: sx(175), y: M.top + 12,
+    'text-anchor':'middle', fill:'rgba(245,242,235,.22)',
+    'font-family':'DM Mono,monospace','font-size':'8','letter-spacing':'.06em'
+  });
+  // Split into two tspan lines
+  zoneLabel.textContent = '';
+  ['Dreifach-','belastungszone'].forEach((line, i) => {
+    const ts = document.createElementNS(ns, 'tspan');
+    ts.textContent = line;
+    ts.setAttribute('x', sx(175));
+    ts.setAttribute('dy', i === 0 ? '0' : '10');
+    zoneLabel.appendChild(ts);
+  });
+  svg.appendChild(zoneLabel);
+
+  // Axes
+  svg.appendChild(el('line',{x1:M.left,y1:M.top+ph,x2:M.left+pw,y2:M.top+ph,
+    stroke:'rgba(245,242,235,.22)','stroke-width':'1'}));
+  svg.appendChild(el('line',{x1:M.left,y1:M.top,x2:M.left,y2:M.top+ph,
+    stroke:'rgba(245,242,235,.22)','stroke-width':'1'}));
+
+  // X tick labels
+  [0,50,100,150,200].forEach(v => svg.appendChild(tx(v,{
+    x:sx(v), y:M.top+ph+14, 'text-anchor':'middle',
+    fill:'rgba(245,242,235,.38)','font-family':'DM Mono,monospace','font-size':'10'
+  })));
+  // Y tick labels
+  [0,25,50,75,100].forEach(v => svg.appendChild(tx(v,{
+    x:M.left-7, y:sy(v)+4, 'text-anchor':'end',
+    fill:'rgba(245,242,235,.38)','font-family':'DM Mono,monospace','font-size':'10'
+  })));
+
+  // Axis titles
+  svg.appendChild(tx('Hitze + Grünarmut (Rang-Score 0–200)',{
+    x:M.left+pw/2, y:H-4, 'text-anchor':'middle',
+    fill:'rgba(245,242,235,.32)','font-family':'DM Mono,monospace',
+    'font-size':'9.5','letter-spacing':'.07em'
+  }));
+  const yTitle = tx('Soziale Belastung (Rang 0–100)',{
+    x:0, y:0, 'text-anchor':'middle',
+    fill:'rgba(245,242,235,.32)','font-family':'DM Mono,monospace',
+    'font-size':'9.5','letter-spacing':'.07em',
+    transform:`translate(12,${M.top+ph/2}) rotate(-90)`
+  });
+  svg.appendChild(yTitle);
+
+  // Points (normal behind, tripel in front)
+  const makeCircle = d => {
+    const isTripel = d.tripel;
+    const r = isTripel ? 5.5 : 3;
+    const c = el('circle',{
+      cx:sx(d.hg), cy:sy(d.rs), r,
+      fill: colorOf[d.bez] || '#aaa',
+      opacity: isTripel ? '1' : '0.65',
+      stroke: isTripel ? 'white' : 'none',
+      'stroke-width': isTripel ? '1.5' : '0',
+      style:'cursor:crosshair'
+    });
+    c.addEventListener('mouseenter', () => {
+      c.setAttribute('r', isTripel ? 7.5 : 5.5);
+      c.setAttribute('opacity','1');
+      if (!tooltip) return;
+      tooltip.style.display = 'block';
+      tooltip.innerHTML =
+        `<div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;margin-bottom:5px;color:rgba(245,242,235,1)">${d.name}</div>`+
+        `<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,242,235,.45);margin-bottom:6px">${d.bez}</div>`+
+        `<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,242,235,.65);display:flex;justify-content:space-between;gap:16px"><span>Hitze+Grün</span><span style="color:rgba(245,242,235,1)">${d.hg.toFixed(0)}</span></div>`+
+        `<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,242,235,.65);display:flex;justify-content:space-between;gap:16px"><span>Rang Sozial</span><span style="color:rgba(245,242,235,1)">${d.rs.toFixed(0)}</span></div>`+
+        (isTripel ? `<div style="font-family:'DM Mono',monospace;font-size:10px;color:#f0a070;margin-top:5px">● Dreifachbelastet</div>` : '');
+    });
+    c.addEventListener('mousemove', e => {
+      if (!tooltip) return;
+      const rect = container.getBoundingClientRect();
+      let lx = e.clientX - rect.left + 14;
+      let ly = e.clientY - rect.top  - 14;
+      if (lx + 180 > rect.width) lx = e.clientX - rect.left - 180;
+      if (ly < 0) ly = 4;
+      tooltip.style.left = lx + 'px';
+      tooltip.style.top  = ly + 'px';
+    });
+    c.addEventListener('mouseleave', () => {
+      c.setAttribute('r', r+'');
+      c.setAttribute('opacity', isTripel ? '1' : '0.65');
+      if (tooltip) tooltip.style.display = 'none';
+    });
+    return c;
+  };
+
+  data.filter(d => !d.tripel).forEach(d => svg.appendChild(makeCircle(d)));
+  data.filter(d =>  d.tripel).forEach(d => svg.appendChild(makeCircle(d)));
+
+  // Legend
+  const lx = M.left + pw + 22;
+  let ly = M.top + 2;
+  svg.appendChild(tx('BEZIRK',{
+    x:lx, y:ly, fill:'rgba(245,242,235,.3)',
+    'font-family':'DM Mono,monospace','font-size':'8','letter-spacing':'.14em'
+  }));
+  ly += 14;
+  const shorten = s => s
+    .replace('Friedrichshain-Kreuzberg','Fhain-Kreuzberg')
+    .replace('Charlottenburg-Wilmersdorf','Charlbg-Wilmd.')
+    .replace('Tempelhof-Schöneberg','Tempelhof-Sbg.')
+    .replace('Marzahn-Hellersdorf','Marzahn-Hdf.')
+    .replace('Treptow-Köpenick','Treptow-Kpnk.');
+  bezList.forEach(b => {
+    svg.appendChild(el('circle',{cx:lx+4,cy:ly-3.5,r:'4',fill:colorOf[b]}));
+    svg.appendChild(tx(shorten(b),{
+      x:lx+13, y:ly, fill:'rgba(245,242,235,.6)',
+      'font-family':'DM Mono,monospace','font-size':'9'
+    }));
+    ly += 13;
+  });
+  ly += 6;
+  svg.appendChild(el('circle',{cx:lx+4,cy:ly-3.5,r:'5.5',
+    fill:'rgba(245,242,235,.15)',stroke:'white','stroke-width':'1.5'}));
+  svg.appendChild(tx('Dreifachbelastet',{
+    x:lx+13, y:ly, fill:'rgba(245,242,235,.6)',
+    'font-family':'DM Mono,monospace','font-size':'9'
+  }));
+
+  container.appendChild(svg);
+}
+
 function computeStats() {
   const vals = Object.values(lookup);
   if (!vals.length) return;
@@ -810,7 +1008,7 @@ async function init() {
   mapIds.forEach(hideLoader);
 
   if (!hasAnalyse) mapIds.forEach(showMiss);
-  else { computeRangRange(); computeStats(); updateKombiLegend(); }
+  else { computeRangRange(); computeStats(); updateKombiLegend(); buildScatter(); }
 
   // Fix grey tiles after layout
   setTimeout(() => {
