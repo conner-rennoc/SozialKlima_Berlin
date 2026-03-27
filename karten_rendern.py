@@ -21,10 +21,10 @@ ROOT = os.path.dirname(__file__)
 
 # Berlin-Ausdehnung in EPSG:25833 (etwas Rand dazu)
 XLIM = (366000, 418000)
-YLIM = (5797000, 5839000)
+YLIM = (5793000, 5843000)  # +4 km oben/unten → ~50 km hoch (vorher 42 km)
 
-BG = '#1a1814'          # Website-Hintergrundfarbe (--ink)
-FIG_W, FIG_H = 16, 10   # ~1.6:1 Seitenverhältnis
+BG = '#1a1814'             # Website-Hintergrundfarbe (--ink)
+FIG_W, FIG_H = 16, 13      # mehr Höhe → weniger Abschneiden
 
 def basis_figure():
     fig, ax = plt.subplots(figsize=(FIG_W, FIG_H))
