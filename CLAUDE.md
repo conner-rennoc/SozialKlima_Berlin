@@ -4,7 +4,9 @@
 
 Ein Critical Mapping Projekt für einen Kurs an der TU Berlin (Institut für Stadt- und Regionalplanung). Es ist eine scrollbare, journalistische Website die räumliche Zusammenhänge zwischen Hitzebelastung, Grünvolumen und sozialer Ungleichheit in Berlin visualisiert.
 
-**These:** Sozial benachteiligte Berliner Planungsräume sind systematisch stärker von Hitze betroffen und haben weniger Grün – und dieser Zusammenhang hat sich durch Gentrifizierung zwischen 2013 und 2022 nicht verbessert.
+**These:** Sozial benachteiligte Berliner Planungsräume sind systematisch stärker von Hitze betroffen und haben weniger Grün – und dieser Zusammenhang ist strukturell, nicht zufällig.
+
+**Status:** Projekt abgeschlossen. Website live auf GitHub Pages.
 
 ---
 
@@ -12,14 +14,22 @@ Ein Critical Mapping Projekt für einen Kurs an der TU Berlin (Institut für Sta
 
 ```
 /
-├── index.html          ← komplette Website (eine Datei, kein Build-System)
-├── lor.geojson         ← LOR-Planungsräume Berlin (Geometrien, von ODIS)
-├── analyse.geojson     ← QGIS-Exportdatei mit Analysedaten (noch ausstehend)
-├── README.md           ← Anleitung für Menschen
-└── CLAUDE.md           ← dieser Kontext für Claude Code
+├── index.html                  ← komplette Website (eine Datei, kein Build-System)
+├── analyse.geojson             ← Analysedaten, 542 LOR, alle Felder (9 MB)
+├── lor.geojson                 ← LOR-Geometrien Berlin (ODIS, EPSG:4326)
+├── versiegelung.png            ← statische Karte: Versiegelungsgrad 2021
+├── gruenversorgung.png         ← statische Karte: Grünversorgung + Parks + Wälder
+├── analyse_erstellen.py        ← reproduzierbares Analyseskript
+├── karten_rendern.py           ← reproduzierbares Karten-Rendering
+├── tabelle_alle_faktoren.csv   ← alle 542 LOR, sortiert nach belastung_rang
+├── tabelle_hitze_gruen.csv     ← alle 542 LOR, sortiert nach Hitze+Grün-Score
+├── tabelle_bezirke.csv         ← alle 12 Bezirke aggregiert
+├── tabelle_gruen_sozial.csv    ← alle 542 LOR, Grün~Sozial-Vergleich
+├── CLAUDE.md                   ← dieser Kontext
+└── README.md                   ← Anleitung für Menschen
 ```
 
-**Wichtig:** Es gibt kein Build-System, kein npm, keine Abhängigkeiten. Alles ist eine einzige HTML-Datei mit eingebettetem CSS und JavaScript. Die Website läuft direkt als statische Seite auf GitHub Pages.
+**Wichtig:** Es gibt kein Build-System, kein npm, keine Abhängigkeiten. Alles ist eine einzige HTML-Datei. Die Rohdaten (`rohdaten/`, `gruenversorgung.geojson`) sind via `.gitignore` lokal gehalten.
 
 ---
 
@@ -30,117 +40,118 @@ Ein Critical Mapping Projekt für einen Kurs an der TU Berlin (Institut für Sta
 - **Vanilla JS** – kein Framework
 - **Google Fonts** – Playfair Display, Source Serif 4, DM Mono
 - **GitHub Pages** – Hosting
+- **geopandas, matplotlib, numpy, pandas** – Analyse & Rendering
 
 ---
 
 ## Datendateien
 
+### analyse.geojson (vorhanden, vollständig)
+542 Features, EPSG:4326, alle Felder befüllt.
+
+| Feldname | Inhalt | Typ |
+|---|---|---|
+| `PLR_ID` | LOR-Schlüssel (8-stellig) | String |
+| `PLR_NAME` | Name des Planungsraums | String |
+| `BEZ` | Bezirkskürzel | String |
+| `BEZ_NAME` | Bezirksname | String |
+| `hitze_pet` | PET-Mittelwert 14 Uhr (°C) | Float |
+| `gruen_gvz` | Grünvolumenzahl 2020 (m³/m²) | Float |
+| `gruen_delta` | Δ GVZ 2010→2020 | Float |
+| `esix_wert` | ESIx 2022 (kontinuierlich, höher = weniger belastet) | Float |
+| `sozial_index` | MSS 2023 Gesamtindex (1–4, Ergänzung) | Float |
+| `rang_hitze` | Perzentil-Rang PET (0–100, 100 = heißester) | Float |
+| `rang_gruen` | Umgekehrter Rang GVZ (0–100, 100 = grünärmster) | Float |
+| `rang_sozial` | Umgekehrter Rang ESIx (0–100, 100 = stärkste Belastung) | Float |
+| `belastung_rang` | Summe rang_hitze + rang_gruen + rang_sozial (max. 300) | Float |
+| `belastung_score_alt` | Alter MSS-basierter Score 0–3 (nur für Statistiken) | Int |
+
 ### lor.geojson
-LOR-Planungsräume Berlin (542 Planungsräume seit 2021).
-- Quelle: ODIS Berlin / Amt für Statistik Berlin-Brandenburg
-- KBS: EPSG:4326
-- Relevante Properties: `PLR_ID` (8-stelliger Schlüssel), `PLR_NAME`, `BEZ_NAME`
-
-### analyse.geojson (noch nicht vorhanden)
-Wird aus QGIS exportiert nachdem die Zonenstatistik-Analyse abgeschlossen ist.
-- KBS muss EPSG:4326 sein
-- Muss folgende Felder enthalten (konfigurierbar im `CFG`-Block in index.html):
-
-| Feldname         | Inhalt                              |
-|------------------|-------------------------------------|
-| `PLR_ID`         | LOR-Schlüssel (Join-Key zu lor.geojson) |
-| `PLR_NAME`       | Name des Planungsraums              |
-| `BEZ_NAME`       | Bezirksname                         |
-| `hitze_pet`      | PET-Mittelwert (°C), Float          |
-| `gruen_gvz`      | Grünvolumenzahl (m³/m²), Float      |
-| `gruen_delta`    | Δ GVZ 2010→2020, Float              |
-| `sozial_index`   | MSS Gesamtindex 2023 (1–4), Float   |
-| `sozial_2013`    | MSS Sozialindex 2013 (1–4), Float   |
-| `sozial_2022`    | MSS Sozialindex 2022 (1–4), Float   |
-| `belastung_score`| Mehrfachbelastung 0–3, Integer      |
+LOR-Planungsräume Berlin (542 PLR, Stand 2021), EPSG:4326.
+Relevante Properties: `PLR_ID`, `PLR_NAME`, `BEZ_NAME`
 
 ---
 
-## Wie die Website funktioniert
+## Konfigurationsblock (index.html)
 
-### Datenladen (init-Funktion in index.html)
-1. `lor.geojson` und `analyse.geojson` werden per `fetch()` geladen
-2. `analyse.geojson` wird in ein Lookup-Objekt `{ PLR_ID: properties }` umgewandelt
-3. Alle Leaflet-Layer werden aus `lor.geojson`-Geometrien aufgebaut
-4. Farben werden aus den `analyse.geojson`-Werten via Lookup bestimmt
-
-### Fehlerbehandlung
-- Fehlt `lor.geojson` → alle Karten zeigen „Daten fehlen"-Banner
-- Fehlt `analyse.geojson` → LOR-Geometrien werden grau angezeigt + Banner erklärt welche Felder fehlen
-- Loading-Spinner bis Daten geladen oder Fehler aufgetreten
-
-### Konfigurationsblock (oben in index.html)
 ```javascript
 const CFG = {
-  lorFile:     'lor.geojson',
-  analyseFile: 'analyse.geojson',
-  idField:     'PLR_ID',        // Join-Key
-  hitzeFeld:   'hitze_pet',
-  gruenFeld:   'gruen_gvz',
-  // ... etc.
+  lorFile:           'lor.geojson',
+  analyseFile:       'analyse.geojson',
+  idField:           'PLR_ID',
+  nameField:         'PLR_NAME',
+  bezirkField:       'BEZ_NAME',
+  hitzeFeld:         'hitze_pet',
+  gruenFeld:         'gruen_gvz',
+  sozialFeld:        'esix_wert',       // ESIx 2022, primärer Sozialindikator
+  scoreFeld:         'belastung_score_alt',
+  deltaFeld:         'gruen_delta',
+  rangHitzeFeld:     'rang_hitze',
+  rangGruenFeld:     'rang_gruen',
+  rangSozialFeld:    'rang_sozial',
+  belastungRangFeld: 'belastung_rang',
 };
 ```
-Wenn QGIS andere Feldnamen exportiert, nur hier anpassen.
-
-### Farbskalen
-- Hitze (PET): `#fee5d9` → `#cb181d` (hellrosa bis dunkelrot)
-- Grün (GVZ): `#00441b` → `#edf8e9` (dunkelgrün bis hellgrün)
-- Sozial (MSS): `#08306b` → `#eff3ff` (dunkelblau bis hellblau)
-- Mehrfachbelastung: `#fef0d9` → `#b30000` (creme bis dunkelrot)
 
 ---
 
-## Seitenstruktur (von oben nach unten)
+## Farbskalen (index.html)
 
-1. **Hero** – Vollbild-Karte als Hintergrund, Titel
+- Hitze (PET): `#ffffb2` → `#d7191c` (hellgelb → dunkelrot)
+- Grün (GVZ): `#edf8e9` → `#00441b` (hellgrün → dunkelgrün)
+- Sozial (ESIx): `#f2e8ff` → `#3f007d` (hellviolett → dunkelviolett)
+  - < −1,5: `#3f007d` — sehr starke Belastung
+  - < −0,3: `#7b3fa3` — überdurchschnittliche Belastung
+  - < +0,6: `#b894d4` — mittlerer Bereich
+  - ≥ +0,6: `#f2e8ff` — geringe Belastung
+- Mehrfachbelastung: 5-stufig, dynamisch auf Wertebereich normiert
+- Dreifachbelastete LOR (alle 3 Ränge > 75): zusätzlich weiße Umrandung (weight 1.5)
+
+---
+
+## Analyselogik
+
+### Flächengewichteter Mittelwert
+Alle thematischen Layer werden via `flaechengewichteter_mittelwert()` in `analyse_erstellen.py` auf LOR-Ebene aggregiert (EPSG:25833 intern für metrische Flächen).
+
+### ESIx-LOR-Mismatch
+ESIx 2022 basiert auf LOR 2019 (448 PLR) → räumliche Verschneidung via `geopandas.overlay()` auf LOR 2021 (542 PLR). Alle 542 LOR haben einen `esix_wert`.
+
+### Rang-basierte Normalisierung
+Gewählt gegenüber Z-Scores, weil ESIx eine breitere Streuung als MSS hat und Z-Scores dadurch einzelne Faktoren übergewichten würden.
+
+### Dreifachbelastung
+Definition: `rang_hitze > 75 AND rang_gruen > 75 AND rang_sozial > 75` → **15 LOR**
+
+---
+
+## Zentrale Analyseergebnisse
+
+| Kennzahl | Wert |
+|---|---|
+| Dreifachbelastete LOR | 15 |
+| Bevölkerung in diesen LOR | ~115.000 |
+| Wohnblockfläche ohne Grünversorgung | 28 % |
+| PET-Spanne (min–max) | 13,4 °C (26,6–40,0 °C) |
+| Ø Δ GVZ 2010→2020 | −0,30 m³/m² |
+| Pearson r: Hitze+Grün ~ Sozial | 0,025 |
+| Pearson r: rang_gruen ~ rang_sozial | 0,089 |
+| Pearson r: gruen_gvz ~ esix_wert | 0,195 |
+
+---
+
+## Seitenstruktur
+
+1. **Hero** – Vollbild-Karte, Titel, Autorennennung
 2. **These** – Einleitungstext
-3. **Mechanismus** – Wie Versiegelung/Grün auf Hitze wirkt
-4. **Daten** – Tabelle der verwendeten Datensätze
-5. **Karte: Hitze** – Interaktive Choroplethenkarte
-6. **Karte: Grün** – Interaktive Choroplethenkarte
-7. **Karte: Sozial** – Interaktive Choroplethenkarte
-8. **Karte: Mehrfachbelastung** – kombinierter Index mit Layer-Switcher
-9. **Erkenntnisse** – drei Kennzahlen (auto-berechnet) + Text
-10. **Fallbeispiele** – zwei Gebiete mit Zeit-Toggle (2013/2022)
-    - Neukölln-Nord (Gentrifizierung)
-    - Spandau-West (konstant belastet)
-11. **Fazit** – planungsrelevante Schlussfolgerungen
-
----
-
-## Häufige Aufgaben
-
-### Feldnamen im CFG anpassen
-Wenn QGIS-Export andere Feldnamen hat:
-→ `CFG`-Block oben in index.html editieren
-
-### Fallgebiete/Zoom-Koordinaten anpassen
-```javascript
-const NK = [52.477, 13.437]; // Neukölln-Nord [lat, lng]
-const SP = [52.527, 13.196]; // Spandau-West
-```
-Zoom-Radius wird in `buildCase()` als `radiusDeg` übergeben (aktuell 0.032 ≈ 3.5 km).
-
-### Neue Texte / Erkenntnisse eintragen
-Die Erkenntnissektion (IDs `s1`, `s2`, `s3`) wird automatisch aus `analyse.geojson` berechnet wenn die Daten vorhanden sind. Statische Fallbeispiel-Texte sind direkt im HTML.
-
-### Farben / Schwellenwerte ändern
-Farbfunktionen `cHeat()`, `cGreen()`, `cSocial()`, `cScore()` in index.html anpassen.
-
----
-
-## Was noch aussteht
-
-- [ ] `analyse.geojson` aus QGIS exportieren und ins Repo laden
-- [ ] CFG-Feldnamen ggf. an QGIS-Export anpassen
-- [ ] Fallbeispiel-Texte nach Analyse-Ergebnissen konkretisieren
-- [ ] Kennzahlen in der Erkenntnissektion prüfen
-- [ ] Ggf. Zoom-Koordinaten der Fallgebiete feinjustieren
+3. **Mechanismus** – Versiegelung (statisch PNG) + Grünversorgung (statisch PNG) + Folge (PET)
+4. **Daten** – Tabelle der verwendeten Datensätze mit "Was er misst"-Spalte
+5. **Karte: Hitze** – Interaktive Choroplethenkarte (PET)
+6. **Karte: Grün** – Interaktive Choroplethenkarte (GVZ)
+7. **Karte: Sozial** – Interaktive Choroplethenkarte (ESIx)
+8. **Karte: Mehrfachbelastung** – rang-basiert, Layer-Toggle, Dreifachbelastung weiß umrandet
+9. **Erkenntnisse** – 115.000 / 28 % / 13,4 °C + Zwei-Typen-Text
+10. **Fazit** – Methodenreflexion, Dynamiken, Grenzen, Planungsempfehlungen
 
 ---
 
@@ -151,18 +162,15 @@ Farbfunktionen `cHeat()`, `cGreen()`, `cSocial()`, `cScore()` in index.html anpa
 - **Papier-Töne** – `#f5f2eb` als Haupthintergrund
 - Fonts: Playfair Display (Headlines), Source Serif 4 (Fließtext), DM Mono (Labels/Captions)
 - Keine externen Abhängigkeiten außer CDN-Links im `<head>`
-- Kein Build-System – direkt editierbar
 
 ---
 
-## Datenquellen (zur Referenz)
+## Datenquellen (WFS-Referenz)
 
-| Datensatz | WFS-URL |
-|-----------|---------|
+| Datensatz | URL |
+|---|---|
 | Klimaanalysekarten 2022 | `https://gdi.berlin.de/services/wfs/ua_stadtklima_2022` |
-| Klimaanalysekarten 2014 | `https://gdi.berlin.de/services/wfs/ua_stadtklima_2014` |
 | Versiegelung 2021 | `https://gdi.berlin.de/services/wms/ua_versiegelung_2021` |
 | Grünvolumen 2020 | `https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_05_09gruenvol2020` |
 | MSS 2023 | `https://gdi.berlin.de/services/wfs/mss_2023` |
-| MSS 2013 | `https://fbinter.stadt-berlin.de/fb/wfs/geometry/senstadt/re_Indizes_MSS2013` |
 | LOR Planungsräume | `https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_lor_plr_2021` |
