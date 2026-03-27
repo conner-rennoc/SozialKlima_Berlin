@@ -199,7 +199,7 @@
     <div class="mc" style="border-top:3px solid var(--accent)">
       <div class="mc-lbl">Folge</div>
       <div class="mc-title">Thermische Belastung für Menschen</div>
-      <p>Der Index PET (Physiologisch Äquivalente Temperatur) bewertet Hitze aus Körperperspektive – unter Einbeziehung von Strahlung, Luftfeuchtigkeit und Wind. In den am stärksten belasteten Berliner Planungsräumen übersteigt der mittlere PET-Wert an Sommernachmittagen 38 °C, was medizinisch als „sehr starke Wärmebelastung" gilt – vergleichbar mit einem Aufenthalt in der prallen Sonne ohne Schatten an einem windstillen Sommertag. Zwischen dem heißesten und kühlsten Planungsraum liegen mehrere Grad – eine Differenz, die nicht zufällig im Raum verteilt ist.</p>
+      <p>Der Index PET (Physiologisch Äquivalente Temperatur) bewertet Hitze aus Körperperspektive – unter Einbeziehung von Strahlung, Luftfeuchtigkeit und Wind. In den am stärksten belasteten Berliner Planungsräumen übersteigt der mittlere PET-Wert an Sommernachmittagen 38 °C, was medizinisch als „sehr starke Wärmebelastung" gilt – vergleichbar mit einem Aufenthalt in der prallen Sonne ohne Schatten an einem windstillen Sommertag. Zwischen dem heißesten und kühlsten Planungsraum liegen 13,4 °C – eine Differenz, die nicht zufällig im Raum verteilt ist.</p>
     </div>
   </div>
   <div class="inn" style="padding-top:40px;padding-bottom:0">
@@ -236,7 +236,7 @@
   <div class="mbi">
     <span class="lbl">Datenschicht 1 von 3</span>
     <h2>Hitzebelastung in Berlin</h2>
-    <p class="mdeck">Nächtliche Lufttemperatur (PET) an einem durchschnittlichen Sommertag, aggregiert auf LOR-Planungsräume. Je dunkler, desto höher die thermische Belastung.</p>
+    <p class="mdeck">Mittägliche thermische Belastung (PET 14 Uhr) an einem durchschnittlichen Sommertag, aggregiert auf LOR-Planungsräume. Je dunkler, desto höher die thermische Belastung.</p>
     <div class="mc-wrap">
       <div id="map-hitze" style="width:100%;height:100%"></div>
       <div class="mload" id="ld-hitze"><div class="spin"></div><div class="ltxt">Lade Geodaten…</div></div>
@@ -293,7 +293,7 @@
       <div class="miss" id="ms-sozial">
         <div class="miss-icon">📂</div>
         <div class="miss-title">Analysedaten fehlen</div>
-        <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">esix_wert</span> (ESIx 2022, kontinuierlicher Index: negativ = stärker belastet).</div>
+        <div class="miss-txt">Das GeoJSON benötigt ein Attribut <span class="miss-file">esix_wert</span>.</div>
       </div>
       <div class="leg"><div class="leg-t">ESIx 2022</div>
         <div class="leg-r"><div class="sw" style="background:#3f007d"></div>Sehr starke Belastung (&lt;−1.5)</div>
@@ -368,13 +368,13 @@
     <span class="lbl">Gesamtstädtische Befunde</span>
     <h2>Was die Daten zeigen</h2>
     <div class="fgrid">
-      <div class="fc"><div class="fn" id="s1" style="font-size:36px;line-height:1.1">115.000</div><div class="fl">Berliner*innen</div><p class="ft" id="s1t">in den 15 am stärksten dreifachbelasteten Planungsräumen – gleichzeitig hitzeexponiert, grünarm und sozial benachteiligt.</p></div>
-      <div class="fc"><div class="fn" id="s2">28 %</div><div class="fl">der Berliner Wohnblockfläche</div><p class="ft" id="s2t">ohne wohnungsnahe Grünversorgung im 500-m-Gehwegnetz. Quelle: Umweltatlas Berlin 2020.</p></div>
-      <div class="fc"><div class="fn" id="s3">13,4°C</div><div class="fl">Temperaturdifferenz</div><p class="ft" id="s3t">zwischen heißestem und kühlstem Berliner Kiez – eine Spanne, die über Gesundheit entscheiden kann.</p></div>
+      <div class="fc"><div class="fn" id="s1" style="font-size:36px;line-height:1.1">115.000</div><div class="fl">Berliner*innen</div><p class="ft" id="s1t">leben in den 15 am stärksten dreifachbelasteten Kiezen.</p></div>
+      <div class="fc"><div class="fn" id="s2">28 %</div><div class="fl">ohne Grünversorgung</div><p class="ft" id="s2t">Jeder vierte Berliner Wohnblock liegt außerhalb jeder erreichbaren Grünanlage.</p></div>
+      <div class="fc"><div class="fn" id="s3">13,4°C</div><div class="fl">Hitzespanne</div><p class="ft" id="s3t">Temperaturgefälle zwischen dem heißesten und kühlsten Berliner Kiez.</p></div>
     </div>
     <h3>Zwei Typen von Hitzeungerechtigkeit</h3>
     <p>Die Daten zeigen zwei strukturell verschiedene Muster. In den DDR-Großsiedlungen am Stadtrand – Marzahn-Hellersdorf, Lichtenberg, Teile Spandaus – ist die klimatische Belastung quasi eingebaut: Hochhaussiedlungen der 1970er bis 1990er Jahre ohne gewachsenen Baumbestand, hohe Versiegelung, wenig wohnungsnahes Grün. Die soziale und die klimatische Benachteiligung haben hier dieselbe historische Wurzel.</p>
-    <p>Im innerstädtischen Gürtel – Neukölln-Nord, Kreuzberg, Moabit, Wedding, Gesundbrunnen – ist das klimatische Problem eine andere: dichte Gründerzeitbebauung mit wenig Innenhofgrün, Straßenschluchten die sich aufheizen. Die soziale Belastung hat eine andere Genese: Diese Viertel sind die letzten noch halbwegs bezahlbaren Lagen innerhalb des S-Bahn-Rings. Einkommensschwächere Bevölkerung wohnt dort, wo sie sich die Miete noch leisten kann – in klimatisch ungünstigen Gebieten. Das ist Umweltungerechtigkeit als Marktmechanismus.</p>
+    <p>Im innerstädtischen Gürtel – Neukölln-Nord, Kreuzberg, Moabit, Wedding, Gesundbrunnen – ist das klimatische Problem ein anderes: dichte Gründerzeitbebauung mit wenig Innenhofgrün, Straßenschluchten die sich aufheizen. Die soziale Belastung hat eine andere Genese: Diese Viertel sind die letzten noch halbwegs bezahlbaren Lagen innerhalb des S-Bahn-Rings. Einkommensschwächere Bevölkerung wohnt dort, wo sie sich die Miete noch leisten kann – in klimatisch ungünstigen Gebieten. Das ist Umweltungerechtigkeit als Marktmechanismus.</p>
     <p>Demgegenüber zeigen Gebiete wie Dahlem, Wannsee oder Pankow-Niederschönhausen durchgängig geringe Belastungswerte in allen drei Dimensionen.</p>
   </div>
 </section>
@@ -405,7 +405,7 @@
 </section>
 
 <footer>
-  <p>Stadtklima &amp; Soziale Ungleichheit in Berlin &nbsp;·&nbsp; Critical Mapping · TU Berlin &nbsp;·&nbsp; 2024 &nbsp;·&nbsp; Geodaten: Umweltatlas Berlin, SenStadt Berlin (dl-zero-de/2.0) · LOR: Amt für Statistik Berlin-Brandenburg (CC BY 3.0 DE)</p>
+  <p>Stadtklima &amp; Soziale Ungleichheit in Berlin &nbsp;·&nbsp; Critical Mapping · TU Berlin &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; Geodaten: Umweltatlas Berlin, SenStadt Berlin (dl-zero-de/2.0) · LOR: Amt für Statistik Berlin-Brandenburg (CC BY 3.0 DE)</p>
 </footer>
 
 <script>
