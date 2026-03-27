@@ -368,9 +368,9 @@
     <span class="lbl">Gesamtstädtische Befunde</span>
     <h2>Was die Daten zeigen</h2>
     <div class="fgrid">
-      <div class="fc"><div class="fn" id="s1">15</div><div class="fl">Dreifach belastete Planungsräume</div><p class="ft" id="s1t">Planungsräume im obersten Viertel bei Hitze, Grünarmut und sozialer Benachteiligung gleichzeitig.</p></div>
-      <div class="fc"><div class="fn" id="s2">−0,30</div><div class="fl">Ø Δ Grünvolumen 2010→2020</div><p class="ft" id="s2t">Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) – gesamtstädtisch leichter Rückgang.</p></div>
-      <div class="fc"><div class="fn" id="s3">13,4°C</div><div class="fl">PET-Spanne Berlin</div><p class="ft" id="s3t">Differenz zwischen heißestem (40,0 °C) und kühlstem (26,6 °C) Planungsraum.</p></div>
+      <div class="fc"><div class="fn" id="s1" style="font-size:36px;line-height:1.1">115.000</div><div class="fl">Berliner*innen</div><p class="ft" id="s1t">in den 15 am stärksten dreifachbelasteten Planungsräumen – gleichzeitig hitzeexponiert, grünarm und sozial benachteiligt.</p></div>
+      <div class="fc"><div class="fn" id="s2">28 %</div><div class="fl">der Berliner Wohnblockfläche</div><p class="ft" id="s2t">ohne wohnungsnahe Grünversorgung im 500-m-Gehwegnetz. Quelle: Umweltatlas Berlin 2020.</p></div>
+      <div class="fc"><div class="fn" id="s3">13,4°C</div><div class="fl">Temperaturdifferenz</div><p class="ft" id="s3t">zwischen heißestem und kühlstem Berliner Kiez – eine Spanne, die über Gesundheit entscheiden kann.</p></div>
     </div>
     <h3>Zwei Typen von Hitzeungerechtigkeit</h3>
     <p>Die Daten zeigen zwei strukturell verschiedene Muster. In den DDR-Großsiedlungen am Stadtrand – Marzahn-Hellersdorf, Lichtenberg, Teile Spandaus – ist die klimatische Belastung quasi eingebaut: Hochhaussiedlungen der 1970er bis 1990er Jahre ohne gewachsenen Baumbestand, hohe Versiegelung, wenig wohnungsnahes Grün. Die soziale und die klimatische Benachteiligung haben hier dieselbe historische Wurzel.</p>
@@ -764,28 +764,13 @@ function activateAll() {
 function computeStats() {
   const vals = Object.values(lookup);
   if (!vals.length) return;
-  // Rang-basierte Dreifachbelastung: alle drei Ränge > 75
-  const withRangs = vals.filter(v =>
-    v[CFG.rangHitzeFeld] != null && v[CFG.rangGruenFeld] != null && v[CFG.rangSozialFeld] != null
-  );
-  if (withRangs.length) {
-    const triple = withRangs.filter(v =>
-      v[CFG.rangHitzeFeld] > 75 && v[CFG.rangGruenFeld] > 75 && v[CFG.rangSozialFeld] > 75
-    ).length;
-    document.getElementById('s1').textContent = triple;
-    document.getElementById('s1t').textContent = 'Planungsräume sind im obersten Viertel bei Hitze, Grünarmut und sozialer Benachteiligung gleichzeitig – dreifach belastet.';
-  }
-  const dl = vals.map(v=>v[CFG.deltaFeld]).filter(v=>v!=null);
-  if (dl.length) {
-    const avg = dl.reduce((a,b)=>a+b,0)/dl.length;
-    document.getElementById('s2').textContent = (avg>=0?'+':'')+avg.toFixed(2).replace('.',',');
-    document.getElementById('s2t').textContent = 'Durchschnittliche Veränderung der Grünvolumenzahl (m³/m²) von 2010 bis 2020 – gesamtstädtisch leichter Rückgang.';
-  }
+  // s3: PET-Spanne aus Daten berechnen (überschreibt statischen Wert mit exaktem)
   const pets = vals.map(v=>v[CFG.hitzeFeld]).filter(v=>v!=null);
   if (pets.length) {
-    document.getElementById('s3').textContent = (Math.max(...pets)-Math.min(...pets)).toFixed(1).replace('.',',')+'°C';
-    document.getElementById('s3t').textContent = 'Differenz zwischen heißestem ('+Math.max(...pets).toFixed(1)+' °C) und kühlstem ('+Math.min(...pets).toFixed(1)+' °C) Planungsraum.';
+    const span = (Math.max(...pets)-Math.min(...pets)).toFixed(1).replace('.',',');
+    document.getElementById('s3').textContent = span+'°C';
   }
+  // s1 und s2 bleiben statisch (115.000 Berliner*innen / 28 % Wohnblockfläche)
 }
 
 // ══════════════════════════════════════════════
