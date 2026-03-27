@@ -1,0 +1,543 @@
+PLR_NAME,BEZ_NAME,rang_hitze,rang_gruen,hitze_gruen_score,rang_sozial
+Alter Schlachthof,Pankow,100.0,99.6,199.6,8.1
+Schöneberger Linse,Tempelhof-Schöneberg,99.8,99.4,199.2,59.6
+Paradestraße,Tempelhof-Schöneberg,99.4,98.5,197.9,54.1
+Landschaftspark Adlershof,Treptow-Köpenick,98.0,98.2,196.2,30.1
+Krugpfuhl,Pankow,98.7,96.5,195.2,22.7
+Wriezener Bahnhof,Friedrichshain-Kreuzberg,95.2,99.8,195.0,93.0
+Helle Mitte,Marzahn-Hellersdorf,93.9,100.0,193.9,77.3
+Weiße Taube,Lichtenberg,98.2,95.6,193.8,4.1
+Kölner Viertel,Treptow-Köpenick,98.3,95.4,193.7,53.3
+Dorf Falkenberg,Lichtenberg,96.3,96.3,192.6,18.8
+Staakener Straße,Spandau,98.5,93.5,192.0,33.2
+Marienfelde Nordost,Tempelhof-Schöneberg,96.1,95.8,191.9,49.1
+Wista,Treptow-Köpenick,92.8,98.3,191.1,6.3
+Schumacher-Quartier,Reinickendorf,93.5,96.7,190.2,65.3
+Alt-Bohnsdorf,Treptow-Köpenick,96.7,93.2,189.9,15.7
+Karow Nord,Pankow,94.8,95.0,189.8,43.2
+Mahlsdorf Nord,Marzahn-Hellersdorf,99.6,88.9,188.5,7.6
+Frauenviertel,Neukölln,92.3,96.1,188.4,49.6
+Heidestraße,Mitte,88.7,99.1,187.8,74.5
+Bornitzstraße,Lichtenberg,93.2,94.5,187.7,40.6
+Nisbléstraße,Pankow,98.9,88.6,187.5,22.9
+Wilhelmstraße,Mitte,88.6,98.9,187.5,34.1
+Töpchiner Weg,Tempelhof-Schöneberg,99.1,88.2,187.3,39.9
+Malchower Weg,Lichtenberg,97.4,89.7,187.1,57.0
+Stralauer Kiez,Friedrichshain-Kreuzberg,89.1,97.8,186.9,44.5
+Blankenburger Süden,Pankow,94.3,92.1,186.4,3.0
+Alt-Rudow,Neukölln,97.2,89.1,186.3,50.9
+Karow Ost,Pankow,94.5,91.7,186.2,4.6
+Borsigwalde,Reinickendorf,95.4,90.6,186.0,56.1
+Schorfheidestraße,Reinickendorf,99.3,86.3,185.6,36.9
+Leipziger Straße,Mitte,87.3,98.0,185.3,35.4
+Unter den Linden,Mitte,85.4,99.3,184.7,14.2
+Isenburger Weg,Spandau,97.0,87.5,184.5,3.7
+Glasower Straße,Neukölln,91.7,92.3,184.0,98.3
+Am Heideberg,Spandau,97.8,85.8,183.6,24.9
+Huttenkiez,Mitte,84.9,98.7,183.6,93.4
+Rummelsburg,Lichtenberg,85.8,97.4,183.2,37.3
+Hauptstraße,Lichtenberg,89.3,93.4,182.7,67.7
+Samariterviertel,Friedrichshain-Kreuzberg,85.2,96.9,182.1,42.4
+Blumenviertel,Neukölln,97.6,84.5,182.1,17.9
+Zittauer Straße,Neukölln,95.9,86.0,181.9,20.1
+Alexanderplatzviertel,Mitte,84.1,97.6,181.7,39.3
+Reinickes Hof,Reinickendorf,94.1,87.3,181.4,78.2
+Breitscheidplatz,Charlottenburg-Wilmersdorf,86.0,95.2,181.2,36.7
+Späthsfelde,Treptow-Köpenick,88.4,91.9,180.3,6.5
+Vogelviertel Nord,Neukölln,95.8,84.3,180.1,58.3
+Güterbahnhof Grunewald,Charlottenburg-Wilmersdorf,89.7,90.4,180.1,22.5
+Märchenland,Pankow,90.4,89.5,179.9,0.2
+Feurigstraße,Tempelhof-Schöneberg,86.9,92.8,179.7,71.6
+Charitéviertel,Mitte,81.7,97.2,178.9,7.7
+Heinersdorf,Pankow,93.0,85.4,178.4,26.0
+Fritz-Werner-Straße,Tempelhof-Schöneberg,91.3,86.9,178.2,63.8
+Pankower Tor,Pankow,86.7,91.5,178.2,30.4
+Alt-Mahlsdorf,Marzahn-Hellersdorf,96.9,81.0,177.9,5.9
+Spandauer Straße,Spandau,92.1,85.1,177.2,51.8
+Velodrom,Pankow,86.2,91.0,177.2,57.9
+Alt-Marzahn,Marzahn-Hellersdorf,93.7,83.2,176.9,55.0
+Vogelviertel Süd,Neukölln,93.4,83.0,176.4,53.0
+Kosmos Viertel,Treptow-Köpenick,82.1,93.9,176.0,85.2
+Rosenbecker Straße,Marzahn-Hellersdorf,84.7,91.1,175.8,80.1
+An der Kappe,Spandau,91.9,83.9,175.8,49.3
+Kaulsdorf Nord,Marzahn-Hellersdorf,96.5,78.2,174.7,11.8
+Mohriner Allee Nord,Neukölln,89.9,84.1,174.0,47.4
+Eddastraße,Pankow,91.1,82.5,173.6,23.1
+Oranienburger Straße,Mitte,80.8,92.6,173.4,25.1
+Königin-Elisabeth-Straße,Charlottenburg-Wilmersdorf,78.2,94.6,172.8,45.0
+Traveplatz,Friedrichshain-Kreuzberg,87.1,85.2,172.3,52.6
+Borkumer Straße,Spandau,85.1,87.1,172.2,60.5
+Marzahner Chaussee,Marzahn-Hellersdorf,83.4,88.7,172.1,45.4
+Dorf Altglienicke,Treptow-Köpenick,90.2,81.7,171.9,10.9
+Malmöer Straße,Pankow,73.8,97.0,170.8,32.8
+TXL,Reinickendorf,83.6,86.7,170.3,34.3
+Schillerpromenade Süd,Neukölln,76.2,94.1,170.3,89.5
+Elsensee,Marzahn-Hellersdorf,84.5,85.6,170.1,1.5
+Buckow West,Neukölln,95.6,74.2,169.8,46.3
+Buckow Ost,Neukölln,92.4,76.8,169.2,72.3
+Schulenburgpark,Neukölln,81.0,88.0,169.0,99.8
+Behaimstraße,Pankow,90.6,77.7,168.3,48.2
+Hohenfriedbergstraße,Tempelhof-Schöneberg,77.5,89.9,167.4,59.4
+Waßmannsdorfer Chaussee,Neukölln,90.0,77.3,167.3,18.6
+Karow Bahnhof,Pankow,87.8,79.5,167.3,4.8
+Große-Leege-Straße,Lichtenberg,91.5,75.5,167.0,53.5
+Buckow Mitte,Neukölln,87.6,79.0,166.6,60.1
+Donaustraße,Neukölln,78.0,87.8,165.8,96.5
+Rathaus Weißensee,Pankow,88.9,76.9,165.8,56.6
+Freiheit,Spandau,77.3,88.4,165.7,80.4
+Pilgramer Straße,Marzahn-Hellersdorf,91.0,74.7,165.7,1.7
+Spreestadt,Charlottenburg-Wilmersdorf,68.3,95.9,164.2,79.0
+Falkplatz,Pankow,74.0,90.2,164.2,23.8
+Blankenburg,Pankow,90.8,73.2,164.0,2.8
+Weißenseer Spitze,Pankow,88.0,75.8,163.8,43.9
+Victoriastadt,Lichtenberg,73.6,90.0,163.6,55.7
+Lübarser Straße,Reinickendorf,88.2,75.1,163.3,38.0
+Marzahn West,Marzahn-Hellersdorf,76.6,86.5,163.1,84.1
+Weiße Siedlung,Neukölln,80.1,82.7,162.8,99.6
+Oberfeldstraße,Marzahn-Hellersdorf,92.6,70.1,162.7,1.3
+Griechischer Park,Treptow-Köpenick,70.3,92.4,162.7,64.4
+Richard-Wagner-Straße,Charlottenburg-Wilmersdorf,81.2,81.2,162.4,69.9
+Roedeliusplatz,Lichtenberg,82.5,79.9,162.4,41.0
+Gethsemanekirche,Pankow,71.4,90.8,162.2,38.4
+Mertensstraße,Spandau,72.7,89.3,162.0,56.8
+Alt-Kaulsdorf,Marzahn-Hellersdorf,89.5,72.3,161.8,22.0
+Senefelderstraße,Pankow,70.1,91.3,161.4,38.7
+Cheruskerstraße,Tempelhof-Schöneberg,77.7,83.6,161.3,59.2
+Karl-August-Platz,Charlottenburg-Wilmersdorf,79.7,81.4,161.1,55.5
+Wilhelmsruh,Pankow,86.5,73.4,159.9,13.8
+Teutoburger Platz,Pankow,76.4,82.8,159.2,19.6
+Eisenzahnstraße,Charlottenburg-Wilmersdorf,82.8,76.0,158.8,45.2
+Birnhornweg,Tempelhof-Schöneberg,95.0,63.7,158.7,12.0
+Gesundbrunnen,Mitte,78.4,80.3,158.7,87.5
+Adele-Sandrock-Straße,Marzahn-Hellersdorf,74.2,83.8,158.0,49.8
+Körnerstraße,Mitte,77.1,80.1,157.2,87.1
+Hausburgviertel,Friedrichshain-Kreuzberg,69.6,86.2,155.8,43.4
+Cecilienplatz,Marzahn-Hellersdorf,74.7,80.4,155.1,58.5
+Uhlandstraße,Pankow,83.0,72.0,155.0,17.3
+Wilhelmstadt West,Spandau,81.5,72.9,154.4,75.6
+Gontermannstraße,Tempelhof-Schöneberg,78.6,75.3,153.9,54.2
+Flughafenstraße,Neukölln,68.6,84.7,153.3,95.9
+Kaiserin-Augusta-Allee,Charlottenburg-Wilmersdorf,58.9,94.3,153.2,60.9
+Rosenthal,Pankow,86.3,66.8,153.1,12.9
+Kyritzer Straße,Marzahn-Hellersdorf,70.8,82.3,153.1,73.6
+Scharnweberstraße,Reinickendorf,84.3,68.6,152.9,84.7
+Kettinger Straße,Tempelhof-Schöneberg,94.6,57.6,152.2,23.4
+Waltersdorfer Chaussee Ost,Neukölln,80.3,71.8,152.1,44.3
+Mehringplatz,Friedrichshain-Kreuzberg,72.3,79.3,151.6,97.8
+Dörpfeldstraße West,Treptow-Köpenick,82.7,68.8,151.5,46.9
+Christburger Straße,Pankow,63.7,87.6,151.3,20.8
+Westliche Müllerstraße,Mitte,76.8,74.5,151.3,84.3
+Ganghoferstraße,Neukölln,74.9,76.2,151.1,90.2
+George-Grosz-Platz,Charlottenburg-Wilmersdorf,71.8,79.2,151.0,32.3
+Ostseestraße,Pankow,78.8,71.4,150.2,44.6
+John-Locke-Straße,Tempelhof-Schöneberg,87.5,62.7,150.2,71.0
+Frankfurter Allee Süd,Lichtenberg,80.4,69.7,150.1,68.6
+Ernst-Reuter-Platz,Charlottenburg-Wilmersdorf,66.4,81.9,148.3,75.3
+Arnold-Zweig-Straße,Pankow,81.4,66.4,147.8,30.8
+Savignyplatz,Charlottenburg-Wilmersdorf,72.1,75.6,147.7,28.4
+Pettenkofer Straße,Friedrichshain-Kreuzberg,54.2,93.0,147.2,42.6
+Ringstraße,Tempelhof-Schöneberg,69.7,77.1,146.8,67.9
+Beusselkiez,Mitte,71.6,74.4,146.0,93.5
+Johannisthal Ost,Treptow-Köpenick,82.3,63.1,145.4,30.3
+Diedersdorfer Weg,Tempelhof-Schöneberg,74.4,70.8,145.2,74.0
+Goldhähnchenweg,Neukölln,77.9,67.2,145.1,70.1
+Nordbahnhof,Mitte,64.2,80.8,145.0,15.1
+Hochmeisterplatz,Charlottenburg-Wilmersdorf,75.6,69.0,144.6,34.9
+Schloßstraße,Charlottenburg-Wilmersdorf,67.7,76.6,144.3,46.7
+An der Tränke,Spandau,81.9,62.2,144.1,7.0
+Julius-Leber-Brücke,Tempelhof-Schöneberg,72.5,71.6,144.1,72.0
+Havelländer Ring,Marzahn-Hellersdorf,69.2,73.6,142.8,73.8
+Rodenbergstraße,Pankow,64.8,77.9,142.7,19.2
+Bötzowstraße,Pankow,63.8,78.8,142.6,25.6
+Wittekindstraße,Tempelhof-Schöneberg,75.8,66.2,142.0,57.4
+Karlshorst West,Lichtenberg,79.0,62.4,141.4,15.9
+Alt-Rixdorf,Neukölln,73.1,68.1,141.2,90.4
+Lützowstraße,Mitte,69.9,71.2,141.1,82.8
+Marienfelder Allee Nordwest,Tempelhof-Schöneberg,85.6,54.8,140.4,76.2
+Gewerbegebiet Bitterfelder Straße,Marzahn-Hellersdorf,71.0,69.2,140.2,91.5
+Rathaus Tempelhof,Tempelhof-Schöneberg,66.6,73.1,139.7,62.2
+Neue Grottkauer Straße,Marzahn-Hellersdorf,63.3,76.4,139.7,85.1
+Wittenbergplatz,Tempelhof-Schöneberg,73.4,65.9,139.3,69.2
+Am Berlin Museum,Friedrichshain-Kreuzberg,69.4,69.9,139.3,98.0
+Dörfer Malchow-Wartenberg,Lichtenberg,74.5,64.6,139.1,3.5
+Lea-Grundig-Straße,Marzahn-Hellersdorf,76.0,61.8,137.8,66.8
+Falkenberg,Treptow-Köpenick,79.2,58.3,137.5,14.9
+Eiswerder,Spandau,43.2,93.7,136.9,86.9
+Bärenstein,Marzahn-Hellersdorf,70.7,66.1,136.8,54.4
+Jahnstraße,Neukölln,62.2,73.8,136.0,92.1
+Invalidenstraße,Mitte,62.9,72.7,135.6,15.3
+Zossener Straße,Marzahn-Hellersdorf,53.7,81.5,135.2,93.9
+Amtsgerichtsplatz,Charlottenburg-Wilmersdorf,67.3,67.5,134.8,31.7
+Norweger Viertel,Pankow,64.4,70.3,134.7,33.0
+Lübars,Reinickendorf,70.5,63.5,134.0,8.7
+Spiekermann Straße,Pankow,75.3,58.7,134.0,31.0
+Ortolanweg,Neukölln,55.5,77.5,133.0,92.3
+Frobenstraße,Tempelhof-Schöneberg,66.1,66.6,132.7,88.2
+Weinmeisterhornweg,Spandau,80.6,51.7,132.3,37.1
+Maulbeerallee,Spandau,68.8,63.3,132.1,99.4
+Humboldthain Nordwest,Mitte,61.1,71.0,132.1,97.2
+Helmholtzplatz,Pankow,59.8,72.1,131.9,38.6
+Heine-Viertel Ost,Mitte,51.7,79.7,131.4,19.7
+Werkstraße,Spandau,79.9,50.9,130.8,17.2
+Altstadt Köpenick,Treptow-Köpenick,45.6,84.9,130.5,72.9
+Markelstraße,Steglitz-Zehlendorf,60.0,70.5,130.5,20.5
+Auersbergstraße,Marzahn-Hellersdorf,64.6,65.7,130.3,54.8
+Kirchstraße,Tempelhof-Schöneberg,83.8,45.6,129.4,16.1
+Lankwitz Süd,Steglitz-Zehlendorf,83.9,45.4,129.3,20.3
+Schloßstraße,Steglitz-Zehlendorf,69.0,60.1,129.1,25.8
+Massower Straße,Lichtenberg,75.1,53.9,129.0,46.1
+Wittenberger Straße,Marzahn-Hellersdorf,57.4,70.7,128.1,80.3
+Perelsplatz,Tempelhof-Schöneberg,68.5,58.9,127.4,18.5
+Emdener Straße,Mitte,68.1,59.2,127.3,77.1
+Revaler Straße,Friedrichshain-Kreuzberg,66.2,61.1,127.3,29.9
+Leon-Jessel-Platz,Charlottenburg-Wilmersdorf,59.2,67.3,126.5,47.6
+Germersheimer Platz,Spandau,72.0,54.2,126.2,84.9
+Leopoldplatz,Mitte,56.6,69.6,126.2,97.4
+Treptower Straße Nord,Neukölln,65.3,60.7,126.0,98.7
+Forckenbeckplatz,Friedrichshain-Kreuzberg,61.8,64.2,126.0,42.8
+Schütte-Lanz-Straße,Steglitz-Zehlendorf,76.9,48.9,125.8,26.4
+Wartenberg Süd,Lichtenberg,47.0,78.6,125.6,74.7
+Sredzkistraße,Pankow,64.9,60.3,125.2,17.0
+Herthaplatz,Pankow,83.2,41.1,124.3,25.3
+Maselake,Spandau,40.8,83.4,124.2,51.3
+Kalckreuthstraße,Tempelhof-Schöneberg,67.2,56.5,123.7,88.0
+Bergstraße,Steglitz-Zehlendorf,66.8,56.8,123.6,40.0
+Wartenberg Nord,Lichtenberg,45.4,78.0,123.4,71.4
+Schweizer Viertel,Steglitz-Zehlendorf,79.5,43.5,123.0,10.1
+Reichenberger Straße West,Friedrichshain-Kreuzberg,60.3,62.0,122.3,83.4
+Sparrplatz,Mitte,63.1,58.1,121.2,87.8
+Marzahner Promenade,Marzahn-Hellersdorf,46.1,74.9,121.0,65.7
+Gut Hellersdorf,Marzahn-Hellersdorf,55.9,65.1,121.0,73.4
+Rosenfelder Ring,Lichtenberg,53.5,67.0,120.5,63.7
+Köllnische Vorstadt,Treptow-Köpenick,57.6,62.9,120.5,66.4
+Klausenerplatz,Charlottenburg-Wilmersdorf,57.2,62.5,119.7,78.8
+Brunnenstraße,Mitte,58.7,60.5,119.2,93.7
+Stülerstraße,Mitte,45.2,74.0,119.2,41.5
+Klixstraße,Reinickendorf,63.5,55.0,118.5,91.7
+Stralauer Halbinsel,Friedrichshain-Kreuzberg,22.9,94.8,117.7,10.7
+Eckschanze,Spandau,61.3,56.3,117.6,83.8
+Lüneburger Straße,Mitte,34.3,82.1,116.4,56.5
+Grazer Platz,Tempelhof-Schöneberg,56.5,59.8,116.3,62.5
+Am Kienberg,Marzahn-Hellersdorf,37.5,78.4,115.9,65.9
+Friedrich-Karl-Straße,Tempelhof-Schöneberg,56.3,59.4,115.7,57.7
+Storkower Bogen,Lichtenberg,62.0,53.3,115.3,48.3
+Boulevard Kastanienallee,Marzahn-Hellersdorf,53.1,61.4,114.5,86.5
+Oberhofer Platz,Steglitz-Zehlendorf,79.3,34.9,114.2,14.4
+Germaniagarten,Tempelhof-Schöneberg,48.5,65.3,113.8,93.2
+Gartenfelder Straße,Spandau,67.0,46.7,113.7,82.7
+Richard-Sorge-Viertel,Friedrichshain-Kreuzberg,54.6,59.0,113.6,33.4
+Humannplatz,Pankow,57.9,55.2,113.1,19.4
+Breite Straße,Charlottenburg-Wilmersdorf,65.9,46.9,112.8,24.7
+Nöldnerplatz,Lichtenberg,62.4,49.6,112.0,45.9
+Brabanter Platz,Charlottenburg-Wilmersdorf,42.3,69.4,111.7,55.4
+Wuhletalstraße,Marzahn-Hellersdorf,46.7,64.8,111.5,79.3
+Ackerstraße,Spandau,59.4,52.0,111.4,80.8
+Schlangenbader Straße,Charlottenburg-Wilmersdorf,42.8,68.3,111.1,64.0
+Arkonaplatz,Mitte,55.2,55.9,111.1,13.1
+Garbátyplatz,Pankow,61.4,49.4,110.8,27.3
+Machonstraße,Tempelhof-Schöneberg,60.9,49.8,110.7,68.1
+Karlshorst Nord,Lichtenberg,61.6,47.8,109.4,11.4
+Rathaus Yorckstraße,Friedrichshain-Kreuzberg,49.4,60.0,109.4,75.8
+Heine-Viertel West,Mitte,55.7,53.5,109.2,23.2
+Koloniestraße,Mitte,56.8,52.4,109.2,94.5
+Letteplatz,Reinickendorf,71.2,37.8,109.0,83.0
+Zehlendorf Eiche,Steglitz-Zehlendorf,75.5,33.4,108.9,16.6
+Droysenstraße,Charlottenburg-Wilmersdorf,54.4,54.4,108.8,49.4
+Rollbergesiedlung,Reinickendorf,60.1,48.2,108.3,98.5
+Arnimplatz,Pankow,43.4,64.9,108.3,32.7
+Nikolsburger Platz,Charlottenburg-Wilmersdorf,52.2,56.1,108.3,31.9
+Bayerischer Platz,Tempelhof-Schöneberg,55.4,52.6,108.0,37.5
+Nibelungenviertel,Lichtenberg,60.7,47.2,107.9,40.8
+Tegeler Weg,Charlottenburg-Wilmersdorf,44.1,63.8,107.9,66.2
+Mellerbogen,Reinickendorf,67.9,39.9,107.8,63.5
+Boxhagener Platz,Friedrichshain-Kreuzberg,50.0,57.0,107.0,29.0
+Graefekiez Süd,Friedrichshain-Kreuzberg,48.9,57.9,106.8,76.4
+Hertzbergplatz,Neukölln,37.8,68.5,106.3,86.7
+Weitlingkiez,Lichtenberg,67.5,38.4,105.9,45.8
+Gleisdreieck,Friedrichshain-Kreuzberg,38.0,67.9,105.9,13.5
+Belziger Straße,Tempelhof-Schöneberg,45.9,59.6,105.5,71.8
+Imbrosweg,Tempelhof-Schöneberg,65.7,39.7,105.4,65.5
+Oberspree,Treptow-Köpenick,62.7,42.3,105.0,29.2
+Lausitzer Platz,Friedrichshain-Kreuzberg,51.8,53.1,104.9,88.4
+Wittenau Süd,Reinickendorf,72.9,31.5,104.4,58.7
+Niederbarnimstraße,Friedrichshain-Kreuzberg,58.1,46.3,104.4,52.0
+Londoner Straße,Mitte,64.0,40.2,104.2,81.0
+Bahnhofstraße,Treptow-Köpenick,36.3,67.7,104.0,28.2
+Forckenbeckstraße,Charlottenburg-Wilmersdorf,50.9,52.8,103.7,21.2
+Drontheimer Straße,Mitte,51.1,52.2,103.3,94.6
+Rollberg,Neukölln,42.1,60.9,103.0,99.1
+Braunschweiger Straße,Neukölln,49.8,53.0,102.8,90.6
+Uferstraße,Mitte,60.5,42.1,102.6,95.4
+Biesdorf Süd,Marzahn-Hellersdorf,65.1,37.5,102.6,1.1
+Belßstraße,Steglitz-Zehlendorf,58.5,43.9,102.4,63.1
+Plänterwald West,Treptow-Köpenick,57.7,44.6,102.3,24.4
+Tempelhofer Weg,Neukölln,45.0,56.6,101.6,85.8
+Pastor-Niemöller-Platz,Pankow,59.6,41.7,101.3,17.5
+Kladower Damm,Spandau,19.9,80.6,100.5,3.1
+Karl-Marx-Allee,Mitte,52.4,48.0,100.4,53.9
+Sundgauer Straße,Steglitz-Zehlendorf,65.5,33.9,99.4,24.0
+Falkenberg West,Lichtenberg,33.9,65.5,99.4,71.2
+Odenwaldstraße,Tempelhof-Schöneberg,54.8,44.5,99.3,18.1
+Schwedenstraße,Mitte,47.8,51.3,99.1,95.0
+Feuerbachstraße,Steglitz-Zehlendorf,55.0,43.7,98.7,36.5
+Hildegardstraße,Charlottenburg-Wilmersdorf,43.5,54.6,98.1,23.6
+Zwinglistraße,Mitte,43.7,54.1,97.8,87.3
+Karlshorst Süd,Lichtenberg,58.3,39.3,97.6,5.2
+Reuterplatz,Neukölln,47.4,50.0,97.4,77.7
+Florakiez,Pankow,48.3,49.1,97.4,27.5
+Park am Buschkrug,Neukölln,39.3,57.4,96.7,91.9
+Goerzwerke,Steglitz-Zehlendorf,32.5,64.0,96.5,16.2
+Lübecker Straße,Mitte,48.7,47.0,95.7,92.8
+Tiroler Viertel,Pankow,52.6,43.0,95.6,31.4
+Antonstraße,Mitte,48.2,47.4,95.6,95.2
+Hindemithplatz,Charlottenburg-Wilmersdorf,46.5,48.7,95.2,37.8
+Landsberger Allee,Lichtenberg,50.7,44.3,95.0,61.1
+Bahnhof Schöneweide,Treptow-Köpenick,37.3,57.7,95.0,48.9
+Zitadellenweg,Spandau,33.0,61.3,94.3,51.7
+Carl-Schurz-Straße,Spandau,49.3,45.0,94.3,79.2
+Köpenicker Straße,Friedrichshain-Kreuzberg,38.2,55.4,93.6,88.6
+Ludwigkirchplatz,Charlottenburg-Wilmersdorf,47.2,46.1,93.3,36.0
+Volkspark (Rudolph-Wilde-Park),Tempelhof-Schöneberg,43.9,49.3,93.2,62.9
+Trelleborger Viertel,Pankow,54.1,39.1,93.2,31.2
+Kollwitzplatz,Pankow,57.0,36.0,93.0,16.8
+Alt-Lietzow,Charlottenburg-Wilmersdorf,41.0,51.8,92.8,60.0
+Askanischer Platz,Friedrichshain-Kreuzberg,39.1,53.7,92.8,98.2
+Haveleck,Spandau,18.8,72.5,91.3,50.0
+Hohenschönhausener Straße,Lichtenberg,34.1,57.2,91.3,78.0
+Nahariyastraße,Tempelhof-Schöneberg,56.1,34.7,90.8,86.0
+Nordufer,Mitte,26.4,64.4,90.8,87.6
+Hundsteinweg,Tempelhof-Schöneberg,53.9,36.9,90.8,48.0
+Helmholtz-Kiez,Treptow-Köpenick,29.0,61.6,90.6,68.3
+Westerwaldstraße,Spandau,53.3,37.1,90.4,94.8
+Maybachufer,Neukölln,34.7,55.5,90.2,77.5
+Alvenslebenstraße,Tempelhof-Schöneberg,41.9,48.3,90.2,91.3
+Kaiser-Wilhelm-Straße,Steglitz-Zehlendorf,62.5,27.3,89.8,52.8
+Franziusweg,Tempelhof-Schöneberg,73.2,16.6,89.8,16.4
+Moritzplatz,Friedrichshain-Kreuzberg,50.6,38.9,89.5,97.0
+Wismarplatz,Friedrichshain-Kreuzberg,45.8,42.8,88.6,52.2
+Prager Platz,Charlottenburg-Wilmersdorf,52.0,36.3,88.3,39.1
+Ceciliengärten,Tempelhof-Schöneberg,43.0,45.2,88.2,25.5
+Handwerker-Siedlung,Neukölln,59.0,28.6,87.6,60.3
+Kurstraße,Spandau,37.1,50.2,87.3,95.8
+Allende I,Treptow-Köpenick,31.2,55.7,86.9,47.2
+Teichstraße,Reinickendorf,51.5,35.1,86.6,73.2
+Kissingenviertel,Pankow,46.9,39.5,86.4,30.6
+Thomasiusstraße,Mitte,35.6,50.6,86.2,44.1
+Fennpfuhl Ost,Lichtenberg,35.4,50.4,85.8,70.3
+Gallwitzallee,Steglitz-Zehlendorf,53.0,32.5,85.5,63.3
+Kaulsdorf Süd,Marzahn-Hellersdorf,49.6,35.8,85.4,4.4
+Bouchéstraße,Neukölln,40.6,44.1,84.7,83.6
+Wrangelkiez,Friedrichshain-Kreuzberg,33.2,51.5,84.7,80.6
+Magistratsweg,Spandau,46.3,38.0,84.3,82.5
+Bosepark,Tempelhof-Schöneberg,42.6,40.0,82.6,57.6
+Halensee,Charlottenburg-Wilmersdorf,40.0,42.4,82.4,35.1
+Oranienplatz,Friedrichshain-Kreuzberg,39.7,41.9,81.6,94.1
+Hausotterplatz,Reinickendorf,50.4,30.4,80.8,81.9
+Springpfuhl,Marzahn-Hellersdorf,36.7,43.4,80.1,67.2
+Preußenpark,Charlottenburg-Wilmersdorf,41.7,38.2,79.9,32.1
+Nonnendammallee,Spandau,28.8,50.7,79.5,72.1
+Berlepschstraße,Steglitz-Zehlendorf,51.3,28.0,79.3,15.5
+Bremer Straße,Mitte,37.6,41.3,78.9,76.9
+Thielallee,Steglitz-Zehlendorf,44.5,32.7,77.2,2.4
+Teterower Ring,Marzahn-Hellersdorf,30.8,45.8,76.6,46.5
+Augustaplatz,Steglitz-Zehlendorf,52.8,23.8,76.6,19.9
+Schulstraße,Mitte,33.8,42.6,76.4,97.6
+Siemensdamm,Spandau,47.6,28.8,76.4,69.6
+Bürgerpark,Marzahn-Hellersdorf,30.1,45.9,76.0,66.6
+Tirschenreuther Ring Ost,Tempelhof-Schöneberg,39.9,35.6,75.5,74.4
+Anton-Saefkow-Park,Pankow,38.7,36.7,75.4,43.0
+Lankwitz Kirche,Steglitz-Zehlendorf,49.1,26.2,75.3,59.0
+Golliner Straße,Marzahn-Hellersdorf,26.8,47.6,74.4,79.9
+Gartenfeld,Spandau,15.5,58.5,74.0,69.0
+Fürstenplatz,Charlottenburg-Wilmersdorf,44.6,29.3,73.9,22.1
+Zachertstraße,Lichtenberg,44.8,29.0,73.8,45.6
+Weichselplatz,Neukölln,30.3,43.2,73.5,77.9
+Mühlengrund,Lichtenberg,32.3,41.0,73.3,61.3
+Rathaus Lichtenberg,Lichtenberg,36.5,36.5,73.0,41.1
+Im Spektefeld,Spandau,21.6,51.1,72.7,86.3
+Elberfelder Straße,Mitte,24.2,48.5,72.7,38.2
+Wolfshagener Straße,Pankow,32.7,38.7,71.4,26.8
+Binger Straße,Charlottenburg-Wilmersdorf,39.5,31.4,70.9,34.7
+Andreasviertel,Friedrichshain-Kreuzberg,35.2,35.2,70.4,59.8
+Lichterfelde West,Steglitz-Zehlendorf,50.2,20.1,70.3,7.9
+Wilhelmstadt Ost,Spandau,28.6,41.5,70.1,75.5
+Herzbergstraße,Lichtenberg,44.3,25.8,70.1,41.3
+Alt-Lankwitz,Steglitz-Zehlendorf,41.5,27.9,69.4,50.6
+Lichterfelde Süd,Steglitz-Zehlendorf,38.6,30.6,69.2,50.7
+Babelsberger Straße,Charlottenburg-Wilmersdorf,35.1,33.8,68.9,58.1
+Hellersdorfer Promenade,Marzahn-Hellersdorf,28.0,40.4,68.4,89.3
+Zingster Straße West,Lichtenberg,27.7,40.6,68.3,85.4
+Güterbahnhof Köpenick,Treptow-Köpenick,30.4,37.6,68.0,27.9
+Weberwiese,Friedrichshain-Kreuzberg,41.1,26.8,67.9,29.3
+Flinsberger Platz,Charlottenburg-Wilmersdorf,41.3,26.4,67.7,32.5
+Schaperstraße,Charlottenburg-Wilmersdorf,38.9,28.2,67.1,40.2
+Rüdesheimer Platz,Charlottenburg-Wilmersdorf,42.4,23.2,65.6,21.6
+Chamissokiez,Friedrichshain-Kreuzberg,20.5,44.8,65.3,62.7
+Buckower Ring,Marzahn-Hellersdorf,40.2,24.7,64.9,68.8
+Friedrichshagener Straße,Treptow-Köpenick,18.3,46.5,64.8,28.0
+Gensinger Straße,Lichtenberg,24.0,40.8,64.8,70.7
+Rudolf-Seiffert-Park,Lichtenberg,31.0,33.6,64.6,48.5
+Bismarckstraße,Steglitz-Zehlendorf,27.3,36.2,63.5,36.2
+Viktoriapark,Friedrichshain-Kreuzberg,25.5,37.3,62.8,56.3
+Marienhöhe,Tempelhof-Schöneberg,28.2,34.5,62.7,61.4
+Bühringstraße,Pankow,40.4,22.0,62.4,52.4
+Branitzer Platz,Charlottenburg-Wilmersdorf,27.9,34.3,62.2,27.7
+Erieseering,Lichtenberg,34.9,26.6,61.5,61.8
+Barstraße,Charlottenburg-Wilmersdorf,27.1,34.1,61.2,55.9
+Taunusstraße,Tempelhof-Schöneberg,36.2,24.9,61.1,18.3
+Thälmannpark,Pankow,22.5,38.6,61.1,72.5
+Gropiusstadt Nord-West,Neukölln,29.9,30.3,60.2,89.1
+Gropiusstadt Süd-Ost,Neukölln,32.1,27.1,59.2,92.4
+Schleipfuhl,Marzahn-Hellersdorf,23.1,35.4,58.5,70.5
+Wittelsbacherstraße,Tempelhof-Schöneberg,48.0,10.0,58.0,9.8
+Graefekiez Nord,Friedrichshain-Kreuzberg,25.6,32.1,57.7,76.6
+Blankenfelde,Pankow,29.2,28.4,57.6,8.9
+Südende,Steglitz-Zehlendorf,31.7,25.3,57.0,35.8
+Alt-Biesdorf,Marzahn-Hellersdorf,31.5,25.5,57.0,9.6
+Urbanstraße,Friedrichshain-Kreuzberg,23.6,33.2,56.8,67.0
+Michelangelostraße,Pankow,26.6,30.1,56.7,65.1
+Volkspark Prenzlauer Berg,Pankow,30.6,25.6,56.2,82.1
+Eisenacher Straße,Tempelhof-Schöneberg,28.4,27.7,56.1,69.7
+Lindenhofsiedlung,Tempelhof-Schöneberg,23.8,32.3,56.1,64.9
+Wittenau Nord,Reinickendorf,36.9,19.2,56.1,28.6
+Hufeisensiedlung,Neukölln,36.0,19.9,55.9,64.8
+Hermsdorf Ost/Waldsee,Reinickendorf,34.5,20.5,55.0,10.5
+Preußen Siedlung,Treptow-Köpenick,33.4,21.0,54.4,11.3
+Orankesee,Lichtenberg,29.5,24.4,53.9,7.4
+Neu Westend,Charlottenburg-Wilmersdorf,29.7,24.2,53.9,22.3
+Barbarossaplatz,Tempelhof-Schöneberg,29.3,24.5,53.8,51.5
+Landsberger Tor,Marzahn-Hellersdorf,21.0,32.8,53.8,42.1
+Graetschelsteig,Spandau,20.7,33.0,53.7,74.9
+Horstwalder Straße,Tempelhof-Schöneberg,38.4,15.1,53.5,33.8
+Am Forstacker,Spandau,26.0,27.5,53.5,70.8
+Zehlendorf Süd,Steglitz-Zehlendorf,21.8,31.2,53.0,55.2
+Jägerallee,Spandau,32.8,19.0,51.8,2.0
+Treuenbrietzener Straße,Reinickendorf,22.1,29.2,51.3,95.6
+Mittelstraße,Steglitz-Zehlendorf,31.4,19.4,50.8,39.7
+Großgörschenstraße,Tempelhof-Schöneberg,17.9,31.0,48.9,91.1
+Falkenberg Ost,Lichtenberg,17.7,30.8,48.5,83.9
+Humboldtstraße,Reinickendorf,25.8,22.7,48.5,62.4
+Lietzensee,Charlottenburg-Wilmersdorf,16.6,31.7,48.3,43.7
+Wilhelmsaue,Charlottenburg-Wilmersdorf,25.1,22.9,48.0,26.6
+Glasgower Straße,Mitte,22.0,26.0,48.0,81.2
+Königsberger Straße,Steglitz-Zehlendorf,26.9,20.7,47.6,29.7
+Ziekowstraße/Freie Scholle,Reinickendorf,31.9,15.7,47.6,39.5
+Teltower Damm,Steglitz-Zehlendorf,35.8,11.4,47.2,11.6
+Alt-Heiligensee,Reinickendorf,20.1,26.9,47.0,9.2
+Friedenstraße,Friedrichshain-Kreuzberg,23.4,23.4,46.8,47.8
+Immanuelkirchstraße,Pankow,16.1,29.9,46.0,20.7
+Spindlersfeld,Treptow-Köpenick,24.5,21.4,45.9,40.4
+Stephankiez,Mitte,22.7,22.1,44.8,79.5
+Wittenau Mitte,Reinickendorf,33.6,10.9,44.5,58.9
+Prinzenstraße,Friedrichshain-Kreuzberg,26.2,18.3,44.5,96.9
+Reichenberger Straße Ost,Friedrichshain-Kreuzberg,14.9,29.5,44.4,82.3
+Baumschulenweg Ost,Treptow-Köpenick,19.6,24.0,43.6,41.9
+Fennpfuhlpark,Lichtenberg,11.1,31.9,43.0,48.7
+Baumschulenweg West,Treptow-Köpenick,19.4,23.1,42.5,41.7
+Tirschenreuther Ring West,Tempelhof-Schöneberg,19.7,22.5,42.2,74.2
+Volkradstraße,Lichtenberg,27.5,14.6,42.1,62.0
+Paul-Hertz-Siedlung,Charlottenburg-Wilmersdorf,19.0,22.3,41.3,89.9
+Zehlendorf Mitte,Steglitz-Zehlendorf,24.4,16.4,40.8,24.2
+Märkisches Zentrum,Reinickendorf,15.1,25.1,40.2,85.6
+Fichtenberg,Steglitz-Zehlendorf,24.9,15.3,40.2,10.0
+Breitkopfbecken,Reinickendorf,22.3,17.9,40.2,83.2
+Zillesiedlung,Mitte,21.2,18.6,39.8,98.9
+Dahlem,Steglitz-Zehlendorf,25.3,14.4,39.7,5.0
+Komponistenviertel Lankwitz,Steglitz-Zehlendorf,23.2,16.1,39.3,21.4
+Botanischer Garten,Steglitz-Zehlendorf,21.4,17.7,39.1,19.0
+Karower Chaussee,Pankow,20.3,18.8,39.1,75.1
+Wendenschloß,Treptow-Köpenick,9.4,29.7,39.1,1.8
+Thermometersiedlung,Steglitz-Zehlendorf,17.2,21.8,39.0,67.5
+Kafkastraße,Spandau,24.7,13.8,38.5,2.2
+Britzer Garten,Neukölln,17.3,21.2,38.5,50.2
+Schlosspark,Pankow,20.8,16.2,37.0,27.1
+Hansaviertel,Mitte,17.0,19.6,36.6,44.8
+Pillnitzer Weg,Spandau,18.5,17.5,36.0,90.0
+Gropiusstadt Süd-West,Neukölln,18.6,17.2,35.8,76.0
+Wassertorplatz,Friedrichshain-Kreuzberg,11.8,23.6,35.4,99.3
+Körnerpark,Neukölln,15.9,18.5,34.4,96.7
+Zingster Straße Ost,Lichtenberg,14.6,19.7,34.3,78.6
+Humboldthain Süd,Mitte,19.2,14.9,34.1,76.8
+Rudolf-Wissell-Großsiedlung,Spandau,12.2,21.6,33.8,91.0
+Weißer See,Pankow,13.3,20.3,33.6,29.5
+Dannenwalder Weg,Reinickendorf,18.1,15.5,33.6,90.8
+Schäfersee,Reinickendorf,14.0,18.1,32.1,68.5
+Schillerpromenade Nord,Neukölln,11.3,20.8,32.1,89.7
+Silbersteinstraße,Neukölln,14.4,17.3,31.7,96.3
+Schlossgarten,Charlottenburg-Wilmersdorf,12.4,16.8,29.2,88.7
+Alt-Tegel,Reinickendorf,16.4,12.7,29.1,33.9
+Amorbacher Weg,Spandau,16.8,12.2,29.0,54.6
+Bismarckallee,Charlottenburg-Wilmersdorf,14.8,13.3,28.1,28.8
+Kameruner Straße,Mitte,12.0,15.9,27.9,81.7
+Fischerhüttenstraße,Steglitz-Zehlendorf,17.5,9.4,26.9,12.5
+Tegel Süd,Reinickendorf,13.7,13.1,26.8,84.5
+Bucher Forst,Pankow,15.3,10.7,26.0,57.2
+Dolgenseestraße,Lichtenberg,14.2,11.8,26.0,61.6
+Parchimer Allee Süd,Neukölln,15.7,9.6,25.3,64.6
+Konradshöhe/Tegelort,Reinickendorf,12.5,12.5,25.0,4.2
+Schillerpark,Mitte,13.5,11.3,24.8,81.4
+Frohnau West,Reinickendorf,16.2,8.5,24.7,5.7
+Parkstraße,Pankow,12.7,11.1,23.8,26.9
+Hindenburgdamm,Steglitz-Zehlendorf,9.6,14.2,23.8,36.3
+Soldiner Straße,Mitte,11.6,12.0,23.6,94.3
+Börnicker Straße,Spandau,6.5,17.0,23.5,13.3
+Landweg,Steglitz-Zehlendorf,10.0,13.5,23.5,67.3
+Gropiusstadt Mitte,Neukölln,9.8,12.4,22.2,92.6
+Dörpfeldstraße Ost,Treptow-Köpenick,13.1,8.9,22.0,47.0
+Böhlener Straße,Marzahn-Hellersdorf,7.6,14.0,21.6,86.2
+Hagenplatz,Charlottenburg-Wilmersdorf,12.9,8.7,21.6,12.4
+Tiefwerder,Spandau,7.7,13.7,21.4,88.9
+Ahrensfelder Berge,Marzahn-Hellersdorf,6.1,14.8,20.9,72.7
+Wartheplatz,Neukölln,7.9,12.9,20.8,96.1
+Jungfernheide/Plötzensee,Charlottenburg-Wilmersdorf,10.9,9.8,20.7,79.7
+Stadtpark,Steglitz-Zehlendorf,8.9,11.6,20.5,38.9
+Hansastraße,Pankow,11.4,9.0,20.4,53.7
+Hermsdorf West,Reinickendorf,13.8,6.5,20.3,10.3
+Alt-Treptow,Treptow-Köpenick,10.3,9.2,19.5,50.4
+Fischtal,Steglitz-Zehlendorf,10.7,7.6,18.3,12.2
+Döberitzer Weg,Spandau,10.5,7.7,18.2,11.1
+Klinikum Buch,Pankow,10.1,8.1,18.2,73.1
+Munsterdamm,Steglitz-Zehlendorf,7.4,10.5,17.9,42.3
+Hirschgarten,Treptow-Köpenick,7.2,10.3,17.5,31.5
+Afrikanische Straße,Mitte,8.1,8.3,16.4,81.5
+Barnimkiez,Friedrichshain-Kreuzberg,5.9,10.1,16.0,60.7
+Schönholz,Pankow,8.5,7.2,15.7,8.5
+Messelpark,Charlottenburg-Wilmersdorf,9.0,6.3,15.3,0.9
+Komponistenviertel Weißensee,Pankow,9.2,5.9,15.1,35.6
+Alt-Gatow,Spandau,8.3,6.6,14.9,12.7
+Johannisthal West,Treptow-Köpenick,6.8,7.9,14.7,33.6
+Flatowallee,Charlottenburg-Wilmersdorf,7.0,7.4,14.4,6.1
+Waidmannslust,Reinickendorf,8.7,5.2,13.9,21.8
+Olympiagelände,Charlottenburg-Wilmersdorf,6.3,7.0,13.3,0.6
+Rohrdamm,Spandau,6.6,6.1,12.7,69.4
+Tierpark,Lichtenberg,5.7,5.7,11.4,66.1
+Kranzallee,Charlottenburg-Wilmersdorf,5.0,5.4,10.4,26.2
+Großer Tiergarten,Mitte,5.2,5.0,10.2,5.4
+Hasenheide,Neukölln,3.3,6.8,10.1,100.0
+Dammheide,Treptow-Köpenick,5.4,4.6,10.0,14.6
+Karolinenhof,Treptow-Köpenick,4.2,5.5,9.7,0.4
+Griesingerstraße,Spandau,4.8,4.4,9.2,78.4
+Angerburger Allee,Charlottenburg-Wilmersdorf,4.4,4.2,8.6,37.6
+Plänterwald Ost,Treptow-Köpenick,5.5,2.8,8.3,53.1
+Siedlung Kämmereiheide,Treptow-Köpenick,4.1,3.9,8.0,24.5
+Wuhlheide,Treptow-Köpenick,3.1,4.8,7.9,64.2
+Waldidyll/Flughafensee,Reinickendorf,3.7,3.3,7.0,34.5
+Heiligensee Nord,Reinickendorf,3.9,2.0,5.9,9.0
+Frohnau Ost,Reinickendorf,4.6,1.3,5.9,5.5
+Düppel,Steglitz-Zehlendorf,3.5,2.2,5.7,35.2
+Kietzer Feld/Nachtheide,Treptow-Köpenick,1.3,4.1,5.4,43.5
+Müggelheim,Treptow-Köpenick,2.4,3.0,5.4,3.9
+Grünau,Treptow-Köpenick,2.6,2.6,5.2,13.7
+Mittelheide,Treptow-Köpenick,3.0,1.8,4.8,14.8
+Wannsee,Steglitz-Zehlendorf,0.9,3.7,4.6,6.6
+Nikolassee,Steglitz-Zehlendorf,1.5,3.1,4.6,7.2
+Alt-Friedrichshagen,Treptow-Köpenick,2.0,2.4,4.4,14.0
+Schmöckwitz/Rauchfangswerder,Treptow-Köpenick,0.4,3.5,3.9,6.8
+Rahnsdorf,Treptow-Köpenick,1.8,1.7,3.5,8.3
+Hüttenweg,Steglitz-Zehlendorf,2.8,0.6,3.4,3.3
+Hakenfelde Nord,Spandau,2.2,0.9,3.1,51.1
+Krumme Lanke,Steglitz-Zehlendorf,1.7,0.7,2.4,2.6
+Allende II,Treptow-Köpenick,0.2,1.5,1.7,21.0
+Eichkamp,Charlottenburg-Wilmersdorf,0.6,1.1,1.7,0.7
+Hundekehle,Charlottenburg-Wilmersdorf,1.1,0.4,1.5,17.7
+Heiligensee,Reinickendorf,0.7,0.2,0.9,9.4
