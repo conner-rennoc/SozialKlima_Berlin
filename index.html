@@ -777,6 +777,16 @@ function activateAll() {
 // ══════════════════════════════════════════════
 // SCATTER PLOT
 // ══════════════════════════════════════════════
+// ── Scatter filter state ──────────────────────────────────────────────────
+const _ss = { normalGroups:{}, tripelGroups:{}, bezList:[], colorOf:{}, active:new Set() };
+
+const shortenBez = s => s
+  .replace('Friedrichshain-Kreuzberg','Fhain-Kreuzberg')
+  .replace('Charlottenburg-Wilmersdorf','Charlbg-Wilmd.')
+  .replace('Tempelhof-Schöneberg','Tempelhof-Sbg.')
+  .replace('Marzahn-Hellersdorf','Marzahn-Hdf.')
+  .replace('Treptow-Köpenick','Treptow-Kpnk.');
+
 function buildScatter() {
   const container = document.getElementById('scatter-container');
   const tooltip   = document.getElementById('scatter-tooltip');
@@ -803,6 +813,11 @@ function buildScatter() {
                    '#74b9ff','#a29bfe','#fd79a8','#e17055'];
   const colorOf = {};
   bezList.forEach((b, i) => { colorOf[b] = palette[i % palette.length]; });
+
+  // Store in module state
+  _ss.bezList = bezList;
+  _ss.colorOf = colorOf;
+  _ss.active  = new Set(bezList);
 
   // Dimensions
   const W = 720, H = 390;
@@ -838,13 +853,11 @@ function buildScatter() {
     fill:'rgba(255,255,255,.025)', stroke:'rgba(255,255,255,.1)',
     'stroke-width':'1','stroke-dasharray':'4 3'
   }));
-  const zoneLabel = tx('Dreifachbelastungs-\nzone', {
+  const zoneLabel = tx('', {
     x: sx(175), y: M.top + 12,
     'text-anchor':'middle', fill:'rgba(245,242,235,.22)',
     'font-family':'DM Mono,monospace','font-size':'8','letter-spacing':'.06em'
   });
-  // Split into two tspan lines
-  zoneLabel.textContent = '';
   ['Dreifach-','belastungszone'].forEach((line, i) => {
     const ts = document.createElementNS(ns, 'tspan');
     ts.textContent = line;
@@ -885,7 +898,7 @@ function buildScatter() {
   });
   svg.appendChild(yTitle);
 
-  // Points (normal behind, tripel in front)
+  // Circle factory
   const makeCircle = d => {
     const isTripel = d.tripel;
     const r = isTripel ? 5.5 : 3;
@@ -927,8 +940,29 @@ function buildScatter() {
     return c;
   };
 
-  data.filter(d => !d.tripel).forEach(d => svg.appendChild(makeCircle(d)));
-  data.filter(d =>  d.tripel).forEach(d => svg.appendChild(makeCircle(d)));
+  // Per-bezirk <g> groups for normal points (enables efficient filtering)
+  const normalGroups = {};
+  bezList.forEach(b => {
+    const g = el('g'); g.dataset.bez = b; normalGroups[b] = g; svg.appendChild(g);
+  });
+  data.filter(d => !d.tripel).forEach(d => {
+    if (normalGroups[d.bez]) normalGroups[d.bez].appendChild(makeCircle(d));
+  });
+
+  // Tripel on top, also grouped by bezirk
+  const tripelTopG = el('g');
+  const tripelGroups = {};
+  bezList.forEach(b => {
+    const g = el('g'); g.dataset.bez = b; tripelGroups[b] = g; tripelTopG.appendChild(g);
+  });
+  data.filter(d => d.tripel).forEach(d => {
+    if (tripelGroups[d.bez]) tripelGroups[d.bez].appendChild(makeCircle(d));
+  });
+  svg.appendChild(tripelTopG);
+
+  // Store group refs for filter functions
+  _ss.normalGroups = normalGroups;
+  _ss.tripelGroups = tripelGroups;
 
   // Legend
   const lx = M.left + pw + 22;
@@ -938,15 +972,9 @@ function buildScatter() {
     'font-family':'DM Mono,monospace','font-size':'8','letter-spacing':'.14em'
   }));
   ly += 14;
-  const shorten = s => s
-    .replace('Friedrichshain-Kreuzberg','Fhain-Kreuzberg')
-    .replace('Charlottenburg-Wilmersdorf','Charlbg-Wilmd.')
-    .replace('Tempelhof-Schöneberg','Tempelhof-Sbg.')
-    .replace('Marzahn-Hellersdorf','Marzahn-Hdf.')
-    .replace('Treptow-Köpenick','Treptow-Kpnk.');
   bezList.forEach(b => {
     svg.appendChild(el('circle',{cx:lx+4,cy:ly-3.5,r:'4',fill:colorOf[b]}));
-    svg.appendChild(tx(shorten(b),{
+    svg.appendChild(tx(shortenBez(b),{
       x:lx+13, y:ly, fill:'rgba(245,242,235,.6)',
       'font-family':'DM Mono,monospace','font-size':'9'
     }));
@@ -961,6 +989,84 @@ function buildScatter() {
   }));
 
   container.appendChild(svg);
+  buildScatterChips();
+}
+
+function buildScatterChips() {
+  const { bezList, colorOf, active } = _ss;
+  const box = document.getElementById('scatter-container').parentElement;
+  const old = document.getElementById('scatter-chips');
+  if (old) old.remove();
+
+  const allActive = active.size === bezList.length;
+  const wrap = document.createElement('div');
+  wrap.id = 'scatter-chips';
+  wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;align-items:center';
+
+  bezList.forEach(b => {
+    const on = allActive || active.has(b);
+    const col = colorOf[b];
+    const btn = document.createElement('button');
+    btn.textContent = shortenBez(b);
+    btn.dataset.bez = b;
+    btn.style.cssText =
+      `font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;`+
+      `padding:3px 9px;border-radius:2px;cursor:pointer;transition:opacity .12s,background .12s,color .12s;`+
+      `background:${on ? col+'28' : 'rgba(245,242,235,.04)'};`+
+      `color:${on ? col : 'rgba(245,242,235,.22)'};`+
+      `border:1px solid ${on ? col+'55' : 'rgba(245,242,235,.1)'};`;
+    btn.addEventListener('click', () => toggleScatterBez(b));
+    wrap.appendChild(btn);
+  });
+
+  if (!allActive) {
+    const reset = document.createElement('button');
+    reset.textContent = '× Alle';
+    reset.style.cssText =
+      `font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;`+
+      `padding:3px 9px;border-radius:2px;cursor:pointer;`+
+      `background:transparent;color:rgba(245,242,235,.35);`+
+      `border:1px solid rgba(245,242,235,.15);margin-left:4px;`;
+    reset.addEventListener('click', resetScatterFilter);
+    wrap.appendChild(reset);
+  }
+
+  box.appendChild(wrap);
+}
+
+function toggleScatterBez(b) {
+  const { bezList, active } = _ss;
+  if (active.size === bezList.length) {
+    // All shown → isolate clicked bezirk
+    active.clear();
+    active.add(b);
+  } else if (active.has(b)) {
+    active.delete(b);
+    if (active.size === 0) bezList.forEach(x => active.add(x)); // last one → reset
+  } else {
+    active.add(b);
+  }
+  applyScatterFilter();
+  buildScatterChips();
+}
+
+function resetScatterFilter() {
+  const { bezList, active } = _ss;
+  active.clear();
+  bezList.forEach(b => active.add(b));
+  applyScatterFilter();
+  buildScatterChips();
+}
+
+function applyScatterFilter() {
+  const { bezList, active, normalGroups, tripelGroups } = _ss;
+  const allActive = active.size === bezList.length;
+  bezList.forEach(b => {
+    const show = allActive || active.has(b);
+    const op = show ? '1' : '0.05';
+    if (normalGroups[b]) normalGroups[b].setAttribute('opacity', op);
+    if (tripelGroups[b]) tripelGroups[b].setAttribute('opacity', op);
+  });
 }
 
 function computeStats() {
